@@ -2442,6 +2442,7 @@ mandatory and optional arguments are, and so forth.
 % TODO: accompanying release of DCC Logo.
 % 
 %    \begin{macrocode}
+\RequirePackage{enumitem}
 \RequirePackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
 \RequirePackage[svgnames]{xcolor}
@@ -2844,7 +2845,31 @@ mandatory and optional arguments are, and so forth.
 \counterwithout{figure}{chapter}
 \counterwithout{table}{chapter}
 %    \end{macrocode}
-% 
+%
+% Lists
+%
+%    \begin{macrocode}
+\newcommand{\bluelabel}[1]{\color{dccblue}#1}
+\setlist[itemize]{font=\color{dccblue}}
+\setlist[enumerate]{font=\color{dccblue}}
+\setlist[description]{font=\dottedblue}
+%    \end{macrocode}
+%
+% Boxouts
+%
+%    \begin{macrocode}
+\RequirePackage{tcolorbox}
+\newtcolorbox{boxout}%
+  { colback=white
+  , colframe=dccmaroon
+  , coltext=dccblue
+  , parbox=false
+  , left=2mm
+  , right=2mm
+  , oversize
+  }
+%    \end{macrocode}
+%
 % Footnotes
 %
 %    \begin{macrocode}
