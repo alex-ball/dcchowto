@@ -2381,6 +2381,14 @@ mandatory and optional arguments are, and so forth.
 \RequirePackage{xkeyval}
 \define@boolkey{dcchowto}{twocolumn}[true]{}
 \define@boolkey{dcchowto}{press}[true]{}
+\define@boolkey{dcchowto}{numbers}[true]{}
+\define@choicekey*{dcchowto.cls}{mark}[\dcchowto@mark@input\dcchowto@mark@index]{draft,rc}[draft]{%
+  \ifcase\dcchowto@mark@index\relax
+    \def\dcchowto@mark{Draft}
+  \or
+    \def\dcchowto@mark{Release Candidate}
+  \fi
+}
 \ProcessOptionsX<dcchowto>
 \ifKV@dcchowto@twocolumn
   \ClassInfo{dcchowto}{Processing in two-column mode}%
