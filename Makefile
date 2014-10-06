@@ -15,12 +15,12 @@ $(NAME).pdf: $(NAME).dtx
 	if [ -f $(NAME).idx ]; then makeindex -q -s gind.ist -o $(NAME).ind $(NAME).idx; fi
 	pdflatex -shell-escape -recorder -interaction=nonstopmode $(NAME).dtx > /dev/null
 	pdflatex -shell-escape -recorder -interaction=nonstopmode $(NAME).dtx > /dev/null
-tmp: $(EG).md
+tmp: $(NAME).pdf $(EG).md
 	cp $(EG).md $(EG)-tmp.md
 	echo -e "\n# References\n\n" >> $(EG)-tmp.md
-pdf: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
+pdf: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl clean
 	pandoc -s -S --latex-engine=lualatex --biblio $(EG).bib --csl $(NAME)-apa.csl -N -V fontsize=11pt -V papersize=a4paper -V lang=british -V geometry:hmargin=3cm -V geometry:vmargin=2.5cm -V mainfont=Charis\ SIL -V monofont=DejaVu\ Sans\ Mono $(EG)-tmp.md -o $(EG)-preview.pdf
-html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
+html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl clean
 	pandoc -s -S --biblio $(EG).bib --csl $(NAME)-apa.csl $(EG)-tmp.md -o $(EG).html
 	perl -0777 -p -i -e 's@<h5 id="([^"]+)">([^<]+)</h5>@<h6 id="\1">\2</h6>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h4 id="([^"]+)">([^<]+)</h4>@<h5 id="\1">\2</h5>@ig' $(EG).html
@@ -28,7 +28,7 @@ html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@<h2 id="([^"]+)">([^<]+)</h2>@<h3 id="\1">\2</h3>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h1 id="([^"]+)">([^<]+)</h1>@<h2 id="\1">\2</h2>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h1>References</h1>@<h2>References</h2>@ig' $(EG).html
-dtp: $(EG).md $(EG).bib $(NAME).latex
+dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME).latex clean
 	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME) $(EG).md -t latex -o $(EG).tex
 	latexmk -pdflatex="pdflatex -synctex=1 -interaction batchmode %O %S" -pdf $(EG).tex
 clean:
