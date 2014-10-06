@@ -2701,6 +2701,96 @@ mandatory and optional arguments are, and so forth.
 \fi
 %    \end{macrocode}
 %
+% \subsection{Title page}
+% 
+%    \begin{macrocode}
+\newcommand*{\thedisplayauthor}{\theauthor}
+\newcommand*{\displayauthor}[1]{\renewcommand*{\thedisplayauthor}{#1}}
+\newbox\TitleBox
+\let\maketitle\relax
+\newcommand{\maketitle}[1][]{%
+  \thispagestyle{title}
+  \vspace*{6pt}
+  \noindent
+  \raisebox{0pt}[1em][0pt]{%
+    \begin{minipage}[b]{\TitleTabWidth}
+      \begin{raggedright}
+        \fontsize{16pt}{20pt}\selectfont\lightseries\color{white}%
+        A Digital Curation Centre%\PartnerNameHook
+        \ `working level' guide\par
+      \end{raggedright}
+    \end{minipage}
+  }
+  \par\vspace{5.3em}
+  \begin{lrbox}{\TitleBox}
+    \begin{minipage}[t]{\textwidth + 0.6\dirtymargin}
+      \begin{flushleft}
+        \fontsize{36pt}{40pt}\selectfont
+        \bfseries\color{dccmaroon}%
+        \thetitle
+      \end{flushleft}
+      
+      \begin{flushleft}
+        \huge\color{dccblue}
+        \thedisplayauthor
+      \end{flushleft}
+      
+      \ifx\undefined\dcchowto@mark\else
+        \begin{flushleft}
+          \smallcaps{\dcchowto@mark:\quad\today}
+        \end{flushleft}
+      \fi
+    \end{minipage}
+  \end{lrbox}
+  \rlap{\usebox{\TitleBox}}
+  \par\vfill
+  \begin{fullwidth*}
+    \begin{flushleft}
+      \large\bfseries
+      \color{dccblue}\includegraphics[width=74pt]{cc_by}\\[4pt]
+      Digital Curation Centre, \the\year.\\
+      Licensed under Creative Commons Attribution 4.0 International:\\
+      \url{http://creativecommons.org/licenses/by/4.0/}
+    \end{flushleft}
+  \end{fullwidth*}
+  \ifKV@dcchowto@twocolumn
+    \setlrmarginsandblock{15mm}{15mm}{*}
+    \setcolsepandrule{10mm}{0pt}
+    \twocolumn[%
+      \begin{@twocolumnfalse}
+        %\vspace*{-1em}
+        \raggedright
+        {\HUGE\color{dccmaroon}\textbf{\thetitle}\par}
+      \end{@twocolumnfalse}
+      \par\vspace{1\onelineskip plus \onelineskip minus \onelineskip}\par
+      \begin{abstract}
+        \raggedright #1
+      \end{abstract}
+      \par\vspace{2\onelineskip plus \onelineskip minus \onelineskip}\par
+    ]
+%    \end{macrocode}
+%
+% Need to ensure marginpar width not auto adjusted
+% 
+%    \begin{macrocode}
+    \memsetmacroused\setmarginnotes
+    \checkandfixthelayout
+  \else
+    \pagebreak
+    \begin{fullwidth*}
+      \vspace*{-1em}\raggedright
+      {\HUGE\color{dccmaroon}\textbf{\thetitle}\par}
+    \end{fullwidth*}
+    \par\vspace{2\onelineskip plus \onelineskip minus \onelineskip}\par
+    \begin{fullwidth*}
+      \begin{abstract}
+        \raggedright #1
+      \end{abstract}
+    \end{fullwidth*}
+  \fi
+}
+%    \end{macrocode}
+%
 % \subsection{Typography}
 % 
 % Abstract
