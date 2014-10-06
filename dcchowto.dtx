@@ -2533,6 +2533,174 @@ mandatory and optional arguments are, and so forth.
 \raggedyright
 %    \end{macrocode}
 %
+% \subsection{Headers and footers}
+%
+%    \begin{macrocode}
+\newlength\TitleTabWidth
+\settowidth{\TitleTabWidth}{\fontsize{16pt}{20pt}\lightseries
+  A Digital Curation Centre `working level' guide}
+%    \end{macrocode}
+%
+% fixes for two-column layout
+%
+%    \begin{macrocode}
+\newlength{\regularheadwidth}
+\ifKV@dcchowto@twocolumn
+  \setlength{\regularheadwidth}{\paperwidth - 30mm}
+\else
+  \setlength{\regularheadwidth}{\headwidth}
+\fi
+%    \end{macrocode}
+%
+% Plain (default) headers and footers
+%
+%    \begin{macrocode}
+\ifx\undefined\dcchowto@mark\else
+  \makeevenhead{plain}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
+  \makeoddhead{plain}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
+\fi
+\ifKV@dcchowto@numbers
+  \ifmemtufte@flipheader
+    \makeoddfoot{plain}{%
+      \makebox[0pt][l]{%
+        \makebox[\regularheadwidth][c]{%
+          \raisebox{-44.4pt}[0pt][0pt]{%
+            \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+          }%
+        }%
+      }%
+      \ifodd
+        \count\z@
+      \else
+        \raisebox{-1.5\onelineskip}{%
+          \textcolor{white}{\textbf{\thepage}}%
+        }%
+      \fi
+    }{}{%
+      \ifodd
+        \count\z@
+        \raisebox{-1.5\onelineskip}{%
+          \textcolor{white}{\textbf{\thepage}}%
+        }%
+      \fi
+    }
+  \else
+    \makeoddfoot{plain}{}{%
+      \makebox[0pt][c]{%
+        \raisebox{-44.4pt}[0pt][0pt]{%
+          \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+        }%
+      }%
+    }{%
+      \raisebox{-1.5\onelineskip}{%
+        \textcolor{white}{\textbf{\thepage}}%
+      }%
+    }
+  \fi
+  \makeevenfoot{plain}{%
+    \makebox[0pt][l]{%
+      \makebox[\regularheadwidth][c]{%
+        \raisebox{-44.4pt}[0pt][0pt]{%
+          \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+        }%
+      }%
+    }%
+    \raisebox{-1.5\onelineskip}{%
+      \textcolor{white}{\textbf{\thepage}}%
+    }%
+  }{}{}
+\else
+  \makeoddfoot{plain}{}{%
+    \makebox[0pt][c]{%
+      \raisebox{-44.4pt}[0pt][0pt]{%
+        \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+      }%
+    }%
+  }{}
+  \makeevenfoot{plain}{}{%
+    \makebox[0pt][c]{%
+      \raisebox{-44.4pt}[0pt][0pt]{%
+        \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+      }%
+    }%
+  }{}
+\fi
+\pagestyle{plain}
+%    \end{macrocode}
+%
+% Title page headers and footers
+% 
+%    \begin{macrocode}
+\copypagestyle{title}{plain}
+\ifKV@dcchowto@twocolumn
+  \makerunningwidth{title}{\headwidth}
+  \makeheadposition{title}{flushright}{flushleft}{flushright}{flushleft}
+\fi
+\makeoddhead{title}{%
+  \makebox[\TitleTabWidth][c]{%
+    \raisebox{-86.8pt}[0pt][0pt]{%
+      \tikz{%
+        \fill[dccmaroon]
+          (0,0)
+          -- ++(0pt,-104pt)
+          arc(180:270:22pt)
+          -- ++(\TitleTabWidth,0pt)
+          arc (270:360:22pt)
+          -- ++(0pt,104pt)
+          -- cycle
+        ;
+      }%
+    }%
+  }%
+}{}{%
+  \makebox[112pt][l]{%
+    \raisebox{-22.8pt}[0pt][0pt]{%
+      \DCCLogo[width=148pt]%\PartnerLogoHook
+    }%
+  }%
+}
+\makeoddfoot{title}{}{%
+  \makebox[0pt][c]{%
+    \raisebox{-44.4pt}[0pt][0pt]{%
+      \color{dccmaroon}\rule{\paperwidth + 18pt}{57pt}%
+    }%
+  }%
+}{}
+%    \end{macrocode}
+%
+% Last page headers and footers (if acting as back cover)
+% 
+%    \begin{macrocode}
+\makepagestyle{last}
+\ifKV@dcchowto@twocolumn
+  \makerunningwidth{last}{\regularheadwidth}
+\else
+  \makerunningwidth{last}{\headwidth}
+\fi
+\makeheadposition{last}{flushright}{flushleft}{flushright}{flushleft}
+\newlength{\LastHeadHeight}
+\newcommand*{\lastheadheight}[1]{\setlength{\LastHeadHeight}{#1}}
+\lastheadheight{200pt}
+\makeevenhead{last}{}{%
+  \makebox[0pt][c]{%
+    \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
+      \color{dccmaroon}\rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
+    }%
+  }%
+}{}
+\makeoddhead{last}{}{%
+  \makebox[0pt][c]{%
+    \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
+      \color{dccmaroon}\rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
+    }%
+  }%
+}{}
+\ifx\undefined\dcchowto@mark\else
+  \makeevenfoot{last}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
+  \makeoddfoot{last}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
+\fi
+%    \end{macrocode}
+%
 % \subsection{Typography}
 % 
 % Abstract
