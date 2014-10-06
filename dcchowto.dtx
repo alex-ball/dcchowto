@@ -547,28 +547,22 @@ Requirements for data citations {#sec:reqs}
 The SageCite Project has identified a set of requirements for dataset
 citations and any services set up to support them.[@duke2011rdc]
 
-The citation itself must be able to identify uniquely the object cited,
-though different citations might use different methods or schemes to do
-so.
+  * The citation itself must be able to identify uniquely the object cited,
+    though different citations might use different methods or schemes to do
+    so.
 
-* * * * *
+  * It must be able to identify subsets of the data as well as the whole
+    dataset.
 
-It must be able to identify subsets of the data as well as the whole
-dataset.
+  * It must provide the reader with enough information to access the
+    dataset; indeed, when expressed digitally it should provide a mechanism
+    for accessing the dataset through the Web infrastructure.
 
-* * * * *
-
-It must provide the reader with enough information to access the
-dataset; indeed, when expressed digitally it should provide a mechanism
-for accessing the dataset through the Web infrastructure.
-
-* * * * *
-
-It must be usable not only by humans but also by software tools, so that
-additional services may be built using these citations. In particular,
-there need to be services that use the citations in metrics to support
-the academic reward system, and services that can generate complete
-citations.
+  * It must be usable not only by humans but also by software tools, so that
+    additional services may be built using these citations. In particular,
+    there need to be services that use the citations in metrics to support
+    the academic reward system, and services that can generate complete
+    citations.
 
 Elements of a data citation {#sec:elements}
 ===========================
@@ -577,38 +571,60 @@ The elements that would make up a complete citation are a matter of some
 debate. The following list is a superset taken from four different
 papers on the subject. [^2][^3][^4][^5]
 
-The creator of the dataset.
+Author
 
-Whichever is the later of: the date the dataset was made available, the
-date all quality assurance procedures were completed, and the date the
-embargo period (if applicable) expired.
+  : The creator of the dataset.
 
-As well as the name of the cited resource itself, this may also include
-the name of a facility and the titles of the top collection and main
-parent sub-collection (if any) of which the dataset is a part.
+Publication date
 
-The level or stage of processing of the data, indicating how raw or
-refined the dataset is.
+  : Whichever is the later of: the date the dataset was made available, the
+    date all quality assurance procedures were completed, and the date the
+    embargo period (if applicable) expired.
 
-A number increased when the data changes, as the result of adding more
-data points or re-running a derivation process, for example.
+Title
 
-The name of an ISO 19101:2002 [@iso19101gir] ‘feature’ (e.g. GridSeries,
-ProfileSeries) and the URI identifying its standard definition, used to
-pick out a subset of the data.
+  : As well as the name of the cited resource itself, this may also include
+    the name of a facility and the titles of the top collection and main
+    parent sub-collection (if any) of which the dataset is a part.
 
-Examples: ‘database’, ‘dataset’.
+Edition
 
-The organisation either hosting the data or performing quality
-assurance.
+  : The level or stage of processing of the data, indicating how raw or
+    refined the dataset is.
 
-A cryptographic hash of the data, used to ensure no changes have
-occurred since the citation.
+Version
 
-An identifier for the data, according to a persistent scheme.
+  : A number increased when the data changes, as the result of adding more
+    data points or re-running a derivation process, for example.
 
-A persistent URL from which the dataset is available. Some identifier
-schemes provide these via an identifier resolver service.
+Feature name and URI
+
+  : The name of an ISO 19101:2002 [@iso19101gir] ‘feature’ (e.g. GridSeries,
+    ProfileSeries) and the URI identifying its standard definition, used to
+    pick out a subset of the data.
+
+Resource type
+
+  : Examples: ‘database’, ‘dataset’.
+
+Publisher
+
+  : The organisation either hosting the data or performing quality
+    assurance.
+
+Unique numeric fingerprint (UNF)
+
+  : A cryptographic hash of the data, used to ensure no changes have
+    occurred since the citation.
+
+Identifier
+
+  : An identifier for the data, according to a persistent scheme.
+
+Location
+
+  : A persistent URL from which the dataset is available. Some identifier
+    schemes provide these via an identifier resolver service.
 
 The most important of these elements – the ones that should be present
 in any citation – are the author, the title and date, and the location.
@@ -617,7 +633,7 @@ data, and permit access the data, respectively. In theory, they should
 between them uniquely identify the dataset; in practice, a formal
 identifier is often needed. The most efficient solution is to give a
 location that consists of a resolver service and an identifier (for an
-example, see on ).
+example, see FIGURE 3 BELOW).
 
 [fig:common]
 
@@ -625,8 +641,8 @@ example, see on ).
 
 Note that the way in which these elements would be styled and combined
 together in the finished citation depends on the style in use for
-citations of textual publications. provides example data citations drawn
-from commonly used style manuals, while shows the citation formats
+citations of textual publications. FIGURE 1 provides example data citations drawn
+from commonly used style manuals, while FIGURE 2 shows the citation formats
 suggested by three data repositories.
 
 Digital Object Identifiers {#sec:dois}
@@ -645,6 +661,8 @@ themselves have the standard Handle structure of prefix, slash, suffix
 (see ). All DOI prefixes begin with ‘`10.`’ to mark them as such; the
 prefix may be further subdivided with dots, but otherwise the characters
 in a DOI have no special significance.
+
+This was inserted to alleviate a bad page break.
 
 [fig:doi]
 
@@ -686,8 +704,10 @@ certain conventions are already becoming established.
     DOI points should also remain unchanged, with any new version
     receiving a new DOI.
 
-**Example **
+<div class="div_highlight" style="border-radius:8px;">
+\expandafter\csname begin\endcsname{boxout}
 
+\paragraph{Example}
 Sage Bionetworks is a non-profit biomedical research organisation
 which is creating the Sage Commons, an infrastructure for
 community-based modelling of large multi-contributor datasets. The
@@ -703,6 +723,9 @@ may be executed by Taverna Workbench, allowing the results from the
 pipeline to be reproduced. The SageCite Project worked with Sage
 Bionetworks to demonstrate both capturing workflows using Taverna, and
 making them citable resources using DataCite DOIs.
+
+\expandafter\csname end\endcsname{boxout}
+</div>
 
 Current issues and challenges {#sec:issues}
 =============================
@@ -2056,7 +2079,7 @@ University) and Tom Pollard (BL) for helpful comments.
 %LITERAL
 %</bib>
 %<*template>
-\documentclass[twocolumn]{dcchowto}
+\documentclass[twocolumn,numbers]{dcchowto}
 $if(biblio-files)$
 \bibliography{$biblio-files$}
 $endif$
@@ -2090,8 +2113,7 @@ $endif$
 \def\docoverandabstract{%
   \let\quote=\oldquote
   \let\endquote=\endoldquote
-  \maketitle
-  %\makehowtotitle{\tmp}%
+  \maketitle[\tmp]%
 }
 
 \begin{document}
