@@ -2533,6 +2533,72 @@ mandatory and optional arguments are, and so forth.
 \raggedyright
 %    \end{macrocode}
 %
+% \subsection{Typography}
+% 
+% Abstract
+% 
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \renewcommand{\abstractname}{Introduction}%
+  \setlength{\absparindent}{0pt}%
+}
+\renewcommand{\abstractnamefont}{\color{dccblue}\Huge}
+\renewcommand{\abstracttextfont}{\color{dccblue}\Large\itshape\lightseries}
+\setlength{\absleftindent}{0pt}
+\setlength{\absrightindent}{0pt}
+\renewcommand{\absnamepos}{flushleft}
+%    \end{macrocode}
+%
+% Headings
+%
+%    \begin{macrocode}
+\setsecheadstyle{%
+  \normalfont\LARGE\bfseries\raggedright\textcolor{dccblue}%
+}
+\setsubsecheadstyle{%
+  \normalfont\Large\raggedright\textcolor{dccblue}%
+}
+\setsubsubsecheadstyle{%
+  \normalfont\normalsize\itshape\raggedright\textcolor{dccblue}%
+}
+\newcommand{\dottedblue}[1]{\textcolor{dccblue}{\addperiod{#1}}}
+\setparaheadstyle{%
+  \normalfont\normalsize\bfseries\dottedblue
+}
+\setsubparaheadstyle{%
+  \normalfont\normalsize\itshape\dottedblue
+}
+\ifKV@dcchowto@twocolumn
+  \hangcaption
+\fi
+\captionstyle[\centering]{\raggedyright}
+\captionnamefont{\footnotesize\bfseries}
+\captiontitlefont{\footnotesize}
+\setsecnumdepth{part}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+%    \end{macrocode}
+% 
+% Footnotes
+%
+%    \begin{macrocode}
+\ifKV@dcchowto@twocolumn
+  \renewcommand*{\footnoterule}{%
+    \kern-3pt%
+    \textcolor{dccmaroon}{\hrule}%
+    \kern 2.6pt%
+  }
+  \setlength{\footmarkwidth}{0pt}
+  \setlength{\footmarksep}{0pt}
+  \footmarkstyle{\textsuperscript{#1} }
+  \renewcommand{\makefootmarkhook}{\raggedyright}
+\fi
+%    \end{macrocode}
+% 
+% 
+%^^A    \begin{macrocode}
+%^^A    \end{macrocode}
+% 
 % \subsection{Bibliography}
 % 
 %    \begin{macrocode}
