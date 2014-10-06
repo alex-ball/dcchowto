@@ -2860,10 +2860,23 @@ mandatory and optional arguments are, and so forth.
   \renewcommand{\makefootmarkhook}{\raggedyright}
 \fi
 %    \end{macrocode}
-% 
-% 
-%^^A    \begin{macrocode}
-%^^A    \end{macrocode}
+%
+% Where it is used, \cs{today} is printed in small caps. The preferred font uses
+% fake small caps, but sadly old style numbers aren't faked. By marking up the
+% figures explicitly, we can allow them to be faked.
+%
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \renewcommand*{\today}{%
+    \oldstylenums{\number\day}\space
+    \ifcase\month
+      \or January\or February\or March\or April\or May\or June \or July%
+      \or August\or September\or October\or November\or December%
+    \fi
+    \space\oldstylenums{\number\year}%
+  }%
+}
+%    \end{macrocode}
 % 
 % \subsection{Bibliography}
 % 
