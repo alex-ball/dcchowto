@@ -2099,6 +2099,12 @@ $for(author)$
 \author{$author$}
 $endfor$
 \date{$date$}
+$for(partner)$
+\partner{$partner$}
+$endfor$
+$for(partnerlogo)$
+\partnerlogo{$partnerlogo$}
+$endfor$
 
 \usepackage{environ}
 
@@ -2710,8 +2716,18 @@ mandatory and optional arguments are, and so forth.
   }%
 }{}{%
   \makebox[112pt][l]{%
-    \raisebox{-22.8pt}[0pt][0pt]{%
-      \DCCLogo[width=148pt]%\PartnerLogoHook
+    \raisebox{10pt-\height}[0pt][0pt]{%
+      \begin{minipage}{148pt}
+        \raggedleft
+        \DCCLogo[width=148pt]\quad
+        \dcchowto@partner@logos
+        \raisebox{0pt}[\height+24pt][0pt]{%
+          \makebox[45pt][l]{%
+            \includegraphics[width=80pt]{jisc-tab}%
+          }%
+        }%
+      \end{minipage}
+      %
     }%
   }%
 }
@@ -2827,6 +2843,26 @@ mandatory and optional arguments are, and so forth.
     \dcchowto@author@name
   }
 }
+\newcounter{dcchowto@partners}
+\def\dcchowto@partners{\setcounter{dcchowto@partners}{0}}
+\newcommand{\partner}[1]{%
+  \ifnum\thedcchowto@partners>0
+    \expandafter\def\csname dcchowto@partner\roman{dcchowto@partners}@and\endcsname{, }
+  \fi
+  \stepcounter{dcchowto@partners}
+  \expandafter\def\csname dcchowto@partner\roman{dcchowto@partners}@and\endcsname{ and }
+  \appto\dcchowto@partners{%
+    \stepcounter{dcchowto@partners}%
+    \csname dcchowto@partner\roman{dcchowto@partners}@and\endcsname
+  }
+  \eappto\dcchowto@partners{#1}  
+}
+\def\dcchowto@partner@logos{}
+\newcommand{\partnerlogo}[1]{%
+  \appto\dcchowto@partner@logos{%
+    \raisebox{0pt}[\height+24pt][0pt]{#1}\quad
+  }%
+}
 %    \end{macrocode}
 %
 % \subsection{Title page}
@@ -2842,7 +2878,7 @@ mandatory and optional arguments are, and so forth.
     \begin{minipage}[b]{\TitleTabWidth}
       \begin{raggedright}
         \fontsize{16pt}{20pt}\selectfont\lightseries\color{white}%
-        A Digital Curation Centre%\PartnerNameHook
+        A Digital Curation Centre\dcchowto@partners
         \ `working level' guide\par
       \end{raggedright}
     \end{minipage}
