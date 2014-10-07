@@ -481,8 +481,8 @@ This work is "maintained" (as per LPPL maintenance status) by
 %<<LITERAL
 ---
 author:
-- 'Alex Ball'
-- 'Monica Duke'
+- 'Alex Ball (DCC)'
+- 'Monica Duke (DCC)'
 title: How to Cite Datasets and Link to Publications
 ...
 
@@ -2095,7 +2095,9 @@ $endif$
 $if(title)$
 \title{$title$}
 $endif$
-\author{$for(author)$$author$$sep$ \and $endfor$}
+$for(author)$
+\author{$author$}
+$endfor$
 \date{$date$}
 
 \usepackage{environ}
@@ -2135,7 +2137,7 @@ Two other DCC guides cover this topic:
 \normalcolor
 \printbibliography[category=notcited]
 
-\textbf{Please cite as:} ???. ‘\thetitle’. \emph{DCC How-to Guides}. Edinburgh: Digital Curation Centre. Available online: \url{http://www.dcc.ac.uk/resources/how-guides}
+\textbf{Please cite as:} \DCCHowtoAuthorAPA\ (\the\year). ‘\thetitle’. \emph{DCC How-to Guides}. Edinburgh: Digital Curation Centre. Available online: \url{http://www.dcc.ac.uk/resources/how-guides}
 
 \vfill
 \noindent\bfseries\begingroup%\color{dccblue}
@@ -2462,6 +2464,12 @@ mandatory and optional arguments are, and so forth.
 \LoadClass[a4paper,11pt,extrafontsizes]{memoir}[2008/05/26]
 %    \end{macrocode}
 %
+% Utilities
+%
+%    \begin{macrocode}
+\RequirePackage{etoolbox,xstring}
+%    \end{macrocode}
+%
 % Language tools
 %
 %    \begin{macrocode}
@@ -2487,7 +2495,14 @@ mandatory and optional arguments are, and so forth.
 % 
 %    \begin{macrocode}
 \RequirePackage{hyperref}
-\AtBeginDocument{\hypersetup{pdfborder={0 0 0},pdfauthor=\theauthor,pdftitle=\thetitle}\urlstyle{tt}}
+\AtBeginDocument{%
+  \hypersetup
+    {pdfborder={0 0 0}%
+    ,pdfauthor=\dcchowto@author@pdf
+    ,pdftitle=\thetitle
+    }%
+  \urlstyle{tt}%
+}
 %    \end{macrocode}
 %
 % \subsection{Layout}
@@ -2742,11 +2757,81 @@ mandatory and optional arguments are, and so forth.
 \fi
 %    \end{macrocode}
 %
+% \subsection{Metadata}
+%
+%    \begin{macrocode}
+\newcounter{dcchowto@authors}
+\newcounter{dcchowto@space}
+\def\dcchowto@author@display{\setcounter{dcchowto@authors}{0}}
+\def\DCCHowtoAuthorAPA{\setcounter{dcchowto@authors}{0}}
+\def\dcchowto@author@pdf{}
+\renewcommand{\author}[1]{%
+  \StrBefore{#1}{ (}[\dcchowto@author@name]
+  \ifdefempty{\dcchowto@author@name}{%
+    \def\dcchowto@author@name{#1}%
+    \let\dcchowto@author@affil\undefined
+  }{%
+    \StrBetween{#1}{(}{)}[\dcchowto@author@affil]%
+  }
+  \ifnum\thedcchowto@authors>0
+    \expandafter\def\csname dcchowto@author\roman{dcchowto@authors}@and\endcsname{, }
+    \expandafter\def\csname dcchowto@author\roman{dcchowto@authors}@et\endcsname{, }
+    \stepcounter{dcchowto@authors}
+    \expandafter\def\csname dcchowto@author\roman{dcchowto@authors}@and\endcsname{ and }
+    \expandafter\def\csname dcchowto@author\roman{dcchowto@authors}@et\endcsname{, \& }
+    \appto\dcchowto@author@display{%
+      \stepcounter{dcchowto@authors}%
+      \csname dcchowto@author\roman{dcchowto@authors}@and\endcsname
+    }
+    \appto\DCCHowtoAuthorAPA{%
+      \stepcounter{dcchowto@authors}%
+      \csname dcchowto@author\roman{dcchowto@authors}@et\endcsname
+    }
+    \appto\dcchowto@author@pdf{, }
+  \else
+    \stepcounter{dcchowto@authors}
+    \appto\dcchowto@author@display{%
+      \stepcounter{dcchowto@authors}%
+    }
+    \appto\DCCHowtoAuthorAPA{%
+      \stepcounter{dcchowto@authors}%
+    }
+  \fi
+  \eappto\dcchowto@author@display{%
+    \noexpand\textmd{\dcchowto@author@name}%
+  }
+  \ifdef{\dcchowto@author@affil}{%
+    \eappto\dcchowto@author@display{
+      (\dcchowto@author@affil)%
+    }%
+  }{}
+  \StrCount{\dcchowto@author@name}{ }[\dcchowto@spaces]
+  \StrBehind[\dcchowto@spaces]{\dcchowto@author@name}{ }[\dcchowto@author@surname]
+  \eappto\DCCHowtoAuthorAPA{%
+    \dcchowto@author@surname,%
+  }
+  \StrChar{\dcchowto@author@name}{1}[\dcchowto@author@init]
+  \eappto\DCCHowtoAuthorAPA{
+    \dcchowto@author@init.%
+  }
+  \setcounter{dcchowto@space}{1}
+  \whileboolexpr{test {\ifnumcomp{\thedcchowto@space}{<}{\dcchowto@spaces}}}{%
+    \StrPosition[\thedcchowto@space]{\dcchowto@author@name}{ }[\dcchowto@initpos]
+    \StrChar{\dcchowto@author@name}{\numexpr\dcchowto@initpos+1}[\dcchowto@author@init]
+    \eappto\DCCHowtoAuthorAPA{
+      \dcchowto@author@init.%
+    }
+    \stepcounter{dcchowto@space}
+  }
+  \eappto\dcchowto@author@pdf{%
+    \dcchowto@author@name
+  }
+}
+%    \end{macrocode}
+%
 % \subsection{Title page}
 % 
 %    \begin{macrocode}
-\newcommand*{\thedisplayauthor}{\theauthor}
-\newcommand*{\displayauthor}[1]{\renewcommand*{\thedisplayauthor}{#1}}
 \newbox\TitleBox
 \let\maketitle\relax
 \newcommand{\maketitle}[1][]{%
@@ -2772,8 +2857,8 @@ mandatory and optional arguments are, and so forth.
       \end{flushleft}
       
       \begin{flushleft}
-        \huge\color{dccblue}
-        \thedisplayauthor
+        \huge\lightseries\color{dccblue}
+        \dcchowto@author@display
       \end{flushleft}
       
       \ifx\undefined\dcchowto@mark\else
