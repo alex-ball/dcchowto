@@ -547,6 +547,8 @@ Requirements for data citations {#sec:reqs}
 The SageCite Project has identified a set of requirements for dataset
 citations and any services set up to support them.[@duke2011rdc]
 
+<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
+
   * The citation itself must be able to identify uniquely the object cited,
     though different citations might use different methods or schemes to do
     so.
@@ -563,6 +565,8 @@ citations and any services set up to support them.[@duke2011rdc]
     there need to be services that use the citations in metrics to support
     the academic reward system, and services that can generate complete
     citations.
+
+\endboxout\egroup</div>
 
 Elements of a data citation {#sec:elements}
 ===========================
@@ -704,7 +708,7 @@ certain conventions are already becoming established.
     DOI points should also remain unchanged, with any new version
     receiving a new DOI.
 
-<div class="div_highlight" style="border-radius:8px;">\boxout
+<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
 \noindent{}**Example**
 
 \smallskip\noindent
@@ -724,7 +728,7 @@ pipeline to be reproduced. The SageCite Project worked with Sage
 Bionetworks to demonstrate both capturing workflows using Taverna, and
 making them citable resources using DataCite DOIs.
 
-\endboxout</div>
+\endboxout\egroup</div>
 
 Current issues and challenges {#sec:issues}
 =============================
@@ -3017,6 +3021,12 @@ mandatory and optional arguments are, and so forth.
   , colframe=dccmaroon
   , coltext=dccblue
   , parbox=false
+  , code=
+    { \setlist[itemize]%
+      { leftmargin=*
+      , font=\color{dccblue}
+      }%
+    }
   , left=2mm
   , right=2mm
   , oversize
