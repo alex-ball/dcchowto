@@ -30,6 +30,7 @@ html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@<h1>References</h1>@<h2>References</h2>@ig' $(EG).html
 dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME).latex
 	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME) $(EG).md -t latex -o $(EG).tex
+	perl -0777 -p -i -e 's@,\sURL:@, \\smallcaps{URL}:@igs' $(EG).tex
 	latexmk -pdflatex="pdflatex -synctex=1 -interaction batchmode %O %S" -pdf $(EG).tex
 clean:
 	rm -f $(NAME).{aux,cod,fdb_latexmk,fls,glo,gls,hd,idx,ilg,ind,ins,log,out,pyg}
