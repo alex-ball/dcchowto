@@ -24,3 +24,11 @@ either version 1.3c of this license or (at your option) any later version.
 
 This work is "maintained" (as per LPPL maintenance status) by
 [Alex Ball](http://alexball.me.uk/).
+
+Please note that the generated file dcchowto-apa.csl is based on the apa.csl
+file written by Simon Kornblith, with contributions from Bruce D'Arcus,
+Curtis M. Humphrey, Richard Karnesky and Sebastian Karcher, and in its
+standalone form is separately licensed under a
+[Creative Commons Attribution-ShareAlike 4.0 International
+Licence](http://creativecommons.org/licenses/by-sa/4.0/).
+

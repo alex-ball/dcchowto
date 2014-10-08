@@ -26,13 +26,15 @@ html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\[([^\]]+)\]\{[^}]+\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\{([^}]+)\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\input\{([^}]+)\}@open+F,"$$1.html";join"",<F>@ige' $(EG)-tmp.md
-	pandoc -s -S --biblio $(EG).bib --csl $(NAME)-apa.csl $(EG)-tmp.md -o $(EG).html
+	pandoc -s -S --toc --biblio $(EG).bib --csl $(NAME)-apa.csl $(EG)-tmp.md -o $(EG).html
 	perl -0777 -p -i -e 's@<h5 id="([^"]+)">([^<]+)</h5>@<h6 id="\1">\2</h6>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h4 id="([^"]+)">([^<]+)</h4>@<h5 id="\1">\2</h5>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h3 id="([^"]+)">([^<]+)</h3>@<h4 id="\1">\2</h4>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h2 id="([^"]+)">([^<]+)</h2>@<h3 id="\1">\2</h3>@ig' $(EG).html
-	perl -0777 -p -i -e 's@<h1 id="([^"]+)">([^<]+)</h1>@<h2 id="\1">\2</h2>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<h1 id="([^"]+)">([^<]+)</h1>@<p class="back"><a href="#top"><img alt="Back to top" class="mceItem" height="16" src="http://www.dcc.ac.uk//sites/all/themes/dcc/images/arrow_up.png" title="Back to top" width="16" /></a></p>\n<h2 id="\1">\2</h2>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<div class="div_highlight" style="border-radius:8px;">\n<h1>([^<]+)</h1>@<div class="div_highlight" style="border-radius:8px;">\n<h2>\1</h2>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h1>References</h1>@<h2>References</h2>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<sup>(\d+)</sup>@<sup>[\1]</sup>@ig' $(EG).html
 dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME).latex
 	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME) $(EG).md -t latex -o $(EG).tex
 	perl -0777 -p -i -e 's@,\sURL:@, \\smallcaps{URL}:@igms' $(EG).tex
