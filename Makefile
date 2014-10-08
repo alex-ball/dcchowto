@@ -14,13 +14,18 @@ $(NAME).pdf: $(NAME).dtx
 	if [ -f $(NAME).glo ]; then makeindex -q -s gglo.ist -o $(NAME).gls $(NAME).glo; fi
 	if [ -f $(NAME).idx ]; then makeindex -q -s gind.ist -o $(NAME).ind $(NAME).idx; fi
 	pdflatex -shell-escape -recorder -interaction=nonstopmode $(NAME).dtx > /dev/null
-	pdflatex -shell-escape -recorder -interaction=nonstopmode $(NAME).dtx > /dev/null
+	pdflatex -shell-escape -recorder -synctex=1 -interaction=nonstopmode $(NAME).dtx > /dev/null
 tmp: $(NAME).pdf $(EG).md
 	cp $(EG).md $(EG)-tmp.md
 	echo -e "\n# References\n\n" >> $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\bgroup\\boxout@<div class="div_highlight" style="border-radius:8px;">@ig' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\endboxout\\egroup@</div>@ig' $(EG)-tmp.md
 pdf: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
 	pandoc -s -S --latex-engine=lualatex --biblio $(EG).bib --csl $(NAME)-apa.csl -N -V fontsize=11pt -V papersize=a4paper -V lang=british -V geometry:hmargin=3cm -V geometry:vmargin=2.5cm -V mainfont=Charis\ SIL -V monofont=DejaVu\ Sans\ Mono $(EG)-tmp.md -o $(EG)-preview.pdf
 html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
+	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\[([^\]]+)\]\{[^}]+\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\{([^}]+)\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\input\{([^}]+)\}@open+F,"$$1.html";join"",<F>@ige' $(EG)-tmp.md
 	pandoc -s -S --biblio $(EG).bib --csl $(NAME)-apa.csl $(EG)-tmp.md -o $(EG).html
 	perl -0777 -p -i -e 's@<h5 id="([^"]+)">([^<]+)</h5>@<h6 id="\1">\2</h6>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h4 id="([^"]+)">([^<]+)</h4>@<h5 id="\1">\2</h5>@ig' $(EG).html
@@ -30,7 +35,9 @@ html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@<h1>References</h1>@<h2>References</h2>@ig' $(EG).html
 dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME).latex
 	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME) $(EG).md -t latex -o $(EG).tex
-	perl -0777 -p -i -e 's@,\sURL:@, \\smallcaps{URL}:@igs' $(EG).tex
+	perl -0777 -p -i -e 's@,\sURL:@, \\smallcaps{URL}:@igms' $(EG).tex
+	perl -0777 -p -i -e 's@\\texttt\{\\textless\{\}\}@\$$\\langle\$$@ig' $(EG).tex
+	perl -0777 -p -i -e 's@\\texttt\{\\textgreater\{\}\}@\$$\\rangle\$$@ig' $(EG).tex
 	latexmk -pdflatex="pdflatex -synctex=1 -interaction batchmode %O %S" -pdf $(EG).tex
 clean:
 	rm -f $(NAME).{aux,cod,fdb_latexmk,fls,glo,gls,hd,idx,ilg,ind,ins,log,out,pyg}

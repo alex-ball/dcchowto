@@ -550,7 +550,7 @@ Requirements for data citations {#sec:reqs}
 The SageCite Project has identified a set of requirements for dataset
 citations and any services set up to support them.[@duke2011rdc]
 
-<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
+\bgroup\boxout
 
   * The citation itself must be able to identify uniquely the object cited,
     though different citations might use different methods or schemes to do
@@ -569,7 +569,7 @@ citations and any services set up to support them.[@duke2011rdc]
     the academic reward system, and services that can generate complete
     citations.
 
-\endboxout\egroup</div>
+\endboxout\egroup
 
 Elements of a data citation {#sec:elements}
 ===========================
@@ -641,17 +641,85 @@ data, and permit access the data, respectively. In theory, they should
 between them uniquely identify the dataset; in practice, a formal
 identifier is often needed. The most efficient solution is to give a
 location that consists of a resolver service and an identifier (for an
-example, see FIGURE 3 BELOW).
-
-[fig:common]
-
-[fig:repo-cites]
+example, see [Figure 3](#fig:doi) below).
 
 Note that the way in which these elements would be styled and combined
 together in the finished citation depends on the style in use for
-citations of textual publications. FIGURE 1 provides example data citations drawn
-from commonly used style manuals, while FIGURE 2 shows the citation formats
+citations of textual publications. [Figure 1](#fig:common) provides example data citations drawn
+from commonly used style manuals, while [Figure 2](#fig:repo-cites) shows the citation formats
 suggested by three data repositories.
+
+\bgroup\figure[ht]\fillboxout\small
+
+APA
+
+  : Cool, H. E. M., & Bell, M. (2011). *Excavations at St Peter's Church,
+    Barton-upon-Humber* \[Data set\].
+    [doi:10.5284/1000389](http://dx.doi.org/10.5284/1000389)
+
+Chicago
+
+  : *(Footnote)* H. E. M. Cool and Mark Bell, Excavations at St Peter's Church,
+    Barton-upon-Humber (accessed May 1, 2011),
+    [doi:10.5284/1000389](http://dx.doi.org/10.5284/1000389).
+
+    *(Bibliography)* Cool, H. E. M., and Mark Bell. Excavations at St Peter's Church,
+    Barton-upon-Humber (accessed May 1, 2011).
+    [doi:10.5284/1000389](http://dx.doi.org/10.5284/1000389).
+
+MLA
+
+  : Cool, H. E. M., and Mark Bell. "Excavations at St Peter's Church,
+    Barton-upon-Humber." Archaeology Data Service, 2001. Web. 1 May 2011.
+    `<`<http://dx.doi.org/10.5284/1000389>`>`.
+
+Oxford
+
+  : Cool, H. E. M. & Bell, M. (2011) *Excavations at St Peter's Church,
+    Barton-upon-Humber* \[data-set\]. York: Archaeology Data Service \[distributor\]
+    `<`DOI [10.5284/1000389](http://dx.doi.org/10.5284/1000389)`>`.
+
+\endfillboxout
+
+\caption[Data citations in common styles]{Data citations in common styles\footnotemark}
+\label{fig:common}
+
+\endfigure\egroup
+
+\footnotetext{%
+\fullcite[211]{apa2010pma}.\quad
+\fullcite[764]{ucp2010cms}.\quad
+\fullcite[213--214, 238--239]{gibaldi2008msm}.\quad
+\fullcite[551]{ritter2002oms}.}
+
+\bgroup\figure[ht]\fillboxout\small
+
+PANGAEA
+
+  : Willmes, S et al. (2009): Onset dates of annual snowmelt on Antarctic
+    sea ice in 2007/2008.
+    [doi:10.1594/PANGAEA.701380](http://dx.doi.org/10.1594/PANGAEA.701380)
+
+Dryad
+
+  : Kingsolver JG, Hoekstra HE, Hoekstra JM, Berrigan D, Vignieri SN,
+    Hill CE, Hoang A, Gibert P, Beerli P (2001) Data from: The strength of
+    phenotypic selection in natural populations. Dryad Digital Repository.
+    [doi:10.5061/dryad.166](http://dx.doi.org/10.5061/dryad.166)
+
+Dataverse
+
+  : Frederico Girosi; Gary King, 2006, 'Cause of Death Data',
+    <http://hdl.handle.net/1902.1/UOVMCPSWOL>
+    `UNF:3:9JU+SmVyHgwRhAKclQ85Cg==`
+    IQSS Dataverse Network \[Distributor\] V3 \[Version\].
+
+\endfillboxout
+
+\caption{Data citation formats suggested by repositories}
+\label{fig:repo-cites}
+
+\endfigure\egroup
 
 Digital Object Identifiers {#sec:dois}
 --------------------------
@@ -667,11 +735,18 @@ DOI Foundation.^[DOI System Website, URL: <http://www.doi.org/>.]
 It is built on the Handle System but has its own
 conventions and an independent business model. The identifiers
 themselves have the standard Handle structure of prefix, slash, suffix
-(see ). All DOI prefixes begin with ‘`10.`’ to mark them as such; the
+(see [Figure 3](#fig:doi)). All DOI prefixes begin with ‘`10.`’ to mark them as such; the
 prefix may be further subdivided with dots, but otherwise the characters
 in a DOI have no special significance.
 
-[fig:doi]
+\bgroup\figure[ht]\fillboxout\small
+\input{fig-doi}
+
+\endfillboxout
+\caption{Anatomy of a DOI}
+\label{fig:doi}
+
+\endfigure\egroup
 
 While there are several services available that can resolve a DOI to an
 Internet location,^[Some publishers provide resolvers for their own DOIs, while
@@ -703,7 +778,8 @@ third-party service such as EZID.^[EZID Website, URL:
 <http://www.cdlib.org/services/uc3/ezid/>.] The username and password are not
 needed for the metadata search or OAI-PMH services.
 
-While best practice has yet to emerge on some matters, (see ‘’ below),
+While best practice has yet to emerge on some matters, (see ‘[Current
+issues and challenges](#sec:issues)’ below),
 certain conventions are already becoming established.
 
 -   Authors should use the URL version of the DOI (i.e. including the
@@ -717,7 +793,7 @@ certain conventions are already becoming established.
     DOI points should also remain unchanged, with any new version
     receiving a new DOI.
 
-<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
+\bgroup\boxout
 \noindent{}**Example**
 
 \smallskip\noindent
@@ -737,7 +813,7 @@ pipeline to be reproduced. The SageCite Project worked with Sage
 Bionetworks to demonstrate both capturing workflows using Taverna, and
 making them citable resources using DataCite DOIs.
 
-\endboxout\egroup</div>
+\endboxout\egroup
 
 Current issues and challenges {#sec:issues}
 =============================
@@ -843,9 +919,19 @@ As the primary utility for such identifiers will be to support software
 tools, they will probably be better placed in machine-readable metadata
 than written out for human inspection. Nevertheless, the ORCID
 Initiative envisages ORCID IDs being included in parentheses after
-author names in textual citations, as in .
+author names in textual citations, as in [Figure 4](#fig:orcid).
 
-[fig:orcid]
+\bgroup\figure[ht]\fillboxout\small
+\noindent{}Chaturvedi, V. (AAA-1019-2010). (2004). Editorial.
+*Mycopathologia, 157,* iii–iv. Retrieved from
+<http://dx.doi.org/10.1023/B:MYCO.0000020677.89178.15>
+
+\endfillboxout
+\caption{Example citation using an ORCID ID}
+\label{fig:orcid}
+
+\endfigure\egroup
+
 
 Placement of data citations {#sec:place}
 ---------------------------
@@ -872,7 +958,7 @@ training. Bibliographies also tend to be better indexed and more freely
 available than the main texts of papers, and would therefore afford the
 citation greater visibility.
 
-<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
+\bgroup\boxout
 
 Summary for researchers
 =======================
@@ -906,7 +992,7 @@ version you used.
 that holds the dataset, so it can add a link from that dataset to your
 paper.
 
-\endboxout\egroup</div>
+\endboxout\egroup
 
 The remainder of this guide is aimed at those responsible for the
 supporting infrastructure, rather than researchers.
@@ -971,7 +1057,7 @@ usage beyond e-print repositories to STFC’s ICAT data catalogue, open
 electronic notebooks and scientific publishers.^[Webtracks Project Web page, URL: 
 <http://www.stfc.ac.uk/e-Science/projects/medium-term/metadata/webtracks/22422.aspx>.]
 
-<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
+\bgroup\boxout
 \noindent{}**Example**
 
 \smallskip\noindent
@@ -985,7 +1071,7 @@ the metadata lookup API from the CrossRef registration agency) or a
 PubMed identifier, though this has not yet been extended to work with
 DataCite DOIs.
 
-\endboxout\egroup</div>
+\endboxout\egroup
 
 Nanopublications {#sec:nano}
 ----------------
@@ -1026,7 +1112,8 @@ Citation Typing Ontology {#sec:cito}
 The Citation Typing Ontology (CiTO) is a formal language for specifying
 why one resource cites another [@shotton2010cct]. It contains several
 terms particularly relevant for data citation; additional terms can be
-found in the extension ontology CiTO4Data.[^22]
+found in the extension ontology CiTO4Data.[@shotton.peroni2011cct]
+[@shotton.peroni2011cdc]
 
 -   *Uses data from/provides data for.* These terms describe the
     relationship between a dataset and a paper describing work using
@@ -1054,7 +1141,7 @@ Data citation infrastructures {#sec:infrastructure}
 The following repositories and systems provide examples of data citation
 infrastructures in practice, both in terms of human workflows and
 software, that could be reused by other repositories. Sample citations
-provided by each of them can be found in on .
+provided by each of them can be found in [Figure 2](#fig:repo-cites) above.
 
 PANGAEA {#sec:pangaea}
 -------
@@ -1184,12 +1271,27 @@ an OAI-ORE Resource Map [@lagoze.etal2008oug].
 Clearly humans and software have different requirements for the dataset
 landing page. One way to satisfy both would be to embed the metadata
 intended for software tools as RDF within the human-readable Web page.
-This can be done using either RDFa as in [@adida.birbeck2008rp], or
-HTML5 microdata as in [@w3c2011hm].
+This can be done using either RDFa as in [Figure 5](#fig:rdfa)
+[@adida.birbeck2008rp], or HTML5 microdata as in [Figure 6](#fig:html5)
+[@w3c2011hm].
 
-[fig:rdfa]
+\bgroup\figure[ht]\fillboxout\small
+\input{fig-rdfa}
 
-[fig:html5]
+\endfillboxout
+\caption{Example of using RDFa to embed a link to a publication within a dataset's Web page}
+\label{fig:rdfa}
+
+\endfigure\egroup
+
+\bgroup\figure[ht]\fillboxout\small
+\input{fig-html5}
+
+\endfillboxout
+\caption{Example of using HTML5 microdata to embed a link to a publication within a dataset's Web page}
+\label{fig:html5}
+
+\endfigure\egroup
 
 An alternative method of serving both constituencies would be to use
 *content negotiation*. This is where the Web server keeps several
@@ -1207,11 +1309,11 @@ the data files or instructions on how to access them, licence terms –
 they are still experimenting with the information they provide to
 software tools.
 
-<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
+\bgroup\boxout
 \noindent{}**Example**
 
-\smallskip\noindent
-*Acta Crystallographica Section E* (*Acta Cryst E*) is an online,
+\smallskip
+\noindent{}*Acta Crystallographica Section E* (*Acta Cryst E*) is an online,
 open access data journal published by the International Union of
 Crystallographers. It operates a workflow whereby data are submitted by
 authors at the same time as the data collection paper. The data are
@@ -1224,7 +1326,7 @@ these. It also explored, with *Acta Cryst E*, the possibility of
 embedding data directly within the Web pages of journal papers, using
 RDF and microformats in a profile of HTML known as Scholarly HTML.
 
-\endboxout\egroup</div>
+\endboxout\egroup
 
 Versioning {#sec:versions}
 ----------
@@ -1274,7 +1376,7 @@ users as citable resources. It does not affect how a repository might
 store the data, so long as it can guarantee that the same identifier
 always returns the same data.
 
-<div class="div_highlight" style="border-radius:8px;">\bgroup\boxout
+\bgroup\boxout
 
 Summary for data repositories
 =============================
@@ -1308,7 +1410,7 @@ collaboration with authors and publishers.
 local DataCite member. For more information about registering Archival
 Resource Keys, contact the California Digital Library.
 
-\endboxout\egroup</div>
+\endboxout\egroup
 
 Acknowledgements
 ================
@@ -2224,7 +2326,7 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
 \usepackage[bookmarks,raiselinks,pageanchor,hyperindex,colorlinks]{hyperref}
 \usepackage{tcolorbox}
 \tcbuselibrary{documentation,breakable,minted}
-\tcbset{listing engine=minted}
+\tcbset{listing engine=minted,index format=doc}
 \makeatletter
 \AtBeginDocument{%
   % Comments
@@ -2984,6 +3086,29 @@ mandatory and optional arguments are, and so forth.
   , right=2mm
   , oversize
   }
+\newtcolorbox{fillboxout}%
+  { colback=dccpeach
+  , colframe=dccpeach
+  , coltext=dccmaroon
+  , boxrule=0pt
+  , parbox=false
+  , code=
+    { \setlist[itemize]%
+      { leftmargin=*
+      , font=\color{dccblue}
+      }%
+      \setlist[description]%
+      { font=\color{dccblue}
+      , style=nextline
+      , leftmargin=0pt
+      }%
+    }
+  , before upper=\raggedyright
+  , left=1ex
+  , right=1ex
+  , top=1ex
+  , bottom=1ex
+}
 %    \end{macrocode}
 %
 % Footnotes
