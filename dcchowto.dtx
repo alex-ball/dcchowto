@@ -473,28 +473,6 @@ Licence](http://creativecommons.org/licenses/by-sa/4.0/).
       <text macro="access" prefix=" "/>
     </layout>
   </citation>
-  <bibliography hanging-indent="true" et-al-min="8" et-al-use-first="6" et-al-use-last="true" entry-spacing="0" line-spacing="2">
-    <sort>
-      <key macro="author"/>
-      <key macro="issued-sort" sort="ascending"/>
-    </sort>
-    <layout>
-      <group suffix=".">
-        <group delimiter=". ">
-          <text macro="author"/>
-          <text macro="issued"/>
-          <text macro="title" prefix=" "/>
-          <text macro="container"/>
-        </group>
-        <text macro="locators"/>
-        <group delimiter=", " prefix=". ">
-          <text macro="event"/>
-          <text macro="publisher"/>
-        </group>
-      </group>
-      <text macro="access" prefix=" "/>
-    </layout>
-  </bibliography>
 </style>
 %LITERAL
 %</csl>
@@ -506,15 +484,6 @@ author:
 - 'Alex Ball (DCC)'
 - 'Monica Duke (DCC)'
 date: \today
-furtherinfo:
-- 'page2009spt'
-- 'ands2011dca'
-- 'callaghan.etal2011cap'
-- 'newton.etal2010ddc'
-- 'lane2008dce'
-- 'wilkinson2011syw'
-- 'wilkinson2011wdw'
-- 'icpsr2011whs'
 ...
 
 > This guide will help you create links between your academic publications
@@ -574,7 +543,7 @@ necessary step if the culture of the scientific and research community
 as a whole is to shift towards data sharing, increasing the rapidity and
 transparency with which science advances.
 
-Requirements for data citations {#sec:reqs}
+Requirements for data citations {#sec:requirements}
 ===============================
 
 The SageCite Project has identified a set of requirements for dataset
@@ -881,7 +850,7 @@ several levels of granularity, the finest-grained level that meets the
 need of the citation should be used in the bibliography, to minimise the
 additional information needed.
 
-Microattribution {#sec:micro}
+Microattribution {#sec:microattribution}
 ----------------
 
 Where a dataset is assembled from very many contributions, crediting
@@ -989,7 +958,7 @@ citation greater visibility.
 
 \bgroup\boxout
 
-Summary for researchers {#sec:summ-res}
+Summary for researchers {#sec:summary-researchers}
 =======================
 
 * If you have generated/collected data to be used as evidence in an
@@ -1026,7 +995,7 @@ paper.
 The remainder of this guide is aimed at those responsible for the
 supporting infrastructure, rather than researchers.
 
-Building a citation infrastructure {#sec:building-infra}
+Building a citation infrastructure {#sec:building-infrastructure}
 ==================================
 
 This section provides an overview of some of the technologies available
@@ -1103,7 +1072,7 @@ to work with DataCite DOIs.
 
 \endboxout\egroup
 
-Nanopublications {#sec:nano}
+Nanopublications {#sec:nanopublications}
 ----------------
 
 A nanopublication is, simply put, a statement and a set of annotations
@@ -1266,7 +1235,7 @@ Alternatively, institutions can set up their own Dataverse
 Network using the open source software.^[Dataverse Network code repository, URL:
 <http://sourceforge.net/projects/dvn/>.]
 
-Current implementation issues {#sec:implement-issues}
+Current implementation issues {#sec:implementation-issues}
 =============================
 
 Two current issues for repositories are how to cater for both manual and
@@ -1410,7 +1379,7 @@ always returns the same data.
 
 \bgroup\boxout
 
-Summary for data repositories {#sec:summ-repo}
+Summary for data repositories {#sec:summary-repositories}
 =============================
 
 * Ensure that anyone wishing to cite a dataset you host can use a
@@ -1446,13 +1415,46 @@ contact the California Digital Library.
 
 \endboxout\egroup
 
-Acknowledgements
+Acknowledgements {#sec:acknowledgements}
 ================
 
 Thank you to Sarah Callaghan (STFC), Shirley Crompton (STFC), Michael
 Diepenbroek (WDC-MARE), Margaret Henty (ANDS), Catherine Jones (STFC),
 Sarah Jones (DCC), Florance Kennedy (DCC), Phillip Lord (Newcastle
 University) and Tom Pollard (BL) for helpful comments.
+
+Further information {#sec:further-information}
+===================
+
+\setlength{\parindent}{0pt}\nonzeroparskip\color{dccblue}\small
+Two other DCC guides cover this topic:
+
+-   **Awareness Level:** [*Introduction to Curation: Data Citation and
+    Linking*](http://www.dcc.ac.uk/resources/briefing-papers/introduction-curation/data-citation-and-linking)
+    \(2011\) by Alex Ball and Monica Duke
+
+-   **Awareness Level:** [*Introduction to Curation: Persistent
+    Identifiers*](http://www.dcc.ac.uk/resources/briefing-papers/introduction-curation/persistent-identifiers)
+    \(2006\) by Joy Davidson
+
+\normalcolor
+The following may also be of interest:
+
+-   \fullcite{ands2011dca}[@ands2011dca]
+
+-   \fullcite{lane2008dce}[@lane2008dce]
+
+-   \fullcite{callaghan.etal2011cap}[@callaghan.etal2011cap]
+
+-   \fullcite{newton.etal2010ddc}[@newton.etal2010ddc]
+
+-   \fullcite{page2009spt}[@page2009spt]
+
+-   \fullcite{icpsr2011whs}[@icpsr2011whs]
+
+-   \fullcite{wilkinson2011syw}[@wilkinson2011syw]
+
+-   \fullcite{wilkinson2011wdw}[@wilkinson2011wdw]
 
 %LITERAL
 %</example>
@@ -2221,20 +2223,12 @@ $for(include-before)$
 $include-before$
 $endfor$
 $body$
+$if(furtherinfo)$
 $for(furtherinfo)$
 \nocite{$furtherinfo$}
 $endfor$
-
-\nonzeroparskip
-\section{Further information}
-\setlength{\parindent}{0pt}%
-\small\color{dccblue}%
-$for(include-after)$
-$include-after$
-$endfor$
-
-\normalcolor
 \printbibliography[category=notcited]
+$endif$
 
 \textbf{Please cite as:} \DCCHowtoAuthorAPA\ (\the\year). ‘\thetitle’. \emph{DCC How-to Guides}. Edinburgh: Digital Curation Centre. Available online: \url{http://www.dcc.ac.uk/resources/how-guides}
 
@@ -2245,6 +2239,9 @@ Follow the DCC on Twitter: \href{http://twitter.com/#!/digitalcuration}{@digital
 \vfill
 \raggedleft\mdseries\footnotesize Revised: \ifx\undefined\thedate\today\else\thedate\fi\par
 \endgroup
+$for(include-after)$
+$include-after$
+$endfor$
 \end{document}
 %</template>
 %<*htemplate>
@@ -2305,6 +2302,13 @@ $if(date)$
 $endif$
 </div>
 $endif$
+$if(title)$$if(date)$
+<div class="div_highlight">
+Please cite as: $for(author)$$author$$sep$, $endfor$ ($date$). ‘$title$’.
+<em>DCC How-to Guides.</em> Edinburgh: Digital Curation Centre. Available online:
+<a href="http://www.dcc.ac.uk/resources/how-guides">http://www.dcc.ac.uk/resources/how-guides</a>
+</div>
+$endif$$endif$
 $if(toc)$
 <div id="$idprefix$TOC">
 $toc$
