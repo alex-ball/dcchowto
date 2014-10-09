@@ -20,10 +20,11 @@ tmp: $(NAME).pdf $(EG).md
 	echo -e "\n# References {#sec:refs}\n\n" >> $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\bgroup\\boxout@<div class="div_highlight" style="border-radius:8px;">@ig' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\endboxout\\egroup@</div>@ig' $(EG)-tmp.md
-pdf: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
-	pandoc -s -S --latex-engine=lualatex --biblio $(EG).bib --csl $(NAME)-apa.csl -N -V fontsize=11pt -V papersize=a4paper -V lang=british -V geometry:hmargin=3cm -V geometry:vmargin=2.5cm -V mainfont=Charis\ SIL -V monofont=DejaVu\ Sans\ Mono $(EG)-tmp.md -o $(EG)-preview.pdf
-html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
-	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\[([^\]]+)\]\{[^}]+\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\(end)?fillboxout@@ig' $(EG)-tmp.md
+pdf: tmp $(EG).bib $(NAME)-apa.csl
+	pandoc -s -S --latex-engine=lualatex --biblio $(EG).bib --csl $(NAME)-apa.csl -N -V fontsize=11pt -V papersize=a4paper -V lang=british -V geometry:hmargin=3cm -V geometry:vmargin=2.5cm -V mainfont=Charis\ SIL -V monofont=DejaVu\ Sans\ Mono -V header-includes="\usepackage{footmisc}\usepackage[svgnames]{xcolor}\colorlet{dccblue}{blue}" $(EG)-tmp.md -o $(EG)-preview.pdf
+html: tmp $(EG).bib $(NAME)-apa.csl
+	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\[([^\]]+)\]\{[^}]+\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p style="text-align:center;"><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\{([^}]+)\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\input\{([^}]+)\}@open+F,"$$1.html";join"",<F>@ige' $(EG)-tmp.md
 	# The next 4 lines are peculiar to the particular sample content
