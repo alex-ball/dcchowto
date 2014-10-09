@@ -17,7 +17,7 @@ $(NAME).pdf: $(NAME).dtx
 	pdflatex -shell-escape -recorder -synctex=1 -interaction=nonstopmode $(NAME).dtx > /dev/null
 tmp: $(NAME).pdf $(EG).md
 	cp $(EG).md $(EG)-tmp.md
-	echo -e "\n# References\n\n" >> $(EG)-tmp.md
+	echo -e "\n# References {#sec:refs}\n\n" >> $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\bgroup\\boxout@<div class="div_highlight" style="border-radius:8px;">@ig' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\endboxout\\egroup@</div>@ig' $(EG)-tmp.md
 pdf: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
@@ -26,17 +26,28 @@ html: tmp $(EG)-tmp.md $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\[([^\]]+)\]\{[^}]+\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\{([^}]+)\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\input\{([^}]+)\}@open+F,"$$1.html";join"",<F>@ige' $(EG)-tmp.md
-	pandoc -s -S --toc --biblio $(EG).bib --csl $(NAME)-apa.csl $(EG)-tmp.md -o $(EG).html
-	perl -0777 -p -i -e 's@<h5 id="([^"]+)">([^<]+)</h5>@<h6 id="\1">\2</h6>@ig' $(EG).html
-	perl -0777 -p -i -e 's@<h4 id="([^"]+)">([^<]+)</h4>@<h5 id="\1">\2</h5>@ig' $(EG).html
-	perl -0777 -p -i -e 's@<h3 id="([^"]+)">([^<]+)</h3>@<h4 id="\1">\2</h4>@ig' $(EG).html
-	perl -0777 -p -i -e 's@<h2 id="([^"]+)">([^<]+)</h2>@<h3 id="\1">\2</h3>@ig' $(EG).html
-	perl -0777 -p -i -e 's@<h1 id="([^"]+)">([^<]+)</h1>@<p class="back"><a href="#top"><img alt="Back to top" class="mceItem" height="16" src="http://www.dcc.ac.uk//sites/all/themes/dcc/images/arrow_up.png" title="Back to top" width="16" /></a></p>\n<h2 id="\1">\2</h2>@ig' $(EG).html
-	perl -0777 -p -i -e 's@<div class="div_highlight" style="border-radius:8px;">\n<h1>([^<]+)</h1>@<div class="div_highlight" style="border-radius:8px;">\n<h2>\1</h2>@ig' $(EG).html
-	perl -0777 -p -i -e 's@<h1>References</h1>@<h2>References</h2>@ig' $(EG).html
+	# The next 4 lines are peculiar to the particular sample content
+	perl -0777 -p -i -e 's@\\footref\{fn:altman.king\}@<a href="#fn7" class="footnoteRef"><sup>[7]</sup></a>@ig' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\footref\{fn:lawrence.etal\}@<a href="#fn8" class="footnoteRef"><sup>[8]</sup></a>@ig' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\footref\{fn:green\}@<a href="#fn9" class="footnoteRef"><sup>[9]</sup></a>@ig' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\footref\{fn:starr.gastl\}@<a href="#fn10" class="footnoteRef"><sup>[10]</sup></a>@ig' $(EG)-tmp.md
+	pandoc -s -S --toc --toc-depth=1 --biblio $(EG).bib --csl $(NAME)-apa.csl --template=$(NAME)-template $(EG)-tmp.md -o $(EG).html
+	perl -0777 -p -i -e 's@<p></p>@@ig' $(EG).html
+	perl -0777 -p -i -e 's@<h5 id="([^"]+)">(?:<a href="[^"]+">)?([^<]+)(?:</a>)?</h5>@<h6 id="\1">\2</h6>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<h4 id="([^"]+)">(?:<a href="[^"]+">)?([^<]+)(?:</a>)?</h4>@<h5 id="\1">\2</h5>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<h3 id="([^"]+)">(?:<a href="[^"]+">)?([^<]+)(?:</a>)?</h3>@<h4 id="\1">\2</h4>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<h2 id="([^"]+)">(?:<a href="[^"]+">)?([^<]+)(?:</a>)?</h2>@<h3 id="\1">\2</h3>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<h1 id="([^"]+)">(?:<a href="[^"]+">)?([^<]+)(?:</a>)?</h1>@<p class="back"><a href="#top"><img alt="Back to top" class="mceItem" height="16" src="http://www.dcc.ac.uk//sites/all/themes/dcc/images/arrow_up.png" title="Back to top" width="16" /></a></p>\n<h2 id="\1">\2</h2>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<div class="div_highlight" style="border-radius:8px;">\n<h1><a href="([^"]+)">([^<]+)</a></h1>@<div class="div_highlight" style="border-radius:8px;">\n<h2 id="\1">\2</h2>@ig' $(EG).html
+	perl -0777 -p -i -e 's@<h1><a href="#sec:refs">References</a></h1>@<h2 id="#sec:refs">References</h2>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<sup>(\d+)</sup>@<sup>[\1]</sup>@ig' $(EG).html
-dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME).latex
-	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME) $(EG).md -t latex -o $(EG).tex
+dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME)-template.latex
+	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME)-template $(EG).md -t latex -o $(EG).tex
+	# The next 4 lines are peculiar to the particular sample content
+	perl -0777 -p -i -e 's@\\autocite\{altman\.king2007pss\}@\\footnote{\\fullcite{altman.king2007pss}\\label{fn:altman.king}}@ig' $(EG).tex
+	perl -0777 -p -i -e 's@\\autocite\{lawrence\.etal2008dp\}@\\footnote{\\fullcite{lawrence.etal2008dp}\\label{fn:lawrence.etal}}@ig' $(EG).tex
+	perl -0777 -p -i -e 's@\\autocite\{green2010wnp\}@\\footnote{\\fullcite{green2010wnp}\\label{fn:green}}@ig' $(EG).tex
+	perl -0777 -p -i -e 's@\\autocite\{starr\.gastl2011ims\}@\\footnote{\\fullcite{starr\.gastl2011ims}\\label{fn:starr.gastl}}@ig' $(EG).tex
 	perl -0777 -p -i -e 's@,\sURL:@, \\smallcaps{URL}:@igms' $(EG).tex
 	perl -0777 -p -i -e 's@\\texttt\{\\textless\{\}\}@\$$\\langle\$$@ig' $(EG).tex
 	perl -0777 -p -i -e 's@\\texttt\{\\textgreater\{\}\}@\$$\\rangle\$$@ig' $(EG).tex
@@ -46,7 +57,7 @@ clean:
 	rm -f $(EG).{aux,bbl,bcf,blg,fdb_latexmk,fls,log,out,run.xml,synctex.gz}
 	rm -f $(EG)-tmp.md
 distclean: clean
-	rm -f $(NAME).{cls,pdf,latex} $(NAME)-apa.csl $(EG).{bib,html,md,pdf,tex} README
+	rm -f $(NAME).{cls,pdf,latex,synctex.gz} $(NAME)-apa.csl $(EG).{bib,html,md,pdf,tex} README
 inst: all
 	mkdir -p $(UTREE)/{tex,source,doc}/latex/$(NAME)
 	cp $(NAME).dtx $(UTREE)/source/latex/$(NAME)

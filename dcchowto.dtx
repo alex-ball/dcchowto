@@ -602,58 +602,60 @@ papers on the subject.
 
 Author
 
-  : The creator of the dataset.
+  : The creator of the dataset.\footref{fn:altman.king}\footref{fn:lawrence.etal}\footref{fn:green}\footref{fn:starr.gastl}
 
 Publication date
 
-  : Whichever is the later of: the date the dataset was made available, the
-    date all quality assurance procedures were completed, and the date the
-    embargo period (if applicable) expired.
+  : Whichever is the later of: the date the dataset was made available,\footref{fn:altman.king} the
+    date all quality assurance procedures were completed,\footref{fn:lawrence.etal}\footref{fn:green} and the date the
+    embargo period (if applicable) expired.\footref{fn:starr.gastl}
 
 Title
 
-  : As well as the name of the cited resource itself, this may also include
-    the name of a facility and the titles of the top collection and main
-    parent sub-collection (if any) of which the dataset is a part.
+  : As well as the name of the cited resource itself,\footref{fn:altman.king}\footref{fn:starr.gastl} this may also include
+    the name of a facility\footref{fn:lawrence.etal} and the titles of the top collection and main
+    parent sub-collection (if any) of which the dataset is a part.\footref{fn:green}
 
 Edition
 
   : The level or stage of processing of the data, indicating how raw or
-    refined the dataset is.
+    refined the dataset is.\footref{fn:lawrence.etal}
 
 Version
 
   : A number increased when the data changes, as the result of adding more
-    data points or re-running a derivation process, for example.
+    data points or re-running a derivation process, for example.\footref{fn:starr.gastl}
 
 Feature name and URI
 
   : The name of an ISO 19101:2002 [@iso19101gir] ‘feature’ (e.g. GridSeries,
     ProfileSeries) and the URI identifying its standard definition, used to
-    pick out a subset of the data.
+    pick out a subset of the data.\footref{fn:lawrence.etal}
 
 Resource type
 
-  : Examples: ‘database’, ‘dataset’.
+  : Examples: ‘database’,\footref{fn:green} ‘dataset’.\footref{fn:starr.gastl}
 
 Publisher
 
-  : The organisation either hosting the data or performing quality
-    assurance.
+  : The organisation either hosting the data\footref{fn:starr.gastl} or performing quality
+    assurance.\footref{fn:lawrence.etal}
 
 Unique numeric fingerprint (UNF)
 
   : A cryptographic hash of the data, used to ensure no changes have
-    occurred since the citation.
+    occurred since the citation.\footref{fn:altman.king}
 
 Identifier
 
-  : An identifier for the data, according to a persistent scheme.
+  : An identifier for the data, according to a persistent
+    scheme.\footref{fn:altman.king}\footref{fn:lawrence.etal}\footref{fn:green}\footref{fn:starr.gastl}
 
 Location
 
   : A persistent URL from which the dataset is available. Some identifier
-    schemes provide these via an identifier resolver service.
+    schemes provide these via an identifier resolver
+    service.\footref{fn:altman.king}\footref{fn:lawrence.etal}\footref{fn:green}\footref{fn:starr.gastl}
 
 The most important of these elements – the ones that should be present
 in any citation – are the author, the title and date, and the location.
@@ -667,8 +669,9 @@ example, see [Figure 3](#fig:doi) below).
 Note that the way in which these elements would be styled and combined
 together in the finished citation depends on the style in use for
 citations of textual publications. [Figure 1](#fig:common) provides example data citations drawn
-from commonly used style manuals, while [Figure 2](#fig:repo-cites) shows the citation formats
-suggested by three data repositories.
+from commonly used style manuals,[@apa2010pma, p. 211][@ucp2010cms, p. 764][@gibaldi2008msm, pp. 213-214, 238-239][@ritter2002oms, p. 551]
+while [Figure 2](#fig:repo-cites) shows the citation formats suggested
+by three data repositories.
 
 \bgroup\figure[ht]\fillboxout\small
 
@@ -702,16 +705,10 @@ Oxford
 
 \endfillboxout
 
-\caption[Data citations in common styles]{Data citations in common styles\footnotemark}
+\caption[Data citations in common styles]{Data citations in common styles}
 \label{fig:common}
 
 \endfigure\egroup
-
-\footnotetext{%
-\fullcite[211]{apa2010pma}.\quad
-\fullcite[764]{ucp2010cms}.\quad
-\fullcite[213--214, 238--239]{gibaldi2008msm}.\quad
-\fullcite[551]{ritter2002oms}.}
 
 \bgroup\figure[ht]\fillboxout\small
 
@@ -785,7 +782,7 @@ globe, led by the German National Library of Science and Technology
 for simple end-user administration of DOI registrations. DataCite also
 collects metadata about each dataset it registers.^[DataCite Metadata Schema
 Repository, URL: <http://schema.datacite.org/>. Version 2.0 of the DataCite
-metadata scheme is discussed by @starr.gastl2011ims.] These metadata
+metadata scheme is discussed by Starr and Gastl.\footref{fn:starr.gastl}] These metadata
 may be searched through a Web interface^[DataCite Metadata Search service,
 URL: <http://search.datacite.org/>.] or harvested using
 OAI-PMH.^[DataCite OAI-PMH service, URL: <http://oai.datacite.org/>.]
@@ -817,11 +814,12 @@ certain conventions are already becoming established.
 \bgroup\boxout
 \noindent{}**Example**
 
-\smallskip\noindent
-Sage Bionetworks is a non-profit biomedical research organisation
-which is creating the Sage Commons, an infrastructure for
-community-based modelling of large multi-contributor datasets. The
-Commons already features a repository of curated datasets; a new
+\smallskip
+\noindent{}Sage Bionetworks is a non-profit biomedical research organisation
+which is creating the Sage Commons,^[Sage Bionetworks Commons Web page, URL:
+<http://sagebase.org/commons/>] an infrastructure for
+community-based modelling of large multi-contributor datasets.[@derry.etal2011dpm] The
+Commons already features a repository of curated datasets;[@furia.sieberts2011sbd] a new
 computational platform and repository front-end called Synapse will be
 added towards the end of 2011.
 
@@ -832,7 +830,8 @@ can be shared with the scientific community. Furthermore, the workflows
 may be executed by Taverna Workbench, allowing the results from the
 pipeline to be reproduced. The SageCite Project worked with Sage
 Bionetworks to demonstrate both capturing workflows using Taverna, and
-making them citable resources using DataCite DOIs.
+making them citable resources using DataCite DOIs.^[SageCite Project
+blog, URL: <http://blogs.ukoln.ac.uk/sagecite/>]
 
 \endboxout\egroup
 
@@ -992,7 +991,7 @@ do so.
 
 * When citing a dataset in a paper, use the citation style required by the
 editor/publisher. If no form is suggested for datasets, take a standard
-data citation style (e.g. DataCite’s) and adapt it to match the style
+data citation style (e.g. DataCite’s [@starr.gastl2011ims]) and adapt it to match the style
 for textual publications.
 
 * Give dataset identifiers in the form of a URL wherever possible, unless
@@ -1082,15 +1081,16 @@ electronic notebooks and scientific publishers.^[Webtracks Project Web page, URL
 \noindent{}**Example**
 
 \smallskip\noindent
-Knowledge Blog is an alternative scholarly publication platform
-based on WordPress blogging software. It makes heavy use of linkbacks,
+Knowledge Blog^[Knowledge Blog Website, URL: <http://knowledgeblog.org/>]
+is an alternative scholarly publication platform based on WordPress^[WordPress
+Website, URL: <http://wordpress.org/>] blogging software. It makes heavy use of linkbacks,
 for example as the mechanism for linking an article with its reviews,
 and could therefore be used together with the Citation Notification
 Service to provide bi-directional links to datasets. Its KCite plugin
 allows for the automatic generation of citations from just a DOI (using
 the metadata lookup API from the CrossRef registration agency) or a
-PubMed identifier, though this has not yet been extended to work with
-DataCite DOIs.
+PubMed identifier,[@lord.etal2011okb] though this has not yet been extended
+to work with DataCite DOIs.
 
 \endboxout\egroup
 
@@ -1336,16 +1336,18 @@ software tools.
 \smallskip
 \noindent{}*Acta Crystallographica Section E* (*Acta Cryst E*) is an online,
 open access data journal published by the International Union of
-Crystallographers. It operates a workflow whereby data are submitted by
+Crystallographers.^[Acta Cryst E Website, URL: <http://journals.iucr.org/e/journalhomepage.html>]
+It operates a workflow whereby data are submitted by
 authors at the same time as the data collection paper. The data are
 checked automatically for validity, and the validation report passed to
 reviewers. On publication, the data are made available for download from
 the page for the paper.
 
 The XYZ Project has developed additional tools to support workflows like
-these. It also explored, with *Acta Cryst E*, the possibility of
+these.^[XYZ Project blog, URL: <http://projectxyz.wordpress.com/>]
+It also explored, with *Acta Cryst E*, the possibility of
 embedding data directly within the Web pages of journal papers, using
-RDF and microformats in a profile of HTML known as Scholarly HTML.
+RDF and microformats in a profile of HTML known as Scholarly HTML [@sefton2011shc].
 
 \endboxout\egroup
 
@@ -1428,8 +1430,10 @@ which you are aware that cite the dataset. This may require
 collaboration with authors and publishers.
 
 * For more information about registering DOIs for datasets, contact your
-local DataCite member. For more information about registering Archival
-Resource Keys, contact the California Digital Library.
+local DataCite member.^[List of DataCite members, URL: <http://datacite.org/members>]
+For more information about registering Archival Resource Keys,^[Archival
+Resource Keys Website, URL: <https://confluence.ucop.edu/display/Curation/ARK>]
+contact the California Digital Library.
 
 \endboxout\egroup
 
@@ -2237,6 +2241,76 @@ $include-after$
 $endfor$
 \end{document}
 %</template>
+%<*htemplate>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="generator" content="pandoc" />
+$for(author-meta)$
+<meta name="author" content="$author-meta$" />
+$endfor$
+$if(date-meta)$
+<meta name="date" content="$date-meta$" />
+$endif$
+<title>$if(title-prefix)$$title-prefix$ - $endif$$pagetitle$</title>
+<style type="text/css">
+code {
+  white-space: pre;
+}
+div.div_highlight {
+  border: 1px solid #C0C0C0;
+  padding: 1em 1em 0px;
+  margin-bottom: 1em;
+}
+</style>
+$if(quotes)$
+<style type="text/css">q { quotes: "“" "”" "‘" "’"; }</style>
+$endif$
+$if(highlighting-css)$
+<style type="text/css">
+$highlighting-css$
+</style>
+$endif$
+$for(css)$
+<link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
+$endfor$
+$if(math)$
+$math$
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+</head>
+<body>
+$for(include-before)$
+$include-before$
+$endfor$
+$if(title)$
+<div id="$idprefix$header">
+<h1 class="title">$title$</h1>
+$if(subtitle)$
+<h1 class="subtitle">$subtitle$</h1>
+$endif$
+<p>By $for(author)$$author$$sep$, $endfor$</p>
+$if(date)$
+<p>Last updated: $date$</p>
+$endif$
+</div>
+$endif$
+$if(toc)$
+<div id="$idprefix$TOC">
+$toc$
+</div>
+$endif$
+$body$
+$for(include-after)$
+$include-after$
+$endfor$
+</body>
+</html>
+%</htemplate>
 %<*internal>
 \fi
 \def\nameofplainTeX{plain}
@@ -2263,24 +2337,25 @@ See:     http://www.latex-project.org/lppl.txt
 Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
 \endpostamble
 
-\usedir{tex/latex/dcchowto}
+\usedir{tex/latex/\jobname}
 \generate{
   \file{\jobname.cls}{\from{\jobname.dtx}{class}}
-  \file{\jobname.latex}{\from{\jobname.dtx}{template}}
+  \file{\jobname-template.latex}{\from{\jobname.dtx}{template}}
 }
 %</install>
 %<install>\endbatchfile
 %<*internal>
-\usedir{source/latex/dcchowto}
+\usedir{source/latex/\jobname}
 \generate{
   \file{\jobname.ins}{\from{\jobname.dtx}{install}}
 }
 \nopreamble\nopostamble
-\usedir{tex/latex/dcchowto}
+\usedir{tex/latex/\jobname}
 \generate{
-  \file{dcchowto-apa.csl}{\from{\jobname.dtx}{csl}}
+  \file{\jobname-apa.csl}{\from{\jobname.dtx}{csl}}
+  \file{\jobname-template.html}{\from{\jobname.dtx}{htemplate}}
 }
-\usedir{doc/latex/dcchowto}
+\usedir{doc/latex/\jobname}
 \generate{
   \file{README.md}{\from{\jobname.dtx}{readme}}
   \file{\jobname-example.md}{\from{\jobname.dtx}{example}}
@@ -2568,13 +2643,18 @@ mandatory and optional arguments are, and so forth.
 % TODO: accompanying release of DCC Logo.
 % 
 %    \begin{macrocode}
-\RequirePackage{enumitem}
 \RequirePackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
 \RequirePackage[svgnames]{xcolor}
 \definecolor{dccmaroon}{RGB}{157,22,27}
 \definecolor{dccpeach}{RGB}{255,235,213}
 \RequirePackage{dcclogo}
+%    \end{macrocode}
+%
+% Formatting aids
+%
+%    \begin{macrocode}
+\RequirePackage{footnote,enumitem}
 %    \end{macrocode}
 %
 % Links and PDF information
@@ -3107,6 +3187,7 @@ mandatory and optional arguments are, and so forth.
   , right=2mm
   , oversize
   }
+\makesavenoteenv{boxout}
 \newtcolorbox{fillboxout}%
   { colback=dccpeach
   , colframe=dccpeach
