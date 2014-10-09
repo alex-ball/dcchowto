@@ -506,6 +506,15 @@ author:
 - 'Alex Ball (DCC)'
 - 'Monica Duke (DCC)'
 date: \today
+furtherinfo:
+- 'page2009spt'
+- 'ands2011dca'
+- 'callaghan.etal2011cap'
+- 'newton.etal2010ddc'
+- 'lane2008dce'
+- 'wilkinson2011syw'
+- 'wilkinson2011wdw'
+- 'icpsr2011whs'
 ...
 
 > This guide will help you create links between your academic publications
@@ -991,7 +1000,7 @@ do so.
 
 * When citing a dataset in a paper, use the citation style required by the
 editor/publisher. If no form is suggested for datasets, take a standard
-data citation style (e.g. DataCite’s [@starr.gastl2011ims]) and adapt it to match the style
+data citation style (e.g. DataCite’s[@starr.gastl2011ims]) and adapt it to match the style
 for textual publications.
 
 * Give dataset identifiers in the form of a URL wherever possible, unless
@@ -2211,18 +2220,18 @@ $endfor$
 $for(include-before)$
 $include-before$
 $endfor$
-
 $body$
+$for(furtherinfo)$
+\nocite{$furtherinfo$}
+$endfor$
 
 \nonzeroparskip
 \section{Further information}
 \setlength{\parindent}{0pt}%
-\small%\color{dccblue}%
-Two other DCC guides cover this topic:
-
-%<<LITERAL
-% Other guides
-%LITERAL
+\small\color{dccblue}%
+$for(include-after)$
+$include-after$
+$endfor$
 
 \normalcolor
 \printbibliography[category=notcited]
@@ -2231,14 +2240,11 @@ Two other DCC guides cover this topic:
 
 \vfill
 \noindent\bfseries\begingroup\color{dccblue}
-Follow the DCC on Twitter: \href{http://twitter.com/#!/digitalcuration}{@digitalcuration}, \href{http://twapperkeeper.com/hashtag/ukdcc}{\#ukdcc}
+Follow the DCC on Twitter: \href{http://twitter.com/#!/digitalcuration}{@digitalcuration}, \href{https://twitter.com/hashtag/ukdcc}{\#ukdcc}
 
 \vfill
 \raggedleft\mdseries\footnotesize Revised: \ifx\undefined\thedate\today\else\thedate\fi\par
 \endgroup
-$for(include-after)$
-$include-after$
-$endfor$
 \end{document}
 %</template>
 %<*htemplate>
