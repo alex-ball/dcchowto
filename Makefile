@@ -55,11 +55,11 @@ dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME)-template.latex
 	perl -0777 -p -i -e 's@\\fullcite\{([^}]+)\}\\autocite\{\1\}@\\fullcite{\1}@ig' $(EG).tex
 	latexmk -pdflatex="pdflatex -synctex=1 -interaction batchmode %O %S" -pdf $(EG).tex
 clean:
-	rm -f $(NAME).{aux,cod,fdb_latexmk,fls,glo,gls,hd,idx,ilg,ind,ins,log,out,pyg}
+	rm -f $(NAME).{aux,cod,fdb_latexmk,fls,glo,gls,hd,idx,ilg,ind,ins,log,out,pyg,tcbtemp}
 	rm -f $(EG).{aux,bbl,bcf,blg,fdb_latexmk,fls,log,out,run.xml,synctex.gz}
 	rm -f $(EG)-tmp.md
 distclean: clean
-	rm -f $(NAME).{cls,pdf,latex,synctex.gz} $(NAME)-apa.csl $(EG).{bib,html,md,pdf,tex} README
+	rm -f $(NAME).{cls,pdf,synctex.gz} $(NAME)-apa.csl $(NAME)-template.{latex,html} $(EG).{bib,html,md,pdf,tex} $(EG)-preview.pdf README
 inst: all
 	mkdir -p $(UTREE)/{tex,source,doc}/latex/$(NAME)
 	cp $(NAME).dtx $(UTREE)/source/latex/$(NAME)

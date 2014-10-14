@@ -2429,10 +2429,14 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
     {Source Code Pro}
 \fi
 % Improving the look of the documentation
-\usepackage[bookmarks,raiselinks,pageanchor,hyperindex,colorlinks]{hyperref}
+\usepackage{hypdoc}
+\hypersetup{bookmarks,raiselinks,pageanchor,hyperindex,colorlinks}
 \usepackage{tcolorbox}
 \tcbuselibrary{documentation,breakable,minted}
-\tcbset{listing engine=minted,index format=doc}
+\tcbset
+  { listing engine=minted
+  , index format=doc
+  }
 \makeatletter
 \AtBeginDocument{%
   % Comments
@@ -2445,7 +2449,7 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
   \def\PY@tok@nb{\def\PY@tc##1{\textcolor{blue!75!black}{##1}}}
 }
 \makeatother
-\newcommand{\pkg}[1]{\textsf{#1}}
+\newcommand{\pkg}[1]{\href{http://www.ctan.org/pkg/#1}{\textsf{#1}}}
 \MakeShortVerb{\|}
 \makeatletter
 \renewenvironment{tcb@manual@entry}{\begin{list}{}{%
@@ -2522,10 +2526,11 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
   \immediate\write\ydocwrite{\themacrocode}%
   \immediate\closeout\ydocwrite
   \let\input\@input
-  \tcbinputlisting{breakable,listing only,minted options={fontsize=\footnotesize},listing file=\ydocfname}%
+  \tcbinputlisting{breakable,listing only,docexample,listing file=\ydocfname}%
   \endgroup
 }
 \makeatother
+%minted options={fontsize=\footnotesize},
 
 \EnableCrossrefs
 \CodelineIndex
@@ -2550,18 +2555,99 @@ page where the code is hosted: \url{https://github.com/alex-ball/dcchowto}.
 
 \section{Usage}
 
-\begin{docCommand}{dummyMacro}{}
-This macro does nothing.\index{doing nothing|usage} It is merely an
-example.  If this were a real macro, you would put a paragraph here
-describing what the macro is supposed to do, what its mandatory and
-optional arguments are, and so forth.
+\subsection{Loading the class}
+
+The class is loaded in the usual way:
+
+\begin{tcolorbox}[docexample,fontupper=\small]
+\begin{docCommand*}{documentclass}{\oarg{options}\brackets{dcchowto}}
+\end{docCommand*}
+\end{tcolorbox}
+
+The following options are recognised:
+
+\begin{docKey}{twocolumn}{}{default \texttt{true}, initially \texttt{false}}
+  The default layout is to have a single column of text,
+  with a wide right-hand margin for side notes.
+  With this option,
+  the layout changes to use two columns of text and footnotes instead.
+\end{docKey}
+
+\begin{docKey}{press}{}{default \texttt{true}, initially \texttt{false}}
+  The default is to lay the PDF out just like the hard copy.
+  With this option, extra margins, trim marks and colour bleeds
+  are added round the edges for professional printing.
+\end{docKey}
+
+\begin{docKey}{numbers}{}{default \texttt{true}, initially \texttt{false}}
+  The default is not to have page numbers.
+  With this option, page numbers are added to the footer of most pages.
+\end{docKey}
+
+\begin{docKey}{mark}{=\meta{mark type}}{default \texttt{draft}}
+  This marks the PDF as not being ready for public release.
+  The two possible values for \meta{mark type} are
+  \docValue{draft} for a working draft,
+  and
+  \docValue{rc} for a release candidate.
+\end{docKey}
+
+\subsection{Preamble}
+
+The class loads \pkg{biblatex} to handle references.
+Please ensure any database file you write uses the \pkg{biblatex} model,
+and load it like this:
+
+\begin{tcolorbox}[docexample,fontupper=\small]
+\begin{docCommand*}{bibliography}{\marg{filename}}
+\end{docCommand*}
+\end{tcolorbox}
+
+Fill out \cs{title} and \cs{date} as normal.
+Please repeat the \cs{author} command for each author,
+rather than linking names together with \cs{and}.
+You can add the affiliation of the author in parentheses,
+as follows:
+
+\begin{dispListing}
+\author{Alex Ball (DCC)}
+\author{Monica Duke (DCC)}
+\end{dispListing}
+
+For joint branding two further commands are defined:
+
+\begin{docCommand}{partner}{\marg{text}}
+  The \meta{text} should be the name of an organisation which has
+  contributed to the guide.
+  The command can and should be repeated if several organisations should
+  be mentioned.
 \end{docCommand}
 
-\begin{docEnvironment}{dummyEnv}{}
-This environment does nothing.  It is merely an example.
-If this were a real environment, you would put a paragraph here
-describing what the environment is supposed to do, what its
-mandatory and optional arguments are, and so forth.
+\begin{docCommand}{partnerlogo}{\marg{image command}}
+  This command puts the logo of the partner organisation on the cover.
+  The \meta{image command} should be something like
+  \cs{includegraphics}\marg{filename}.
+  This allows you the freedom to shift the image around a bit using boxes,
+  or draw the logo instead using \pkg{pstricks} or \pkg{pgf}.
+\end{docCommand}
+
+\subsection{Body}
+
+\begin{docCommand}{makehowtotitle}{\oarg{abstract}}
+  Use this instead of \cs{maketitle} to lay out the cover page and
+  introductory paragraph, the text for which should be provided as the
+  \meta{abstract}.
+\end{docCommand}
+
+\begin{docEnvironment}{boxout}{}
+  Use this to set off some content in a red box.
+  Note that the box will not break over columns or pages.
+\end{docEnvironment}
+
+\begin{docEnvironment}{fillboxout}{}
+  Use this to set off some content using a peachy background.
+  It is intended for use with figures.
+  Note that the box will not break over columns or pages.
 \end{docEnvironment}
 
 \StopEventually{^^A
@@ -2692,7 +2778,9 @@ mandatory and optional arguments are, and so forth.
 \fi
 %    \end{macrocode}
 %
-% When in two-column mode, one column = (210 - 15 - 15 - 10)mm / 2 in width
+% When in two-column mode, the left and right margins are both 15\,mm,
+% while the gap between columns is 10\,mm, so one column =
+% $(210 - 15 - 15 - 10)\,\textrm{mm} / 2$ wide.
 %
 %    \begin{macrocode}
 \newlength{\OneColWidth}
@@ -2945,6 +3033,8 @@ mandatory and optional arguments are, and so forth.
 %
 % \subsection{Metadata}
 %
+% Reimplementation of \cs{author} command.
+%
 %    \begin{macrocode}
 \newcounter{dcchowto@authors}
 \newcounter{dcchowto@space}
@@ -3013,6 +3103,11 @@ mandatory and optional arguments are, and so forth.
     \dcchowto@author@name
   }
 }
+%    \end{macrocode}
+%
+% Organisations collaborating on this guide with the DCC.
+%
+%    \begin{macrocode}
 \newcounter{dcchowto@partners}
 \def\dcchowto@partners{\setcounter{dcchowto@partners}{0}}
 \newcommand{\partner}[1]{%
@@ -3027,6 +3122,11 @@ mandatory and optional arguments are, and so forth.
   }
   \eappto\dcchowto@partners{#1}  
 }
+%    \end{macrocode}
+%
+% Branding associated with the above organisations.
+%
+%    \begin{macrocode}
 \def\dcchowto@partner@logos{}
 \newcommand{\partnerlogo}[1]{%
   \appto\dcchowto@partner@logos{%
