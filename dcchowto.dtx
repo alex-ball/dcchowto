@@ -2693,9 +2693,9 @@ For joint branding two further commands are defined:
 % 
 % \subsection{Fonts}
 %
-% The class uses Gill Sans if available, otherwise it falls back to Helvetica.
-% TODO: introduce intermediate fallback to Lato, add option to load Gill Sans
-% using \pkg{fontspec}.
+% The class uses Gill Sans if available, otherwise it falls back to Lato or,
+% failing that, Helvetica.
+% TODO: add option to load Gill Sans using \pkg{fontspec}.
 % 
 %    \begin{macrocode}
 \IfFileExists{gillsans.sty}{%
@@ -2707,10 +2707,25 @@ For joint branding two further commands are defined:
   \SetSymbolFont{letters}{normal}{T1}{bgs}{m}{it}
   \RequirePackage[scaled=0.824]{beramono}
 }{%
-  \newcommand*{\memfontfamily}{phv}
-  \newcommand*{\memfontenc}{T1}%
-  \newcommand*{\memfontpack}{pslatex}
-  \def\lightseries{\normalseries}
+  \IfFileExists{lato.sty}{%
+    \PassOptionsToPackage{defaultsans}{lato}
+    \newcommand*{\memfontfamily}{fla}
+    \newcommand*{\memfontenc}{T1}
+    \newcommand*{\memfontpack}{lato}
+    \def\lato@scale{s*[0.9]}
+    \def\lightseries{\fontseries{l}\selectfont}
+    \SetSymbolFont{operators}{normal}{T1}{fla}{m}{n}
+    \SetSymbolFont{letters}{normal}{T1}{fla}{m}{it}
+    \RequirePackage[scaled=0.824]{beramono}
+  }{%
+    \newcommand*{\memfontfamily}{phv}
+    \newcommand*{\memfontenc}{T1}
+    \newcommand*{\memfontpack}{helvet}
+    \def\Hv@scale{0.88}
+    \def\lightseries{\mdseries}
+    \SetSymbolFont{operators}{normal}{T1}{phv}{m}{n}
+    \SetSymbolFont{letters}{normal}{T1}{phv}{m}{it}
+  }%
 }
 \renewcommand{\familydefault}{\sfdefault}
 %    \end{macrocode}
