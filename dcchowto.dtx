@@ -3582,6 +3582,30 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % 
 % \subsection{Bibliography}
+%
+% TODO: Provide a set of patches tweaking the normal APA format to DCC house
+% style, including adaptations for use in a footnote environment:
+% \begin{itemize}
+%   \item
+%   Provide public version of the (currently private) apa-verbose.cbx citation
+%   style.
+%   \item
+%   When a reference appears as a footnote, redirect the postnote to appear
+%   mid-reference in |bookaddinfo| bibmacro, and the drivers for |article|,
+%   |booklet|, |collection|, and |report| (patching apa.bbx).
+%   \item
+%   Allow reports to use the traditional |institution| instead of
+%   |publisher|, and to have a number without a series (patching apa.bbx).
+%   \item
+%   Include the ‘doi:’ bit in DOI links (patching apa.bbx).
+%   \item
+%   Allow the use of |shorttitle| as the |labeltitle| (patching apa.bbx).
+%   \item
+%   Break URLs like \pkg{apacite} and \pkg{biblatex} v0.9 (patching apa.bbx).
+%   \item
+%   Swap month and day position in dates as in British orthography (patching
+%   british-apa.lbx)
+% \end{itemize}
 % 
 %    \begin{macrocode}
 \RequirePackage[bibstyle=apa,citestyle=apa-verbose,backend=biber]{biblatex}
