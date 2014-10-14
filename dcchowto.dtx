@@ -2452,6 +2452,8 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
 \newcommand{\pkg}[1]{\href{http://www.ctan.org/pkg/#1}{\textsf{#1}}}
 \MakeShortVerb{\|}
 \makeatletter
+\let\PrintMacroName\@gobble
+\let\PrintEnvName\@gobble
 \renewenvironment{tcb@manual@entry}{\begin{list}{}{%
   \setlength{\topsep}{0pt}
   \setlength{\partopsep}{0pt}
@@ -3282,6 +3284,11 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \RequirePackage{tcolorbox}
+%    \end{macrocode}
+%
+% 
+% \begin{environment}{boxout}
+%    \begin{macrocode}
 \newtcolorbox{boxout}%
   { colback=white
   , colframe=dccmaroon
@@ -3298,6 +3305,12 @@ For joint branding two further commands are defined:
   , oversize
   }
 \makesavenoteenv{boxout}
+%    \end{macrocode}
+% \end{environment}
+%
+% 
+% \begin{environment}{fillboxout}
+%    \begin{macrocode}
 \newtcolorbox{fillboxout}%
   { colback=dccpeach
   , colframe=dccpeach
@@ -3322,6 +3335,7 @@ For joint branding two further commands are defined:
   , bottom=1ex
 }
 %    \end{macrocode}
+% \end{environment}
 %
 % Footnotes
 %
