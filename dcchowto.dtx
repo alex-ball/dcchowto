@@ -515,7 +515,7 @@ systems put in place around it: mechanisms allowing authors to be open
 about their research while still receiving due credit; metrics used to
 translate such attributions into rewards for authors and their
 institutions; and archives ensuring that the work is permanently
-available for reference and reuse [@mackenzieowen2007sai ch. 2]. If
+available for reference and reuse [@mackenzieowen2007sai, ch. 2]. If
 datasets are to be regarded as first-class records of research, as they
 need to be, a similar set of control systems needs to be constructed
 around them.
@@ -2741,7 +2741,7 @@ For joint branding two further commands are defined:
 % Utilities
 %
 %    \begin{macrocode}
-\RequirePackage{etoolbox,xstring}
+\RequirePackage{etoolbox,xstring,xpatch}
 %    \end{macrocode}
 %
 % Language tools
@@ -3581,39 +3581,186 @@ For joint branding two further commands are defined:
 }
 %    \end{macrocode}
 % 
-% \subsection{Bibliography}
+% \subsection{Citations and references}
 %
-% TODO: Provide a set of patches tweaking the normal APA format to DCC house
-% style, including adaptations for use in a footnote environment:
-% \begin{itemize}
-%   \item
-%   Provide public version of the (currently private) apa-verbose.cbx citation
-%   style.
-%   \item
-%   When a reference appears as a footnote, redirect the postnote to appear
-%   mid-reference in |bookaddinfo| bibmacro, and the drivers for |article|,
-%   |booklet|, |collection|, and |report| (patching apa.bbx).
-%   \item
-%   Allow reports to use the traditional |institution| instead of
-%   |publisher|, and to have a number without a series (patching apa.bbx).
-%   \item
-%   Include the ‘doi:’ bit in DOI links (patching apa.bbx).
-%   \item
-%   Allow the use of |shorttitle| as the |labeltitle| (patching apa.bbx).
-%   \item
-%   Break URLs like \pkg{apacite} and \pkg{biblatex} v0.9 (patching apa.bbx).
-%   \item
-%   Swap month and day position in dates as in British orthography (patching
-%   british-apa.lbx)
-% \end{itemize}
-% 
+% We use \pkg{biblatex} and \pkg{biblatex-apa} for referencing (with tweaks).
+%
 %    \begin{macrocode}
-\RequirePackage[bibstyle=apa,citestyle=apa-verbose,backend=biber]{biblatex}
+\RequirePackage[bibstyle=apa,citestyle=verbose,citetracker=false,backend=biber]{biblatex}
 \DeclareLanguageMapping{british}{british-apa}
 %    \end{macrocode}
 %
-% Normally this only kicks in with the bibliography, but we have bibliography
-% entries instead of parenthetical citations in the text.
+% We need to adapt the verbose (footnote) citation style so it works with the
+% APA bibliography style. First, APA references use full points to separate
+% elements, so we cannot use weaker punctuation to separate multiple entries
+% in a single citation.
+%
+%    \begin{macrocode}
+\renewcommand*{\multicitedelim}{\addperiod\space}
+%    \end{macrocode}
+%
+% Second, we allow postnotes to appear mid-citation in footnotes.
+%
+%    \begin{macrocode}
+\DeclareCiteCommand{\footcite}[\mkbibfootnote]{%
+  \usebibmacro{prenote}%
+  \renewcommand*{\postnotedelim}{}%
+}{%
+  \usebibmacro{citeindex}%
+  \usebibmacro{cite}%
+}{%
+  \multicitedelim
+}{}
+\DeclareCiteCommand{\footcitetext}[\mkbibfootnotetext]{%
+  \usebibmacro{prenote}%
+  \renewcommand*{\postnotedelim}{}%
+}{%
+  \usebibmacro{citeindex}%
+  \usebibmacro{cite}%
+}{%
+  \multicitedelim
+}{}
+\DeclareCiteCommand{\smartcite}[\iffootnote\mkbibparens\mkbibfootnote]{%
+  \usebibmacro{prenote}%
+  \renewcommand*{\postnotedelim}{}%
+}{%
+  \usebibmacro{citeindex}%
+  \usebibmacro{cite}%
+}{%
+  \multicitedelim
+}{}
+\DeclareCiteCommand{\fullcite}{%
+  \usebibmacro{prenote}%
+  \renewcommand*{\postnotedelim}{}%
+}{%
+  \usedriver{%
+    \DeclareNameAlias{sortname}{default}%
+  }{%
+    \thefield{entrytype}%
+  }%
+}{%
+  \multicitedelim
+}{}
+\DeclareCiteCommand{\footfullcite}[\mkbibfootnote]{%
+  \usebibmacro{prenote}%
+  \renewcommand*{\postnotedelim}{}%
+}{%
+  \usedriver{%
+    \DeclareNameAlias{sortname}{default}%
+  }{%
+    \thefield{entrytype}%
+  }%
+}{%
+  \multicitedelim
+}{}
+%    \end{macrocode}
+%
+% Third, we want \cs{textcite} to act like the regular author-date version
+% instead of the footnote-based version. The following is borrowed from apa.cbx.
+%
+%    \begin{macrocode}
+\newbool{cbx:parens}
+\renewbibmacro*{textcite}{%
+  \iffieldequals{namehash}{\cbx@lasthash}{%
+    \setunit{\compcitedelim}%
+    \usebibmacro{cite:plabelyear+extrayear}%
+  }{%
+    \ifbool{cbx:parens}{%
+      \bibcloseparen\global\boolfalse{cbx:parens}%
+    }{}%
+    \setunit{\compcitedelim}%
+    \ifthenelse{\ifnameundef{labelname}\OR\iffieldequalstr{entrytype}{patent}}{%
+      \iffieldundef{shorthand}{%
+        \usebibmacro{cite:noname}%
+        \setunit{%
+          \ifbool{cbx:np}{%
+            \nameyeardelim
+          }{%
+            \global\booltrue{cbx:parens}\addspace\bibopenparen
+          }%
+        }%
+        \usebibmacro{cite:plabelyear+extrayear}%
+      }{%
+        \usebibmacro{cite:shorthand}%
+      }%
+    }{%
+      \ifnameundef{shortauthor}{%
+        \printnames[labelname][-\value{listtotal}]{labelname}%
+      }{%
+        \cbx@apa@ifnamesaved{%
+          \printnames{shortauthor}%
+        }{%
+          \printnames[labelname][-\value{listtotal}]{author}%
+        }%
+      }%
+      \setunit{%
+        \ifbool{cbx:np}{%
+          \nameyeardelim
+        }{%
+          \global\booltrue{cbx:parens}\addspace\bibopenparen
+        }%
+      }%
+      \ifnameundef{shortauthor}{}{%
+        \cbx@apa@ifnamesaved{}{%
+          \printnames{shortauthor}\setunit{\nameyeardelim}%
+        }%
+      }%
+      \usebibmacro{cite:plabelyear+extrayear}%
+      \savefield{namehash}{\cbx@lasthash}%
+    }%
+  }%
+}
+\newbibmacro*{cite:plabelyear+extrayear}{%
+  \iffieldundef{labelyear}{}{%
+    \printtext[bibhyperref]{%
+      \printfield[noformat]{origyear}\setunit*{\addslash}%
+      \printfield{labelyear}\printfield{extrayear}%
+    }%
+  }%
+  \iffieldundef{issue}{}{%
+    \addcomma\addspace\printfield{issue}%
+  }%
+}
+\newbibmacro*{cite:shorthand}{%
+  \ifciteseen{%
+    \printfield{shorthand}%
+  }{%
+    \printnames[labelname][-\value{listtotal}]{labelname}%
+    \setunit{\nameyeardelim}%
+    \printfield{title}\space\printfield{shorthand}%
+  }%
+}
+\newbibmacro*{cite:init}{%
+  \global\boolfalse{cbx:parens}%
+  \global\undef\cbx@lasthash
+}
+\newbibmacro*{cite:post}{%
+  \xifinlist{\thefield{namehash}}{\cbx@apa@names}{}{%
+    \listxadd{\cbx@apa@names}{\thefield{namehash}}%
+  }%
+}
+\newbibmacro*{textcite:postnote}{%
+  \usebibmacro{postnote}%
+  \ifbool{cbx:parens}{%
+    \bibcloseparen\global\boolfalse{cbx:parens}%
+  }{}%
+}
+\DeclareCiteCommand{\textcite}{%
+  \usebibmacro{cite:init}%
+  \usebibmacro{prenote}%
+}{%
+  \usebibmacro{citeindex}%
+  \usebibmacro{textcite}%
+}{}{%
+  \usebibmacro{textcite:postnote}%
+  \usebibmacro{cite:post}%
+}
+\DeclareMultiCiteCommand{\textcites}{\textcite}{\compcitedelim}
+%    \end{macrocode}
+%
+% The following redefinition of \cs{finalnamedelim} usually occurs at the start of
+% the bibliography, but since we need it like this in the footnotes, we make it
+% the regular definition.
 %
 %    \begin{macrocode}
 \renewcommand*{\finalnamedelim}{%
@@ -3628,15 +3775,195 @@ For joint branding two further commands are defined:
     }%
   }%
 }
-\newbibmacro*{cite:noyear}{%
-  \ifnameundef{shortauthor}{}{%
-    \ifciteseen{}{%
-      \printnames{shortauthor}%
-      \setunit{\nameyeardelim}%
-    }%
-  }%
-  \printtext{\biblcstring{nodate}}%
+%    \end{macrocode}
+%
+% In the bibliography style, we need to insert postnotes (where applicable) in
+% the appropriate place in citations (typically after the title).
+%
+%    \begin{macrocode}
+\xpatchbibmacro{bookaddinfo}{%
+  \iffieldundef{volumes}%
+}{%
+  \iffieldundef{volumes}\AND\iffieldundef{postnote}%
+}{}{%
+  \typeout{Failed to patch bookaddinfo macro if-clause}%
 }
+\xpatchbibmacro{bookaddinfo}{%
+  \printfield{volumes}%
+}{%
+  \printfield{volumes}%
+  \setunit*{\addcomma\addspace}%
+  \printfield{postnote}%
+}{}{%
+  \typeout{Failed to patch bookaddinfo macro print sequence}%
+}
+\xpatchbibmacro{addinfo}{%
+  \iffieldundef{volumes}%
+}{%
+  \iffieldundef{volumes}\AND\iffieldundef{postnote}%
+}{}{%
+  \typeout{Failed to patch addinfo macro if-clause}%
+}
+\xpatchbibmacro{addinfo}{%
+  \printfield{pages}%
+}{%
+  \printfield{pages}%
+  \setunit*{\addspace\printtext{at}\addspace}%
+  \printfield{postnote}%
+}{}{%
+  \typeout{Failed to patch addinfo macro print sequence}%
+}
+\xpatchbibdriver{article}{%
+  \printfield{pages}%
+}{%
+  \printfield{pages}%
+  \iffieldundef{postnote}{}{%
+    \addspace\printtext{at}\addspace\usebibmacro{cite:postnote}%
+  }%
+}{}{%
+  \typeout{Failed to patch article driver}%
+}
+\xpatchbibdriver{booklet}{%
+  \usebibmacro{title}%
+}{%
+  \usebibmacro{title}%
+  \iffieldundef{postnote}{}{%
+    \addspace\mkbibparens{\usebibmacro{cite:postnote}}%
+  }%
+}{}{%
+  \typeout{Failed to patch booklet driver}%
+}
+\xpatchbibdriver{collection}{%
+  \usebibmacro{title}%
+}{%
+  \usebibmacro{title}%
+  \iffieldundef{postnote}{}{%
+    \addspace\mkbibparens{\usebibmacro{cite:postnote}}%
+  }%
+}{}{%
+  \typeout{Failed to patch collection driver}%
+}
+\xpatchbibdriver{report}{%
+  \newunit\newblock
+  \printlist{institution}%
+}{%
+  \iffieldundef{postnote}{}{%
+    \addspace\mkbibparens{\usebibmacro{cite:postnote}}%
+  }%
+}{}{%
+  \typeout{Failed to patch report driver}%
+}
+%    \end{macrocode}
+%
+% For some reason, \pkg{biblatex-apa} expects reports to have a |publisher|,
+% while the convention is to use |institution|. We partially fixed this above,
+% and complete the job below.
+%
+%    \begin{macrocode}
+\xpatchbibmacro{location+publisher}{%
+  \printlist{publisher}%
+}{%
+  \iflistundef{publisher}{%
+    \printlist{institution}%
+  }{%
+    \printlist{publisher}%
+  }%
+}{}{%
+  \typeout{Failed to patch location+publisher macro}%
+}
+%    \end{macrocode}
+%
+% We move the ‘doi:’ portion of a DOI inside the hyperlink. Since it's all run
+% together, it just makes sense. 
+%
+%    \begin{macrocode}
+\DeclareFieldFormat{doi}{%
+  \ifhyperref{%
+    \href{http://dx.doi.org/#1}{\nolinkurl{doi:#1}}%
+  }{%
+    \nolinkurl{doi:#1}%
+  }%
+}
+%    \end{macrocode}
+%
+% The APA has its own URL-breaking rules. The following code, a combination of
+% that from \pkg{apacite} and version 0.9 of \pkg{biblatex}, gives good results.
+%
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \renewcommand*{\biburlsetup}{%
+    \Urlmuskip=0mu plus 2mu\relax
+    \mathchardef\UrlBreakPenalty=200\relax
+    \mathchardef\UrlBigBreakPenalty=100\relax
+    \mathchardef\UrlEmergencyPenalty=9000\relax
+    \def\APAURLdot{\mathchar"2E }%
+    \def\APAURLcomma{\mathchar"2C }%
+    \def\APAURLquestionmark{\mathchar"3F }%
+    \def\APAURLexclamation{\mathchar"21 }%
+    \def\APAURLhyphen{\mathchar"2D }%
+    \def\APAURLunderscore{\_}%
+    \appto\UrlSpecials{%
+      \do\0{\mathchar`\0\penalty\UrlEmergencyPenalty}%
+      \do\1{\mathchar`\1\penalty\UrlEmergencyPenalty}%
+      \do\2{\mathchar`\2\penalty\UrlEmergencyPenalty}%
+      \do\3{\mathchar`\3\penalty\UrlEmergencyPenalty}%
+      \do\4{\mathchar`\4\penalty\UrlEmergencyPenalty}%
+      \do\5{\mathchar`\5\penalty\UrlEmergencyPenalty}%
+      \do\6{\mathchar`\6\penalty\UrlEmergencyPenalty}%
+      \do\7{\mathchar`\7\penalty\UrlEmergencyPenalty}%
+      \do\8{\mathchar`\8\penalty\UrlEmergencyPenalty}%
+      \do\9{\mathchar`\9\penalty\UrlEmergencyPenalty}%
+      \do\.{\mathbin{}\APAURLdot }%
+      \do\,{\mathbin{}\APAURLcomma }%
+      \do\-{\mathbin{}\APAURLhyphen }%
+      \do\?{\mathbin{}\APAURLquestionmark }%
+      \do\!{\mathbin{}\APAURLexclamation }%
+      \do\_{\mathbin{}\APAURLunderscore }%
+    }%
+    \def\UrlBreaks{%
+      \do\.\do\@\do\/\do\\\do\!\do\_\do\|\do\;\do\>\do\]\do\)\do\}%
+      \do\,\do\?\do\'\do\+\do\=\do\#\do\$\do\&\do\*\do\^\do\"%
+    }%
+    \def\UrlBigBreaks{\do\:\do\-}%
+  }%
+}        
+%    \end{macrocode}
+%
+% Use British dates in British English.
+%
+%    \begin{macrocode}
+\patchcmd{\mkbibrangeapalong}{%
+  \mkbibdateapalongmdy
+}{%
+  \mkbibdateapalongdmy
+}{}{%
+  \typeout{Failed to patch mkbibrangeapalong}
+}
+\DefineBibliographyExtras{british}{%
+  \protected\def\mkbibdateapalongdmy#1#2#3{%
+    \iffieldundef{#3}%
+    {}%
+    {\stripzeros{\thefield{#3}}}%
+    \iffieldundef{#2}%
+    {}%
+    {\iffieldundef{#3}%
+      {}%
+      {\addspace}%
+      \mkbibmonth{\thefield{#2}}}%
+    \iffieldundef{#1}%
+    {}%
+    {\ifthenelse{\iffieldundef{#2}\OR\iffieldundef{#3}}%
+      {}%
+      {\addspace}%
+      \iffieldbibstring{#1}{\biblcstring{\thefield{#1}}}{\thefield{#1}}}}%
+}
+%    \end{macrocode} 
+%
+% If using the bibliography for further reading, we don't want an auto-generated
+% heading, and (since it is set in narrow columns) we don't want a hanging
+% indent.
+%
+%    \begin{macrocode}
 \defbibheading{bibliography}{}
 \setlength{\bibhang}{0pt}
 %    \end{macrocode}
@@ -3658,8 +3985,18 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \RequirePackage{multicol}
+%    \end{macrocode}
+%
+% We provide \cs{refurl} as a convenience command for providing quick website
+% references.
+%
+% \begin{macro}{refurl}
+%    \begin{macrocode}
 \newcommand*{\refurl}[2]{\begingroup\biburlsetup #1, \textsc{url}: \url{#2}\endgroup.}
 %    \end{macrocode}
+% \end{macro}
+%
+% There is no more.
 %
 %    \begin{macrocode}
 \endinput
