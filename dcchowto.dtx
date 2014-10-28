@@ -2179,13 +2179,19 @@ $if(biblio-files)$
 $endif$
 \renewcommand*{\bibfont}{\small}
 \ifdraftdoc
-	\usepackage{embedfile}
-	\embedfile[desc={Source code for this document}]{\jobname.tex}
-	$if(biblio-files)$
-	\embedfile[desc={Biblatex database for this document}]{$biblio-files$}
-	$endif$
+  \usepackage{embedfile}
+  \embedfile[desc={Source code for this document}]{\jobname.tex}
+  $if(biblio-files)$
+  \embedfile[desc={Biblatex database for this document}]{$biblio-files$}
+  $endif$
 %<internal>\iffalse
 %<template>\fi
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
 
 $if(title)$
 \title{$title$}
