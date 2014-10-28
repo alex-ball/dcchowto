@@ -3477,13 +3477,19 @@ For joint branding two further commands are defined:
 \setsubparaheadstyle{%
   \normalfont\normalsize\itshape\dottedblue
 }
+\setsecnumdepth{part}
+%    \end{macrocode}
+%
+% Floats
+%
+%    \begin{macrocode}
 \ifKV@dcchowto@twocolumn
   \hangcaption
 \fi
 \captionstyle[\centering]{\raggedyright}
 \captionnamefont{\footnotesize\bfseries}
 \captiontitlefont{\footnotesize}
-\setsecnumdepth{part}
+\makesavenoteenv{figure}
 \counterwithout{figure}{chapter}
 \counterwithout{table}{chapter}
 %    \end{macrocode}
