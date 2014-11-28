@@ -484,6 +484,8 @@ author:
 - 'Alex Ball (DCC)'
 - 'Monica Duke (DCC)'
 date: \today
+classoption:
+- morefloats=3
 ...
 
 > This guide will help you create links between your academic publications
@@ -2173,7 +2175,7 @@ The following may also be of interest:
 %LITERAL
 %</bib>
 %<*template>
-\documentclass[twocolumn,numbers]{dcchowto}
+\documentclass[numbers,$for(classoption)$$classoption$$sep$,$endfor$]{dcchowto}
 $if(biblio-files)$
 \bibliography{$biblio-files$}
 $endif$
@@ -2688,6 +2690,7 @@ For joint branding two further commands are defined:
     \def\dcchowto@mark{Release Candidate}
   \fi
 }
+\DeclareOptionX{morefloats}[0]{\PassOptionsToPackage{\CurrentOption}{morefloats}}
 \ProcessOptionsX<dcchowto>
 \ifKV@dcchowto@twocolumn
   \ClassInfo{dcchowto}{Processing in two-column mode}%
@@ -2747,7 +2750,7 @@ For joint branding two further commands are defined:
 % Utilities
 %
 %    \begin{macrocode}
-\RequirePackage{etoolbox,xstring,xpatch}
+\RequirePackage{etoolbox,xstring,xpatch,xifthen,calc}
 %    \end{macrocode}
 %
 % Language tools
@@ -2798,6 +2801,18 @@ For joint branding two further commands are defined:
   }%
   \urlstyle{tt}%
 }
+%    \end{macrocode}
+%
+% General typography
+%
+%    \begin{macrocode}
+\RequirePackage{balance,fix2col,morefloats}
+\RequirePackage[tracking=smallcaps,letterspace=50,expansion=false,protrusion=basictext]{microtype}
+\RequirePackage{textcase,relsize}
+\newcommand{\allcaps}[1]{\MakeTextUppercase{\textls[100]{#1}}}
+\newcommand{\smallcaps}[1]{\MakeTextLowercase{\textsc{#1}}}
+\renewcommand*{\oldstylenums}[1]{{\smaller[2]#1}}
+\firmlists
 %    \end{macrocode}
 %
 % \subsection{DCC Logo}
@@ -2987,7 +3002,11 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 %
 % \subsection{Layout}
-% 
+%
+% The press option lays the content out on oversize stock, making it easier
+% to print colours out to the edges (by overshooting and trimming off the
+% excess).
+%
 %    \begin{macrocode}
 \ifKV@dcchowto@press
   \setstocksize{317.817mm}{230.817mm}
@@ -2997,76 +3016,38 @@ For joint branding two further commands are defined:
 \fi
 %    \end{macrocode}
 %
-% When in two-column mode, the left and right margins are both 15\,mm,
-% while the gap between columns is 10\,mm, so one column =
-% $(210 - 15 - 15 - 10)\,\textrm{mm} / 2$ wide.
+% The title page has 25\,mm margins left and right, and 64\,pt margins top
+% and bottom. The top margin divides into 28\,pt header drop, 15\,pt header
+% height and 21\,pt header separation from the textblock. Subsequent page
+% geometry is set by \cs{makehowtotitle}.
 %
 %    \begin{macrocode}
-\newlength{\OneColWidth}
-\setlength{\OneColWidth}{85mm}
-\ifKV@dcchowto@twocolumn
-  \RequirePackage{xifthen,calc,balance,fix2col}
-  \RequirePackage[tracking=smallcaps,letterspace=50,expansion=false,protrusion=basictext]{microtype}
-  \RequirePackage{textcase}
-  \newcommand{\allcaps}[1]{\MakeTextUppercase{\textls[100]{#1}}}
-  \newcommand{\smallcaps}[1]{\MakeTextLowercase{\textsc{#1}}}
-  \renewcommand*{\oldstylenums}[1]{{\footnotesize #1}}
-  \newif\ifmemtufte@flipheader\memtufte@flipheaderfalse
-\fi
-\firmlists
-\ifKV@dcchowto@twocolumn
-  \setlxvchars
-  \setlength{\xlvchars}{.45\lxvchars}
-  \newlength{\marginunit}
-  \setlength{\marginunit}{(\paperwidth - \lxvchars - \xlvchars) / \real{2.5}}
-  \setlength{\headwidth}{\paperwidth - 2\marginunit}
-  \newlength{\dirtymargin}
-  \setlength{\dirtymargin}{\xlvchars + 0.4\marginunit}
-  \setlrmarginsandblock{1.05\marginunit}{1.45\marginunit + \xlvchars}{*}
-  \setulmarginsandblock{1.25\marginunit}{*}{1}
-  \setheaderspaces{*}{*}{0.75}
-  \setmarginnotes{0.4\marginunit}{\xlvchars}{\baselineskip}
-  \checkandfixthelayout
-\fi
+\setlrmarginsandblock{25mm}{*}{1}
 \setulmarginsandblock{64pt}{*}{1}
+\setheadfoot{15pt}{28pt}
+\setheaderspaces{*}{*}{0.75}
+\checkandfixthelayout
 %    \end{macrocode}
 %
-% Need to ensure marginpar width not auto adjusted
+% The fullwidth environment is only really useful in one-column mode,
+% where it is used to span content across both the textblock and marginal
+% column.
 %
+% \begin{environment}{fullwidth}
 %    \begin{macrocode}
-\memsetmacroused\setmarginnotes
-\checkandfixthelayout
-\ifKV@dcchowto@twocolumn
-  \newenvironment{fullwidth}{%
-    \if@twoside
-      \begin{adjustwidth*}{0pt}{-\dirtymargin}%
-    \else
-      \begin{adjustwidth}{0pt}{-\dirtymargin}%
-    \fi
-  }{%
-    \if@twoside\end{adjustwidth*}\else\end{adjustwidth}\fi
-  }
-  \newsavebox{\memtufte@fwbox}
-  \newenvironment{fullwidth*}{%
-    \begin{lrbox}{\memtufte@fwbox}
-      \begin{minipage}[t]{\headwidth}
-  }{%
-      \end{minipage}
-    \end{lrbox}
-    \begin{adjustwidth}{0pt}{0pt}% mimicking the spacing of `fullwidth'
-      \if@twoside
-        \checkoddpage
-        \ifoddpage
-          \rlap{\usebox{\memtufte@fwbox}}%
-        \else
-          \llap{\usebox{\memtufte@fwbox}}%
-        \fi
-      \else
-        \rlap{\usebox{\memtufte@fwbox}}%
-      \fi
-    \end{adjustwidth}
-  }
-\fi
+\newsavebox{\dcchowto@fwbox}
+\newenvironment{fullwidth}{%
+  \begin{lrbox}{\dcchowto@fwbox}
+    \begin{minipage}[t]{180mm}
+}{%
+    \end{minipage}
+  \end{lrbox}
+  \rlap{\usebox{\dcchowto@fwbox}}%
+}
+%    \end{macrocode}
+% \end{environment}
+
+%    \begin{macrocode}
 \RequirePackage{marginfix}
 \flushbottom
 \raggedyright
@@ -3080,17 +3061,6 @@ For joint branding two further commands are defined:
   A Digital Curation Centre `working level' guide}
 %    \end{macrocode}
 %
-% fixes for two-column layout
-%
-%    \begin{macrocode}
-\newlength{\regularheadwidth}
-\ifKV@dcchowto@twocolumn
-  \setlength{\regularheadwidth}{\paperwidth - 30mm}
-\else
-  \setlength{\regularheadwidth}{\headwidth}
-\fi
-%    \end{macrocode}
-%
 % Plain (default) headers and footers
 %
 %    \begin{macrocode}
@@ -3099,31 +3069,7 @@ For joint branding two further commands are defined:
   \makeoddhead{plain}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
 \fi
 \ifKV@dcchowto@numbers
-  \ifmemtufte@flipheader
-    \makeoddfoot{plain}{%
-      \makebox[0pt][l]{%
-        \makebox[\regularheadwidth][c]{%
-          \raisebox{-44.4pt}[0pt][0pt]{%
-            \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
-          }%
-        }%
-      }%
-      \ifodd
-        \count\z@
-      \else
-        \raisebox{-1.5\onelineskip}{%
-          \textcolor{white}{\textbf{\thepage}}%
-        }%
-      \fi
-    }{}{%
-      \ifodd
-        \count\z@
-        \raisebox{-1.5\onelineskip}{%
-          \textcolor{white}{\textbf{\thepage}}%
-        }%
-      \fi
-    }
-  \else
+  \ifKV@dcchowto@twocolumn
     \makeoddfoot{plain}{}{%
       \makebox[0pt][c]{%
         \raisebox{-44.4pt}[0pt][0pt]{%
@@ -3135,10 +3081,38 @@ For joint branding two further commands are defined:
         \textcolor{white}{\textbf{\thepage}}%
       }%
     }
+  \else
+    \makeoddfoot{plain}{%
+      \makebox[0pt][l]{%
+        \makebox[\paperwidth - 30mm][c]{%
+          \raisebox{-44.4pt}[0pt][0pt]{%
+            \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+          }%
+        }%
+      }%
+      \ifodd
+      \count\z@
+      \else
+      \raisebox{-1.5\onelineskip}{%
+        \textcolor{white}{\textbf{\thepage}}%
+      }%
+      \fi
+    }{}{%
+      \ifodd
+      \count\z@
+      \raisebox{-1.5\onelineskip}{%
+        \rlap{%
+          \makebox[70mm][r]{%
+            \textcolor{white}{\textbf{\thepage}}%
+          }%
+        }%
+      }%
+      \fi
+    }
   \fi
   \makeevenfoot{plain}{%
     \makebox[0pt][l]{%
-      \makebox[\regularheadwidth][c]{%
+      \makebox[\paperwidth - 30mm][c]{%
         \raisebox{-44.4pt}[0pt][0pt]{%
           \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
         }%
@@ -3168,16 +3142,12 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 %
 % Title page headers and footers
-% 
+%
 %    \begin{macrocode}
 \copypagestyle{title}{plain}
-\ifKV@dcchowto@twocolumn
-  \makerunningwidth{title}{\headwidth}
-  \makeheadposition{title}{flushright}{flushleft}{flushright}{flushleft}
-\fi
 \makeoddhead{title}{%
   \makebox[\TitleTabWidth][c]{%
-    \raisebox{-86.8pt}[0pt][0pt]{%
+    \raisebox{-21pt - 2\baselineskip - 6pt - 22pt}[0pt][0pt]{%
       \tikz{%
         \fill[dccmaroon]
           (0,0)
@@ -3192,15 +3162,15 @@ For joint branding two further commands are defined:
     }%
   }%
 }{}{%
-  \makebox[112pt][l]{%
+  \makebox[39mm][l]{%
     \raisebox{10pt-\height}[0pt][0pt]{%
-      \begin{minipage}{148pt}
+      \begin{minipage}{52mm}
         \raggedleft
-        \dcclogo[width=148pt]\quad
+        \dcclogo[width=52mm]\quad
         \dcchowto@partner@logos
         \raisebox{0pt}[\height+24pt][0pt]{%
-          \makebox[45pt][l]{%
-            \includegraphics[width=80pt]{jisc-tab}%
+          \makebox[16mm][l]{%
+            \includegraphics[width=28mm]{jisc-tab}%
           }%
         }%
       \end{minipage}
@@ -3221,11 +3191,6 @@ For joint branding two further commands are defined:
 % 
 %    \begin{macrocode}
 \makepagestyle{last}
-\ifKV@dcchowto@twocolumn
-  \makerunningwidth{last}{\regularheadwidth}
-\else
-  \makerunningwidth{last}{\headwidth}
-\fi
 \makeheadposition{last}{flushright}{flushleft}{flushright}{flushleft}
 \newlength{\LastHeadHeight}
 \newcommand*{\lastheadheight}[1]{\setlength{\LastHeadHeight}{#1}}
@@ -3372,72 +3337,71 @@ For joint branding two further commands are defined:
       \end{raggedright}
     \end{minipage}
   }
-  \par\vspace{5.3em}
-  \begin{lrbox}{\TitleBox}
-    \begin{minipage}[t]{\textwidth + 0.6\dirtymargin}
-      \begin{flushleft}
-        \fontsize{36pt}{40pt}\selectfont
-        \bfseries\color{dccmaroon}%
-        \thetitle
-      \end{flushleft}
-      
-      \begin{flushleft}
-        \huge\lightseries\color{dccblue}
-        \dcchowto@author@display
-      \end{flushleft}
-      
-      \ifx\undefined\dcchowto@mark\else
-        \begin{flushleft}
-          \smallcaps{\dcchowto@mark:\quad\today}
-        \end{flushleft}
-      \fi
-    \end{minipage}
-  \end{lrbox}
-  \rlap{\usebox{\TitleBox}}
-  \par\vfill
-  \begin{fullwidth*}
+  \par\vspace{3.5\baselineskip}
+  \begin{flushleft}
+    \fontsize{36pt}{40pt}\selectfont
+    \bfseries\color{dccmaroon}%
+    \thetitle
+  \end{flushleft}
+  
+  \begin{flushleft}
+    \huge\lightseries\color{dccblue}
+    \dcchowto@author@display
+  \end{flushleft}
+  
+  \ifx\undefined\dcchowto@mark\else
     \begin{flushleft}
-      \large\bfseries
-      \color{dccblue}\includegraphics[width=74pt]{cc_by}\\[4pt]
-      Digital Curation Centre, \the\year.\\
-      Licensed under Creative Commons Attribution 4.0 International:\\
-      \url{http://creativecommons.org/licenses/by/4.0/}
+      \smallcaps{\dcchowto@mark:\quad\today}
     \end{flushleft}
-  \end{fullwidth*}
+  \fi
+  \par\vfill
+  \begin{flushleft}
+    \large\bfseries
+    \color{dccblue}\includegraphics[width=74pt]{cc_by}\\[4pt]
+    Digital Curation Centre, \the\year.\\
+    Licensed under Creative Commons Attribution 4.0 International:\\
+    \url{http://creativecommons.org/licenses/by/4.0/}
+  \end{flushleft}
+%    \end{macrocode}
+%
+% Here is where we set the geometry for the rest of the document,
+% and begin by printing the title (again) and the abstract.
+%
+%    \begin{macrocode}
   \ifKV@dcchowto@twocolumn
-    \setlrmarginsandblock{15mm}{15mm}{*}
-    \setcolsepandrule{10mm}{0pt}
+    \clearpage
+    \setlrmarginsandblock{15mm}{15mm}{*}%
+    \setcolsepandrule{10mm}{0pt}%
+    \checkandfixthelayout
     \twocolumn[%
-      \begin{@twocolumnfalse}
-        %\vspace*{-1em}
-        \raggedright
-        {\HUGE\color{dccmaroon}\textbf{\thetitle}\par}
-      \end{@twocolumnfalse}
+    \begin{@twocolumnfalse}
+      \raggedright
+      \HUGE\color{dccmaroon}\textbf{\thetitle}\par
+    \end{@twocolumnfalse}
+    \par\vspace{1\onelineskip plus \onelineskip minus \onelineskip}\par
+    \begin{abstract}
+      \raggedright #1
+    \end{abstract}
+    \par\vspace{1\onelineskip plus \onelineskip minus \onelineskip}\par
+    \vskip\dbltextfloatsep
+    ]
+  \else
+    \clearpage
+    \setlrmarginsandblock{15mm}{85mm}{*}%
+    \setmarginnotes{10mm}{60mm}{\baselineskip}%
+    \checkandfixthelayout
+    \ch@ngetext
+    \vbox{%
+      \hsize180mm
+      \@parboxrestore
+      \raggedright
+      \HUGE\color{dccmaroon}\textbf{\thetitle}\par
+      \normalsize
       \par\vspace{1\onelineskip plus \onelineskip minus \onelineskip}\par
       \begin{abstract}
         \raggedright #1
       \end{abstract}
-      \par\vspace{2\onelineskip plus \onelineskip minus \onelineskip}\par
-    ]
-%    \end{macrocode}
-%
-% Need to ensure marginpar width not auto adjusted
-% 
-%    \begin{macrocode}
-    \memsetmacroused\setmarginnotes
-    \checkandfixthelayout
-  \else
-    \pagebreak
-    \begin{fullwidth*}
-      \vspace*{-1em}\raggedright
-      {\HUGE\color{dccmaroon}\textbf{\thetitle}\par}
-    \end{fullwidth*}
-    \par\vspace{2\onelineskip plus \onelineskip minus \onelineskip}\par
-    \begin{fullwidth*}
-      \begin{abstract}
-        \raggedright #1
-      \end{abstract}
-    \end{fullwidth*}
+    }%
   \fi
 }
 %    \end{macrocode}
@@ -3563,17 +3527,40 @@ For joint branding two further commands are defined:
 % Footnotes
 %
 %    \begin{macrocode}
+\setlength{\footmarkwidth}{0pt}
+\setlength{\footmarksep}{0pt}
 \ifKV@dcchowto@twocolumn
+  \footmarkstyle{\textsuperscript{#1} }
   \renewcommand*{\footnoterule}{%
     \kern-3pt%
     \textcolor{dccmaroon}{\hrule}%
     \kern 2.6pt%
   }
   \setlength{\footmarkwidth}{0pt}
-  \setlength{\footmarksep}{0pt}
-  \footmarkstyle{\textsuperscript{#1} }
   \renewcommand{\makefootmarkhook}{\raggedyright}
+\else
+  \footmarkstyle{\textsuperscript{#1}\,}
+  \footnotesinmargin
+  \setlength{\sidefootmarkwidth}{0pt}
+  \setlength{\sidefootmarksep}{0pt}
+  \sidefootmarkstyle{\textsuperscript{#1}\,}
+  \patchcmd{\@plainfootnotetext}{%
+    \reset@font
+  }{%
+    \sidefootform\reset@font
+  }{}{%
+  \typeout{Failed to patch mkbibrangeapalong}
+  }
 \fi
+\newcommand{\marginnote}[1]{%
+  \marginpar{%
+    \def\baselinestretch{\m@m@footnote@spacing}%
+    \sidefootform
+    \reset@font
+    \foottextfont
+    \ignorespaces#1%
+  }%
+}
 %    \end{macrocode}
 %
 % Where it is used, \cs{today} is printed in small caps. The preferred font uses
