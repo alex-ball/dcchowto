@@ -3369,6 +3369,7 @@ For joint branding two further commands are defined:
     \clearpage
     \setlrmarginsandblock{15mm}{85mm}{*}%
     \setmarginnotes{10mm}{60mm}{\baselineskip}%
+    \setsidecaps{10mm}{60mm}
     \checkandfixthelayout
     \ch@ngetext
     \vbox{%
@@ -3424,18 +3425,48 @@ For joint branding two further commands are defined:
 \setsecnumdepth{part}
 %    \end{macrocode}
 %
-% Floats
+% Footnotes
 %
 %    \begin{macrocode}
+\setlength{\footmarkwidth}{0pt}
+\setlength{\footmarksep}{0pt}
 \ifKV@dcchowto@twocolumn
-  \hangcaption
+  \footmarkstyle{\textsuperscript{#1} }
+  \renewcommand*{\footnoterule}{%
+    \kern-3pt%
+    \textcolor{dccmaroon}{\hrule}%
+    \kern 2.6pt%
+  }
+  \renewcommand{\makefootmarkhook}{\raggedyright}
+\else
+  \footnotesinmargin
+  \setlength{\sidefootmarkwidth}{0pt}
+  \setlength{\sidefootmarksep}{0pt}
+  % Gap between consecutive (saved) footnotes
+  \setlength{\footnotesep}{\baselineskip}
+  \addtolength{\footnotesep}{\marginparpush}
+  \footmarkstyle{\textsuperscript{#1}\,}
+  \sidefootmarkstyle{\textsuperscript{#1}\,}
+  \renewcommand{\makefootmarkhook}{\sidefootform}
+  % The width of saved footnotes...
+  \let\fn@colwidth\marginparwidth
+  \patchcmd{\savenotes}{%
+    \columnwidth
+  }{%
+    \marginparwidth
+  }{}{%
+    \typeout{Failed to patch savenotes}
+  }
 \fi
-\captionstyle[\centering]{\raggedyright}
-\captionnamefont{\footnotesize\bfseries}
-\captiontitlefont{\footnotesize}
-\makesavenoteenv{figure}
-\counterwithout{figure}{chapter}
-\counterwithout{table}{chapter}
+\newcommand{\marginnote}[1]{%
+  \marginpar{%
+    \def\baselinestretch{\m@m@footnote@spacing}%
+    \sidefootform
+    \reset@font
+    \foottextfont
+    \ignorespaces#1%
+  }%
+}
 %    \end{macrocode}
 %
 % Lists
@@ -3504,45 +3535,6 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % \end{environment}
 %
-% Footnotes
-%
-%    \begin{macrocode}
-\setlength{\footmarkwidth}{0pt}
-\setlength{\footmarksep}{0pt}
-\ifKV@dcchowto@twocolumn
-  \footmarkstyle{\textsuperscript{#1} }
-  \renewcommand*{\footnoterule}{%
-    \kern-3pt%
-    \textcolor{dccmaroon}{\hrule}%
-    \kern 2.6pt%
-  }
-  \setlength{\footmarkwidth}{0pt}
-  \renewcommand{\makefootmarkhook}{\raggedyright}
-\else
-  \footmarkstyle{\textsuperscript{#1}\,}
-  \footnotesinmargin
-  \setlength{\sidefootmarkwidth}{0pt}
-  \setlength{\sidefootmarksep}{0pt}
-  \sidefootmarkstyle{\textsuperscript{#1}\,}
-  \patchcmd{\@plainfootnotetext}{%
-    \reset@font
-  }{%
-    \sidefootform\reset@font
-  }{}{%
-  \typeout{Failed to patch mkbibrangeapalong}
-  }
-\fi
-\newcommand{\marginnote}[1]{%
-  \marginpar{%
-    \def\baselinestretch{\m@m@footnote@spacing}%
-    \sidefootform
-    \reset@font
-    \foottextfont
-    \ignorespaces#1%
-  }%
-}
-%    \end{macrocode}
-%
 % Where it is used, \cs{today} is printed in small caps. The preferred font uses
 % fake small caps, but sadly old style numbers aren't faked. By marking up the
 % figures explicitly, we can allow them to be faked.
@@ -3559,7 +3551,268 @@ For joint branding two further commands are defined:
   }%
 }
 %    \end{macrocode}
-% 
+%
+% \subsection{Floats}
+%
+% The following code puts captions in the margins. It is adapted from \pkg{tufte-latex}
+% for use with \pkg{memoir}. It needs thoroughly rewriting.
+%
+%    \begin{macrocode}
+\ifKV@dcchowto@twocolumn\else
+  \setsidecappos{b}
+  \sidecapmargin{outer}
+  \renewcommand*{\sidecapstyle}{\sidefootform\toggletrue{blx@footnote}}
+  \newcommand{\floatalignment}{x}% holds the current float alignment (t, b, h, p)
+  \newcommand{\setfloatalignment}[1]{\renewcommand{\floatalignment}{#1}}% manually sets the float alignment
+  % % % Save original LaTeX float environment
+  \let\memtufte@orig@float\@float
+  \let\memtufte@orig@endfloat\end@float
+  % % % Save original LaTeX \caption and \label commands
+  \AtBeginDocument{%
+    \let\memtufte@orig@caption\caption%
+    \let\memtufte@orig@label\label%
+  }
+  % % % Store the caption and label contents
+  \newcommand{\memtufte@caption}[2][]{%
+    \ifthenelse{\isempty{#1}}
+    {\gdef\m@mscap@fortoc{#2}}%
+    {\gdef\m@mscap@fortoc{#1}}%
+    \gdef\m@mscap@forcap{#2}%
+  }
+  \newcommand{\memtufte@label}[1]{%
+    \ifx\@empty#1\@empty
+    \gdef\m@mscaplabel{}%
+    \else
+    \gdef\m@mscaplabel{\@bsphack\memtufte@orig@label{#1}\@esphack}%
+    \fi
+  }
+  % % % Two temporary lengths
+  \newlength\dcchowto@tmpa
+  \newlength\dcchowto@tmpb
+  % % % Define a float environment to place the captions in the margin space
+  \newenvironment{memtufte@float}[2][htbp]
+  {% If the float placement specifier is 't' and only 't', then top-align the mini-pages, otherwise bottom-align them.
+    \ifthenelse{\equal{#1}{t}\OR\equal{#1}{T}}{%
+      \setsidecappos{t}
+    }{%
+      \setsidecappos{b}%
+    }%
+    % Reset captions
+    \gdef\m@mscap@fortoc{}%
+    \gdef\m@mscap@forcap{}%
+    \gdef\m@mscaplabel{}%
+    \let\memtufte@orig@caption\caption%
+    \let\memtufte@orig@label\label%
+    \renewcommand{\caption}[2][]{\memtufte@caption[##1]{##2}}%
+    \renewcommand{\label}[1]{\memtufte@label{##1}}%
+    \memtufte@orig@float{#2}[#1]%
+    \@mem@scap@beforehook%
+    \setlength{\m@mscapmainwidth}{\sidecapfloatwidth}%
+    \setm@mscaplkern
+    \begin{lrbox}{\m@mscap@fbox}%
+      \begin{minipage}[c]{\m@mscapmainwidth}}
+      {\par\hbox{}\vspace{-\baselineskip}%
+        \ifthenelse{\prevdepth>0}{\vspace{-\prevdepth}}{}% align baselines of boxes
+      \end{minipage}%
+    \end{lrbox}%
+    \ifthenelse{\equal{\m@mscap@forcap}{}}{}{%
+      \ifx\undefined\H@refstepcounter
+      \refstepcounter\@captype
+      \else
+      \H@refstepcounter{\@captype}%
+      \hyper@makecurrent{\@captype}%
+      \fi
+      \m@mscaplabel
+      \begin{lrbox}{\m@mscap@capbox}%
+        \begin{minipage}[c]{\sidecapwidth}%
+          \sidecapstyle
+          \@caption\@captype[\m@mscap@fortoc]{\m@mscap@forcap}%
+        \end{minipage}%
+      \end{lrbox}%
+      \global\dcchowto@tmpa=\z@
+      \global\advance\dcchowto@tmpa \ht\m@mscap@capbox
+      \global\advance\dcchowto@tmpa \dp\m@mscap@capbox
+      \global\advance\dcchowto@tmpa \marginparpush
+      \global\dcchowto@tmpb=\marginparpush
+      \m@mscapopboxes
+    }
+    \memtufte@orig@endfloat
+    % Reset commands and temp boxes
+    \let\caption\memtufte@orig@caption
+    \let\label\memtufte@orig@label
+    \marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
+    \begin{lrbox}{\m@mscap@fbox}\hbox{}\end{lrbox}%
+    \begin{lrbox}{\m@mscap@capbox}\hbox{}\end{lrbox}%
+  }
+  % % % Redefine the figure environment to place the captions in the margin space
+  \renewenvironment{figure}[1][htbp]
+  {\begin{memtufte@float}[#1]{figure}}
+    {\end{memtufte@float}}
+  % % % Redefine the table environment to place the captions in the margin space
+  \renewenvironment{table}[1][htbp]
+  {\begin{memtufte@float}[#1]{table}}
+    {\end{memtufte@float}}
+%    \end{macrocode}
+%
+% Now we define full width floats using a similar technique. For compatibility
+% we use the same names (the starred variants of table and figure) as for floats
+% spanning two columns, which is approximately what this is doing.
+%
+%    \begin{macrocode}
+  \newcommand*{\sidecappos}[1]{%
+    \gdef\m@mscappos{#1}\def\@tempb{t}%
+    \ifx\@tempb\m@mscappos
+    \else
+    \gdef\@tempb{b}%
+    \ifx\@tempb\m@mscappos
+    \else
+    \gdef\@tempb{c}%
+    \ifx\@tempb\m@mscappos
+    \else
+    \@memerror{Argument to \string\sidecappos\space is not t or c or b.
+      \MessageBreak Set to c}{\@ehc}%
+    \gdef\m@mscappos{c}%
+    \fi
+    \fi
+    \fi}
+  \newenvironment{memtufte@float@star}[2][htbp]
+  {% If the float placement specifier is 'b' and only 'b', then bottom-align the mini-pages, otherwise top-align them.
+    \ifthenelse{\equal{#1}{b}\OR\equal{#1}{B}}%
+    {\setsidecappos{b}}%
+    {\setsidecappos{t}}%
+    % Reset captions
+    \gdef\m@mscap@fortoc{}%
+    \gdef\m@mscap@forcap{}%
+    \gdef\m@mscaplabel{}%
+    \let\memtufte@orig@caption\caption%
+    \let\memtufte@orig@label\label%
+    \renewcommand{\caption}[2][]{\memtufte@caption[##1]{##2}}%
+    \renewcommand{\label}[1]{\memtufte@label{##1}}%
+    \memtufte@orig@float{#2}[#1]%
+    \@mem@scap@beforehook%
+    \setlength{\m@mscapmainwidth}{\sidecapfloatwidth}%
+    \setm@mscaplkern
+    \begin{lrbox}{\m@mscap@fbox}%
+      \begin{minipage}[c]{\m@mscapmainwidth}
+        \begin{fullwidth}
+        }
+        {\par\hbox{}\vspace{-\baselineskip}%
+          \ifthenelse{\prevdepth>0}{\vspace{-\prevdepth}}{}% align baselines of boxes
+        \end{fullwidth}
+      \end{minipage}
+    \end{lrbox}
+    \ifthenelse{\equal{\m@mscap@forcap}{}}{}{%
+      \ifx\undefined\H@refstepcounter
+      \refstepcounter\@captype
+      \else
+      \H@refstepcounter{\@captype}%
+      \hyper@makecurrent{\@captype}%
+      \fi
+      \m@mscaplabel
+      \begin{lrbox}{\m@mscap@capbox}%
+        \begin{minipage}[c]{\sidecapwidth}%
+          \sidecapstyle
+          \@caption\@captype[\m@mscap@fortoc]{\m@mscap@forcap}%
+        \end{minipage}%
+      \end{lrbox}%
+      \let\memtufte@sidecapstyle\sidecapstyle
+      \global\dcchowto@tmpa=\z@
+      \global\advance\dcchowto@tmpa \ht\m@mscap@fbox
+      \global\advance\dcchowto@tmpa \dp\m@mscap@fbox
+      \global\advance\dcchowto@tmpa \marginparpush
+      \def\@tempb{t}%
+      \ifx\m@mscappos\@tempb
+        \setlength{\m@mscapraise}{0pt}%
+        \settoheight{\m@m@tempdima}{\strut\usebox{\m@mscap@capbox}}%
+        \advance\m@mscapraise -\m@m@tempdima
+        \settodepth{\m@m@tempdima}{\usebox{\m@mscap@fbox}}%
+        \advance\m@mscapraise -\m@m@tempdima
+        \advance\m@mscapraise 0.5ex
+        \advance\m@mscapraise -\abovecaptionskip
+        \global\dcchowto@tmpb=\dcchowto@tmpa
+        \global\advance\dcchowto@tmpb \abovecaptionskip
+        \global\advance\dcchowto@tmpb \ht\m@mscap@capbox
+        \global\advance\dcchowto@tmpb \dp\m@mscap@capbox
+        \global\advance\dcchowto@tmpb \marginparpush
+      \else
+        \def\@tempb{b}%
+        \ifx\m@mscappos\@tempb
+          \settodepth{\m@mscapraise}{\strut\usebox{\m@mscap@capbox}}%
+          \settoheight{\m@m@tempdima}{\usebox{\m@mscap@fbox}}%
+          \advance\m@mscapraise \m@m@tempdima
+          \advance\m@mscapraise \belowcaptionskip
+          \global\dcchowto@tmpb=\z@
+          \global\advance\dcchowto@tmpa \belowcaptionskip
+          \global\advance\dcchowto@tmpa \ht\m@mscap@capbox
+          \global\advance\dcchowto@tmpa \dp\m@mscap@capbox
+        \else
+          \m@mscapraise=\z@
+          \advance\m@mscapraise 0.25ex
+          \global\dcchowto@tmpb=\z@
+          \global\advance\dcchowto@tmpb \marginparpush
+          \global\advance\dcchowto@tmpb \ht\m@mscap@capbox
+          \global\advance\dcchowto@tmpb \dp\m@mscap@capbox
+          \ifdim\dcchowto@tmpb>\dcchowto@tmpa
+            \global\advance\dcchowto@tmpb -\dcchowto@tmpa
+            \global\advance\dcchowto@tmpa .5\dcchowto@tmpb
+            \global\advance\dcchowto@tmpb -.5\dcchowto@tmpb
+          \else
+            \global\dcchowto@tmpb=\z@
+          \fi
+        \fi
+      \fi
+      \advance\m@mscapraise  \sidecapraise
+    }
+    \m@mscapcheckside
+    \ifscapmargleft%
+    \makebox[\textwidth][r]{\usebox{\m@mscap@fbox}}%
+    \rlap{\kern-\m@mscaplkern
+      \raisebox{\m@mscapraise}[0pt][0pt]{\usebox{\m@mscap@capbox}}}%
+    \else%
+    \makebox[\textwidth][l]{\usebox{\m@mscap@fbox}}%
+    \rlap{\kern\sidecapsep
+      \raisebox{\m@mscapraise}[0pt][0pt]{\usebox{\m@mscap@capbox}}}%
+    \fi
+    \gdef\m@mscapthisside{}%
+    \@mem@scap@afterhook%
+    \memtufte@orig@endfloat%
+    % reset commands and temp boxes
+    \let\caption\memtufte@orig@caption%
+    \let\label\memtufte@orig@label%
+    \let\sidecapstyle\memtufte@sidecapstyle%
+    \marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
+    \begin{lrbox}{\m@mscap@fbox}\hbox{}\end{lrbox}%
+    \begin{lrbox}{\m@mscap@capbox}\hbox{}\end{lrbox}%
+  }
+  % % % Full-width figure
+  \renewenvironment{figure*}[1][htbp]%
+  {\begin{memtufte@float@star}[#1]{figure}}
+    {\end{memtufte@float@star}}
+  % % % Full-width table
+  \renewenvironment{table*}[1][htbp]%
+  {\begin{memtufte@float@star}[#1]{table}}
+    {\end{memtufte@float@star}}
+\fi
+%    \end{macrocode}
+%
+% Captions should be small, set ragged if long and (in two column mode) centred
+% if short.
+%
+%    \begin{macrocode}
+\ifKV@dcchowto@twocolumn
+  \hangcaption
+  \captionstyle[\centering]{\raggedyright}
+\else
+  \captionstyle[\raggedright]{\raggedyright}  
+\fi
+\captionnamefont{\footnotesize\bfseries}
+\captiontitlefont{\footnotesize}
+\makesavenoteenv{figure}
+\makesavenoteenv{figure*}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+%    \end{macrocode}
+%
 % \subsection{Citations and references}
 %
 % We use \pkg{biblatex} and \pkg{biblatex-apa} for referencing (with tweaks).
@@ -3607,7 +3860,7 @@ For joint branding two further commands are defined:
   \usebibmacro{cite}%
 }{%
   \multicitedelim
-}{}
+}{\unspace}
 \DeclareCiteCommand{\fullcite}{%
   \usebibmacro{prenote}%
   \renewcommand*{\postnotedelim}{}%
