@@ -2760,7 +2760,6 @@ For joint branding two further commands are defined:
     \newcommand*{\memfontenc}{T1}
     \newcommand*{\memfontpack}{helvet}
     \def\Hv@scale{0.88}
-    \def\lightseries{\mdseries}
     \SetSymbolFont{operators}{normal}{T1}{phv}{m}{n}
     \SetSymbolFont{letters}{normal}{T1}{phv}{m}{it}
   }%
@@ -3086,7 +3085,8 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \newlength\TitleTabWidth
-\settowidth{\TitleTabWidth}{\fontsize{16pt}{20pt}\lightseries
+\settowidth{\TitleTabWidth}{\fontsize{16pt}{20pt}%
+  \ifx\undefined\lightseries\mdseries\else\lightseries\fi
   A Digital Curation Centre `working level' guide}
 %    \end{macrocode}
 %
@@ -3287,7 +3287,11 @@ For joint branding two further commands are defined:
     }
   \fi
   \eappto\dcchowto@author@display{%
-    \noexpand\textmd{\dcchowto@author@name}%
+    \ifx\undefined\lightseries
+      \noexpand\textbf{\dcchowto@author@name}%
+    \else
+      \noexpand\textmd{\dcchowto@author@name}%
+    \fi
   }
   \ifdef{\dcchowto@author@affil}{%
     \eappto\dcchowto@author@display{
@@ -3360,7 +3364,9 @@ For joint branding two further commands are defined:
   \raisebox{0pt}[1em][0pt]{%
     \begin{minipage}[b]{\TitleTabWidth}
       \begin{raggedright}
-        \fontsize{16pt}{20pt}\selectfont\lightseries\color{white}%
+        \fontsize{16pt}{20pt}\selectfont
+        \ifx\undefined\lightseries\mdseries\else\lightseries\fi
+        \color{white}%
         A Digital Curation Centre\dcchowto@partners
         \ `working level' guide\par
       \end{raggedright}
@@ -3374,7 +3380,9 @@ For joint branding two further commands are defined:
   \end{flushleft}
   
   \begin{flushleft}
-    \huge\lightseries\color{dccblue}
+    \huge
+    \ifx\undefined\lightseries\mdseries\else\lightseries\fi
+    \color{dccblue}%
     \dcchowto@author@display
   \end{flushleft}
   
@@ -3445,8 +3453,16 @@ For joint branding two further commands are defined:
   \renewcommand{\abstractname}{Introduction}%
   \setlength{\absparindent}{0pt}%
 }
-\renewcommand{\abstractnamefont}{\color{dccblue}\Huge}
-\renewcommand{\abstracttextfont}{\color{dccblue}\Large\itshape\lightseries}
+\renewcommand{\abstractnamefont}{%
+  \color{dccblue}%
+  \Huge
+  \ifx\undefined\lightseries\bfseries\else\mdseries\fi
+}
+\renewcommand{\abstracttextfont}{%
+  \color{dccblue}%
+  \Large\itshape%
+  \ifx\undefined\lightseries\mdseries\else\lightseries\fi
+}
 \setlength{\absleftindent}{0pt}
 \setlength{\absrightindent}{0pt}
 \renewcommand{\absnamepos}{flushleft}
