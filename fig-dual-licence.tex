@@ -1,35 +1,80 @@
-\centering
-\tikzset{entity/.style={rectangle,text badly centered}}
-\tikzset{lbl/.style={midway,fill=dccpeach,inner sep=0pt}}
+\centerfloat
+\tikzset{entity/.style={rectangle,text badly centered}}%
+\tikzset{lbl/.style={midway,fill=dccpeach,inner sep=0pt}}%
 \begin{tikzpicture}[>=to,very thick,rounded corners=2pt,line cap=round]
-	% boxes
-	\node[entity,top color=Honeydew,bottom color=Honeydew!90!black,text width=21ex]
-	(core) {\strut Core Product};
-	\node[entity,top color=Ivory,bottom color=Ivory!90!black,text width=14ex,
-	above left=3em and -3.5em of core]% was 2em above
-	(devcom) {\strut Development Community\strut};
-	\node[entity,top color=AliceBlue,bottom color=AliceBlue!90!black,text width=14ex,
-	above right=3em and -3.5em of core]% was 2em above
-	(devpart) {\strut Development Partners\strut};
-	\node[entity,top color=AliceBlue,bottom color=AliceBlue!90!black,
-	dotted,below=3.25em of core.315,anchor=center]% was 2em below
-	(resell) {\strut Reseller};
-	\node[entity,top color=Ivory,bottom color=Ivory!90!black,
-	below left=6.5em and 0pt of core.south]% was 6em below
-	(users) {\strut Copyleft Users};
-	\node[entity,top color=AliceBlue,bottom color=AliceBlue!90!black,
-	below right=6.5em and 0pt of core.south]% was 6em below
-	(customers) {\strut Customers};
-	\coordinate[below=1em of users] (sub-users);
-	\coordinate[below=1em of customers] (sub-customers);
-	% arrows
-	\draw[dccmaroon,->] (devcom) -| (core.135) node[lbl,pos=0.85,xshift=-1.5ex] {\textcopyright};
-	\draw[dccmaroon,->] (core) -| (devcom.225) node[lbl,pos=0.8] {Copyleft};
-	\draw[dccmaroon,->] (devpart) -| (core.45) node[lbl,pos=0.85,xshift=1ex] {Licence};
-	\draw[dccmaroon,->] (core) -| (devpart.315) node[lbl,pos=0.8] {Licence fees};
-	\draw[dccmaroon] (core.315) -- (resell.north);
-	\draw[dccmaroon,<-] (core.315) ++(0,-6.5em) -- (resell) node[lbl] {Licence};
-	\draw[dccmaroon,<-] (core.345) -- ++(0,-6.5em) node [lbl,pos=0.2,xshift=1em] {Licence fees};
-	\draw[dccmaroon,<-] (users.north) -- ++(0,6.5em) node[lbl] {Copyleft};
-	\draw[Green,->,ultra thick] (users) -- (sub-users) -- (sub-customers) node[midway,below,Green] {Migration} -- (customers);
-\end{tikzpicture} 
+  % boxes
+  \node
+    [ entity
+    , top color=Honeydew
+    , bottom color=Honeydew!90!black
+    , text width=21ex
+    ] (core) {\strut Core Product};
+  \node
+    [ entity
+    , top color=Ivory
+    , bottom color=Ivory!90!black
+    , text width=14ex
+    , above left=3em and -3.5em of core
+    ] (devcom) {\strut Development Community\strut};
+  \node
+    [ entity
+    , top color=AliceBlue
+    , bottom color=AliceBlue!90!black
+    , text width=14ex
+    , above right=3em and -3.5em of core
+    ] (devpart) {\strut Development Partners\strut};
+  \node
+    [ entity
+    , top color=AliceBlue
+    , bottom color=AliceBlue!90!black
+    , dotted
+    , below=3.25em of core.315
+    , anchor=center
+    ] (resell) {\strut Reseller};
+  \node
+    [ entity
+    , top color=Ivory
+    , bottom color=Ivory!90!black
+    , below left=6.5em and 0pt of core.south
+    ] (users) {\strut Copyleft Users};
+  \node
+    [ entity
+    , top color=AliceBlue
+    , bottom color=AliceBlue!90!black
+    , below right=6.5em and 0pt of core.south
+    ] (customers) {\strut Customers};
+  \coordinate
+    [ below=1em of users
+    ] (sub-users);
+  \coordinate
+    [ below=1em of customers
+    ] (sub-customers);
+  % arrows
+  \draw[dccmaroon,->]
+    (devcom) -| (core.135)
+    node[lbl,pos=0.85,xshift=-1.5ex] {\textcopyright};
+  \draw[dccmaroon,->]
+    (core) -| (devcom.225)
+    node[lbl,pos=0.8,xshift=0.5ex] {Copyleft};
+  \draw[dccmaroon,->]
+    (devpart) -| (core.45)
+    node[lbl,pos=0.85] {Licence};
+  \draw[dccmaroon,->]
+    (core) -| (devpart.315)
+    node[lbl,pos=0.8,xshift=-1.5ex] {Licence fees};
+  \draw[dccmaroon]
+    (core.315) -- (resell.north);
+  \draw[dccmaroon,<-]
+    (core.315) ++(0,-6.5em) -- (resell)
+    node[lbl] {Licence};
+  \draw[dccmaroon,<-]
+    (core.345) -- ++(0,-6.5em)
+    node [lbl,pos=0.2,xshift=1em] {Licence fees};
+  \draw[dccmaroon,<-]
+    (users.north) -- ++(0,6.5em)
+    node[lbl] {Copyleft};
+  \draw[Green,->,ultra thick]
+    (users) -- (sub-users) -- (sub-customers)
+    node[midway,below,Green] {Migration}
+    -- (customers);
+\end{tikzpicture}

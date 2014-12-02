@@ -749,15 +749,15 @@ Licences typically grant permissions on condition that certain terms are
 met. While the precise details vary, three conditions commonly found in
 licences are attribution, copyleft, and non-commerciality.
 
--   An *attribution* requirement means that the licensor must be given
+  * An *attribution* requirement means that the licensor must be given
     due credit for the work when it is distributed, displayed,
     performed, or used to derive a new work.
 
--   A *copyleft* requirement means that any new works derived from the
+  * A *copyleft* requirement means that any new works derived from the
     licensed one must be released under the same license, and only that
     licence.
 
--   The intent of a *non-commercial* licence is to prevent the licensee
+  * The intent of a *non-commercial* licence is to prevent the licensee
     from exploiting the work commercially. Such licences are often used
     as part of a dual-licensing regime (see ‘[Multiple 
     licensing](#sec:multi)’, below), where the alternative licence 
@@ -819,6 +819,24 @@ licensor’s IPR or, for a particular licensee, through breach of terms.
 Creative Commons {#sec:cc}
 ----------------
 
+\bgroup\marginbox\boxout
+\noindent{}**Creative Commons at a glance**
+
+*Good for*
+
+  * very simple, factual datasets
+  * data to be used automatically
+
+*Watch out for*
+
+  * versions: use v.\ 4 or later
+  * attribution stacking
+  * the NC condition: only use with dual licensing
+  * the SA condition as it reduces interoperability
+  * the ND condition as it severely restricts reuse
+
+\endboxout\endmarginbox\egroup
+
 Creative Commons is a non-profit corporation set up in 2001 for the
 purpose of producing simple yet robust licences for creative
 works.^[Creative Commons Website, URL: <http://creativecommons.org/>]
@@ -874,22 +892,22 @@ are mutually exclusive.
 
 The six permutations are therefore
 
--   Attribution (CC BY);^[CC BY, URL:
+  * Attribution (CC BY);^[CC BY, URL:
     <http://creativecommons.org/licenses/by/4.0>]
 
--   Attribution Share Alike (CC BY-SA);^[CC BY-SA, URL:
+  * Attribution Share Alike (CC BY-SA);^[CC BY-SA, URL:
      <http://creativecommons.org/licenses/by-sa/4.0>]
 
--   Attribution No Derivatives (CC BY-ND);^[CC BY-ND, URL:
+  * Attribution No Derivatives (CC BY-ND);^[CC BY-ND, URL:
     <http://creativecommons.org/licenses/by-nd/4.0>]
 
--   Attribution Non-Commercial (CC BY-NC);^[CC BY-NC, URL:
+  * Attribution Non-Commercial (CC BY-NC);^[CC BY-NC, URL:
     <http://creativecommons.org/licenses/by-nc/4.0>]
 
--   Attribution Non-Commercial Share Alike (CC BY-NC-SA);^[CC BY-NC-SA,
+  * Attribution Non-Commercial Share Alike (CC BY-NC-SA);^[CC BY-NC-SA,
     URL: <http://creativecommons.org/licenses/by-nc-sa/4.0>]
 
--   Attribution Non-Commercial No Derivatives (CC BY-NC-ND).^[CC
+  * Attribution Non-Commercial No Derivatives (CC BY-NC-ND).^[CC
     BY-NC-ND, URL: <http://creativecommons.org/licenses/by-nc-nd/4.0>]
 
 The versions of the licences prior to version 4 were not specifically
@@ -930,14 +948,28 @@ Open Data Commons {#sec:odc}
 The Open Data Commons Project^[Open Data Commons Website, URL:
 <http://opendatacommons.org/>] was set up in 2007 to develop a
 successor to the Talis Community Licence (TCL).^[TCL, URL:
-<http://web.archive.org/web/20130923083859/http://tdnarchive.capita-
-libraries.co.uk/tcl>] 
+<http://web.archive.org/web/20130923083859/http://tdnarchive.capita-libraries.co.uk/tcl>] 
 The first licence to be produced was a public domain dedication for 
 databases. The project transferred to the Open Knowledge Foundation in 
 2009 and has produced two further licences having some of the character 
 of the Creative Commons licences, but designed specifically for 
 databases. All three follow the Creative Commons model of providing a 
 clear summary and canonical URL alongside the full legal text.
+
+\bgroup\marginbox\boxout
+\noindent{}**ODC-By at a glance**
+
+*Good for*
+
+  * most databases and datasets
+  * data to be used automatically
+  * data to be used for generating non-data products
+
+*Watch out for*
+
+  * attribution stacking
+
+\endboxout\endmarginbox\egroup
 
 The Open Data Commons Attribution Licence (ODC-By) allows licensees to
 copy, distribute and use the database, to produce works from it and to
@@ -950,6 +982,23 @@ Attribution License](http://opendatacommons.org/licenses/by/).’] If the
 database is used substantially to create a new database or collection 
 of databases, the licence URL or text and copyright/database right 
 notices must be distributed with the new database or collection.
+
+\bgroup\marginbox\boxout
+\noindent{}**ODC-ODbL at a glance**
+
+*Good for*
+
+  * most databases and datasets
+  * data to be used automatically
+  * data to be used for generating non-data products
+
+*Watch out for*
+
+  * attribution stacking
+  * the copyleft condition as it reduces interoperability
+  * the DRM clause as it may put off some reusers
+
+\endboxout\endmarginbox\egroup
 
 The Open Data Commons Open Database Licence (ODC-ODbL) is the same as
 ODC-By but for a couple of additional conditions.^[ODC-ODbL, URL:
@@ -1014,15 +1063,15 @@ from copyright/database right restrictions. If this is not the case then
 what you can do is, of course, determined by the terms of the licensed
 data that contributes to your dataset:
 
--   If the licence applies a copyleft condition to derived
-works/databases, you must respect that and license the derived
-dataset in the same way.
+  * If the licence applies a copyleft condition to derived
+    works/databases, you must respect that and license the derived
+    dataset in the same way.
 
--   If the licence applies a non-commercial condition to uses of the
-licensed data, then you should not charge others for any of the
-licences under which you release your derived dataset, though this
-does not prevent you using multiple licensing as a compatibility
-strategy.
+  * If the licence applies a non-commercial condition to uses of the
+    licensed data, then you should not charge others for any of the
+    licences under which you release your derived dataset, though this
+    does not prevent you using multiple licensing as a compatibility
+    strategy.
 
 In any event, whenever licensing a dataset containing data licensed to
 you, you should be careful not to claim rights you do not hold.
@@ -1035,17 +1084,17 @@ holders are setting up a multiple licensing regime of their own.
 Another, more extreme, possibility is to negotiate a rights assignment.
 [@meeker2005dlo][@gnu2010wca]
 
-\bgroup\figure[ht]\fillboxout\small
+\bgroup\marginfigure\marginfillboxout\small
 \input{fig-dual-licence}
 
-\endfillboxout
+\endmarginfillboxout
 
 \caption[Licence streams of a core product in a simplified dual 
 licensing model]{Licence streams of a core product in a simplified dual 
 licensing model (adapted from Välimäki, 2003).\protect\footref(fn:valimiki)}
 \label{fig:dual-licence}
 
-\endfigure\egroup
+\endmarginfigure\egroup
 
 By way of illustration, a dual licensing model working within these
 constraints is shown in [Figure 3](#fig:dual-licence). This model was 
@@ -1068,8 +1117,8 @@ as follows.
 
 > \[This database is/These data are/\<*name of dataset*\> is\] made
 > available under the Public Domain Dedication and License v1.0 whose
-> full text can be found at: 
-<http://opendatacommons.org/licenses/pddl/1.0/>
+> full text can be found at:
+> <http://opendatacommons.org/licenses/pddl/1.0/>
 
 \endfillboxout\egroup
 
@@ -1085,15 +1134,15 @@ comes when the tool has to review the IPR status of a data source,
 examine any available licence terms, and decide whether to accept them. 
 There are three possible ways to overcome this difficulty:
 
-1.  a human could review each data source before letting the tool use
+ 1. a human could review each data source before letting the tool use
     it;
 
-2.  a human could decide in advance under which licences the tool would
+ 2. a human could decide in advance under which licences the tool would
     be allowed to use data, and the data provider could label the data
     source in such a way that a tool could tell under what licence it is
     released;
 
-3.  tool authors and data providers could agree a common vocabulary for
+ 3. tool authors and data providers could agree a common vocabulary for
     describing the capabilities of tools, and data providers could
     associate with the data a machine-readable list of operations that
     are, or are not, permitted.
@@ -1126,9 +1175,9 @@ such as that shown in [Figure 4](#fig:rdf-rights).[@manola.miller2004rp]
 
 ~~~~ {.xml}
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns">
-<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/terms/">
-<dc:license rdf:resource="http://opendatacommons.org/licenses/pddl/1.0/" />
-</rdf:Description>
+  <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/terms/">
+    <dc:license rdf:resource="http://opendatacommons.org/licenses/pddl/1.0/" />
+  </rdf:Description>
 </rdf:RDF>
 ~~~~~~~~~~~
 
@@ -1264,32 +1313,32 @@ Further information {#sec:further-information}
 \setlength{\parindent}{0pt}\nonzeroparskip\color{dccblue}\small
 Two other DCC guides cover this topic:
 
--   **Awareness Level:** [*Introduction to Curation: Data Citation and
+  * **Awareness Level:** [*Introduction to Curation: Data Citation and
     Linking*](http://www.dcc.ac.uk/resources/briefing-papers/introduction-curation/data-citation-and-linking)
     \(2011\) by Alex Ball and Monica Duke
 
--   **Awareness Level:** [*Introduction to Curation: Persistent
+  * **Awareness Level:** [*Introduction to Curation: Persistent
     Identifiers*](http://www.dcc.ac.uk/resources/briefing-papers/introduction-curation/persistent-identifiers)
     \(2006\) by Joy Davidson
 
 \normalcolor
 The following may also be of interest:
 
--   \fullcite{ands2011dca}[@ands2011dca]
+  * \fullcite{ands2011dca}[@ands2011dca]
 
--   \fullcite{lane2008dce}[@lane2008dce]
+  * \fullcite{lane2008dce}[@lane2008dce]
 
--   \fullcite{callaghan.etal2011cap}[@callaghan.etal2011cap]
+  * \fullcite{callaghan.etal2011cap}[@callaghan.etal2011cap]
 
--   \fullcite{newton.etal2010ddc}[@newton.etal2010ddc]
+  * \fullcite{newton.etal2010ddc}[@newton.etal2010ddc]
 
--   \fullcite{page2009spt}[@page2009spt]
+  * \fullcite{page2009spt}[@page2009spt]
 
--   \fullcite{icpsr2011whs}[@icpsr2011whs]
+  * \fullcite{icpsr2011whs}[@icpsr2011whs]
 
--   \fullcite{wilkinson2011syw}[@wilkinson2011syw]
+  * \fullcite{wilkinson2011syw}[@wilkinson2011syw]
 
--   \fullcite{wilkinson2011wdw}[@wilkinson2011wdw]
+  * \fullcite{wilkinson2011wdw}[@wilkinson2011wdw]
 
 %LITERAL
 %</example>
@@ -3535,6 +3584,35 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % \end{environment}
 %
+% \begin{environment}{marginfillboxout}
+%    \begin{macrocode}
+\newtcolorbox{marginfillboxout}%
+{ colback=dccpeach
+  , colframe=dccpeach
+  , coltext=dccmaroon
+  , boxrule=0pt
+  , parbox=false
+  , code=
+  { \setlist[itemize]%
+    { leftmargin=*
+      , font=\color{dccblue}
+    }%
+    \setlist[description]%
+    { font=\color{dccblue}
+      , style=nextline
+      , leftmargin=0pt
+    }%
+  }
+  , before upper=\raggedyright
+  , left=2mm
+  , right=2mm
+  , top=2mm
+  , bottom=2mm
+  , oversize
+}
+%    \end{macrocode}
+% \end{environment}
+%
 % Where it is used, \cs{today} is printed in small caps. The preferred font uses
 % fake small caps, but sadly old style numbers aren't faked. By marking up the
 % figures explicitly, we can allow them to be faked.
@@ -3811,6 +3889,26 @@ For joint branding two further commands are defined:
 \makesavenoteenv{figure*}
 \counterwithout{figure}{chapter}
 \counterwithout{table}{chapter}
+%    \end{macrocode}
+%
+% Memoir provides marginfigure and margintable environments, but here is a new
+% environment for plain, uncaptioned marginal floats.
+%
+%    \begin{macrocode}
+\newsavebox{\dcchowto@mflt}
+\newenvironment{marginbox}{%
+  \begin{lrbox}{\dcchowto@mflt}
+    \begin{minipage}{\marginparwidth}
+      \footnotesize
+      \toggletrue{blx@footnote}%
+      \raggedright
+      \setlength{\parindent}{0pt}%
+      \setlength{\parskip}{\smallskipamount}%
+}{%
+    \end{minipage}
+  \end{lrbox}
+  \marginpar{\usebox{\dcchowto@mflt}}%
+}
 %    \end{macrocode}
 %
 % \subsection{Citations and references}
