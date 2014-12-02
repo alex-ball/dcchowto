@@ -479,71 +479,68 @@ Licence](http://creativecommons.org/licenses/by-sa/4.0/).
 %<*example>
 %<<LITERAL
 ---
-title: How to Cite Datasets and Link to Publications
+title: How to Write DCC Guidance in Markdown
 author:
 - 'Alex Ball (DCC)'
-- 'Monica Duke (DCC)'
+- 'Another Author (ETC)'
 date: \today
 classoption:
 - morefloats=3
 ...
 
-> This guide will help you create links between your academic publications
-> and the underlying datasets, so that anyone viewing the publication will
-> be able to locate the dataset and vice versa. It provides a working 
+> This guide will help you create working-level guidance for inclusion
+> in the DCC's series of How-to Guides, using a form of scholarly Markdown
+> in conjunction with LaTeX and the Pandoc utility. It provides a working 
 > knowledge of the issues and challenges involved, and of how current
-> approaches seek to address them. This guide should interest researchers
-> and principal investigators working on data-led research, as well as the
-> data repositories with which they work.
+> approaches seek to address them. This guide should interest DCC staff,
+> their collaborators, and those with an interest in novel publication
+> workflows.
 
-Why cite datasets and link them to publications? {#sec:why}
-================================================
+Why use Markdown for writing DCC guidance? {#sec:why}
+==========================================
 
-The motivation to cite datasets^[The term ‘dataset’ is used throughout this
-guide to mean a logically complete set of data; some systems or services prefer
-the terms ‘data product’ or ‘data package’.] arises from a recognition that
-data generated in the course of research are just as valuable to the ongoing
-academic discourse as papers and monographs. Scientific journals have
-traditionally supported research by disseminating knowledge in such
-detail that first, peer scientists could judge the strength of the
-conclusions based on the quality of the premises and research methods
-employed, and second, further investigations could be based upon it. In
-many disciplines, though, the paper alone is no longer sufficient for
-these purposes: the underlying data also need to be shared.
+Markdown is a set of conventions for formatting text documents so that they can
+easily be parsed by automated tools. While it tries to be as unobtrusive as
+possible, looking like an 'ordinary' text document for most of the time, certain
+typographical devices need a form of markup, but these are kept as minimal as
+possible.^[An example is this markup for writing footnotes.] While the core of
+Markdown is simple and fairly limited, it has been extended to support almost
+all aspects of what might be needed in a scholarly work.
+
+There are several advantages to using a text-based format. It is a relatively
+simple format to preserve, barring issues about encoding (UTF-8 is recommended).
+It is universally well supported by a range of editing tools and version control
+systems, making it ideal for collaboration and long-term maintenance by a chain
+of authors. From a psychological point of view, its clear separation away from
+issues of formatting mean that authors can concentrate on the quality of the
+content instead of being distracted by how it might look on a page.
 [@stodden2009err][@rin.nesta2010oac][@lynch2009jgf]
 
-As a medium, the journal paper owes its success in part to the control
-systems put in place around it: mechanisms allowing authors to be open
-about their research while still receiving due credit; metrics used to
-translate such attributions into rewards for authors and their
-institutions; and archives ensuring that the work is permanently
-available for reference and reuse [@mackenzieowen2007sai, ch. 2]. If
-datasets are to be regarded as first-class records of research, as they
-need to be, a similar set of control systems needs to be constructed
-around them.
+The system being used here allows the plain text to be transformed both to 
+clean, simple HTML and an attractive, high-quality typeset PDF via LaTeX
+[@mackenzieowen2007sai, ch. 2]. Only minor post-processing is needed to prepare
+documents for publication on the DCC website in both forms. As a policy, authors
+should try to achieve what they want using these techniques in order of
+preference:
 
-A major part of this work can be achieved using a robust citation
-mechanism for referencing datasets from within traditional publications.
-Provided the citation contains the name of a responsible agent, it can
-be used to assign due credit. By providing a globally unique identifier,
-it can be used to track the impact of a particular dataset. A citation
-is also an ideal place to provide the information needed to locate and
-access the dataset. In this way, datasets can take advantage of the
-infrastructure already in place to manage journal papers.
+ 1. Regular markup in the Markdown document.
+ 
+ 2. Special (e.g. LaTeX) markup in the Markdown document.
+ 
+ 2. Simple transformations in the Makefile.
+ 
+ 3. Parallel content targeting HTML and LaTeX, saved in external files included
+    by reference in the Markdown document.
+    
+ 4. Editing the resulting HTML and LaTeX code by hand. Ideally the only things
+    done at this stage should be shifting the order of content and awkward
+    markup fixes.
 
-The rise of electronic journals has led to new and valuable services
-being layered over the top of papers, among them the provision of
-forward links to papers citing the current one. Such links help the
-reader to gauge the impact of the paper, place it within the literature
-and in some cases gain awareness of flaws or issues discovered by
-others. Forward links from datasets to the papers that cite them provide
-all the same benefits, as well as ensuring that documentation for the
-dataset can be found.
+The remainder of this document contains dummy text and disjointed content. The
+purpose is to demonstrate how to achieve certain effects, and also to test the
+various component of the toolchain (most particularly the LaTeX class) to ensure
+they work as intended.
 
-Ultimately, bibliographic links between datasets and papers are a
-necessary step if the culture of the scientific and research community
-as a whole is to shift towards data sharing, increasing the rapidity and
-transparency with which science advances.
 
 Requirements for data citations {#sec:requirements}
 ===============================
@@ -649,9 +646,7 @@ example, see [Figure 3](#fig:doi) below).
 Note that the way in which these elements would be styled and combined
 together in the finished citation depends on the style in use for
 citations of textual publications. [Figure 1](#fig:common) provides example data citations drawn
-from commonly used style manuals,[@apa2010pma, p. 211][@ucp2010cms, p. 764][@gibaldi2008msm, pp. 213-214, 238-239][@ritter2002oms, p. 551]
-while [Figure 2](#fig:repo-cites) shows the citation formats suggested
-by three data repositories.
+from commonly used style manuals.[@apa2010pma, p. 211][@ucp2010cms, p. 764][@gibaldi2008msm, pp. 213-214, 238-239][@ritter2002oms, p. 551]
 
 \bgroup\figure[ht]\fillboxout\small
 
@@ -690,35 +685,6 @@ Oxford
 
 \endfigure\egroup
 
-\bgroup\figure[ht]\fillboxout\small
-
-PANGAEA
-
-  : Willmes, S et al. (2009): Onset dates of annual snowmelt on Antarctic
-    sea ice in 2007/2008.
-    [doi:10.1594/PANGAEA.701380](http://dx.doi.org/10.1594/PANGAEA.701380)
-
-Dryad
-
-  : Kingsolver JG, Hoekstra HE, Hoekstra JM, Berrigan D, Vignieri SN,
-    Hill CE, Hoang A, Gibert P, Beerli P (2001) Data from: The strength of
-    phenotypic selection in natural populations. Dryad Digital Repository.
-    [doi:10.5061/dryad.166](http://dx.doi.org/10.5061/dryad.166)
-
-Dataverse
-
-  : Frederico Girosi; Gary King, 2006, 'Cause of Death Data',
-    <http://hdl.handle.net/1902.1/UOVMCPSWOL>
-    `UNF:3:9JU+SmVyHgwRhAKclQ85Cg==`
-    IQSS Dataverse Network \[Distributor\] V3 \[Version\].
-
-\endfillboxout
-
-\caption{Data citation formats suggested by repositories}
-\label{fig:repo-cites}
-
-\endfigure\egroup
-
 Digital Object Identifiers {#sec:dois}
 --------------------------
 
@@ -733,7 +699,7 @@ DOI Foundation.^[DOI System Website, URL: <http://www.doi.org/>.]
 It is built on the Handle System but has its own
 conventions and an independent business model. The identifiers
 themselves have the standard Handle structure of prefix, slash, suffix
-(see [Figure 3](#fig:doi)). All DOI prefixes begin with ‘`10.`’ to mark them as such; the
+(see [Figure 2](#fig:doi)). All DOI prefixes begin with ‘`10.`’ to mark them as such; the
 prefix may be further subdivided with dots, but otherwise the characters
 in a DOI have no special significance.
 
@@ -751,45 +717,6 @@ Internet location,^[Some publishers provide resolvers for their own DOIs, while
 the Handle resolver <http://hdl.handle.net/> can be used for any DOI.] the
 preferred one is <http://dx.doi.org/>. Appending a DOI to this URL creates a
 further URL that can be used to access the associated resource.
-
-The task of managing the DOI registers is delegated to registration
-agencies that each specialise in a type of resource. For research
-datasets, the registration agency is the DataCite Consortium.^[DataCite
-Website, URL: <http://www.datacite.org/>.] The
-consortium is made up of libraries and data centres from across the
-globe, led by the German National Library of Science and Technology
-(TIB). Among the services it provides are human and machine interfaces
-for simple end-user administration of DOI registrations. DataCite also
-collects metadata about each dataset it registers.^[DataCite Metadata Schema
-Repository, URL: <http://schema.datacite.org/>. Version 2.0 of the DataCite
-metadata scheme is discussed by Starr and Gastl.\footref{fn:starr.gastl}] These metadata
-may be searched through a Web interface^[DataCite Metadata Search service,
-URL: <http://search.datacite.org/>.] or harvested using
-OAI-PMH.^[DataCite OAI-PMH service, URL: <http://oai.datacite.org/>.]
-
-*Individuals* wishing to register a DOI for their dataset normally do so
-via their data repository, rather than directly through DataCite. Any
-*repository* wishing to register DOIs needs to obtain a username and
-password from DataCite to gain access to the registration service.
-Alternatively, the organisation can manage its DOIs through a
-third-party service such as EZID.^[EZID Website, URL:
-<http://www.cdlib.org/services/uc3/ezid/>.] The username and password are not
-needed for the metadata search or OAI-PMH services.
-
-While best practice has yet to emerge on some matters, (see ‘[Current
-issues and challenges](#sec:issues)’ below),
-certain conventions are already becoming established.
-
--   Authors should use the URL version of the DOI (i.e. including the
-    resolver) wherever possible.
-
--   When organisations register a DOI for a resource, they should not
-    introduce semantic elements into the suffix, especially not metadata
-    that might change over time (e.g. publisher, archive, owner).
-
--   As DOIs are used to cite data as evidence, the dataset to which a
-    DOI points should also remain unchanged, with any new version
-    receiving a new DOI.
 
 \bgroup\boxout
 \noindent{}**Example**
@@ -815,427 +742,439 @@ blog, URL: <http://blogs.ukoln.ac.uk/sagecite/>]
 
 \endboxout\egroup
 
-Current issues and challenges {#sec:issues}
-=============================
+Common terms {#sec:terms}
+------------
 
-While the basics of data citation can be derived by analogy with the
-citation of textual publications, especially electronic ones, there are
-finer points such as issues of granularity, fine-grained and unambiguous
-credit and citation placement that merit special attention.
+Licences typically grant permissions on condition that certain terms are
+met. While the precise details vary, three conditions commonly found in
+licences are attribution, copyleft, and non-commerciality.
 
-Granularity {#sec:units}
------------
+-   An *attribution* requirement means that the licensor must be given
+    due credit for the work when it is distributed, displayed,
+    performed, or used to derive a new work.
 
-With print publications, the issue of citing at different levels of
-granularity is relatively straightforward. The documents listed within a
-bibliography or reference section represent intellectual wholes:
-single-author monographs are referenced as whole books, but with journal
-issues, conference proceedings and edited collections the relevant
-papers are referenced individually. More granular references (to
-sections, pages, etc.) are made at the point of citation in the text,
-rather than in the bibliography.
+-   A *copyleft* requirement means that any new works derived from the
+    licensed one must be released under the same license, and only that
+    licence.
 
-Datasets are a little more complicated. A dataset may form part of a
-collection and be made up of several files, each containing several
-tables, each containing many data points. There are also more abstract
-subsets that can be used, such as features and parameters. At the other
-end of the scale, it is not always obvious what would constitute an
-intellectual whole: it can be argued, for example, that investigations
-should be the primary units of citation rather than individual datasets
-[@lawrence2011cdo]. For authors, the pragmatic solution is to list
-datasets at whatever level of granularity has been chosen by the host
-repository for assigning identifiers. If a finer level of granularity is
-required, the in-text citation should provide the reader with the
-information needed to find the subset. As conventions for doing this
-have yet to be established, if the repository provides identifiers at
-several levels of granularity, the finest-grained level that meets the
-need of the citation should be used in the bibliography, to minimise the
-additional information needed.
+-   The intent of a *non-commercial* licence is to prevent the licensee
+    from exploiting the work commercially. Such licences are often used
+    as part of a dual-licensing regime (see ‘[Multiple 
+    licensing](#sec:multi)’, below), where the alternative licence 
+    allows commercial uses but requires payment to the licensor.
 
-Microattribution {#sec:microattribution}
+While these all have their uses, they can cause problems in the context
+of datasets.
+
+Datasets are particularly prone to *attribution stacking*, where a
+derivative work must acknowledge all contributors to each work from
+which it is derived, no matter how distantly. If a dataset is at the end
+of a long chain of derivations, or if large teams of contributors were
+involved, the list of credits might well be considered too unwieldy
+[@sciencecommons2007pio]. The problem is magnified if different sets of
+contributors have to be credited in a different way, especially if
+automated methods are used to assemble the dataset – some of the
+benefits of automation are lost if attribution conditions have to be
+inspected manually. Some licenses and licensors tackle this problem by
+specifying lightweight attribution mechanisms.^[OCLC, for example, 
+builds flexibility into its use of the ODC-By licence by allowing ‘in 
+circumstances where providing the full attribution statement...is not 
+technically feasible, the use of canonical \[dataset\] URIs is 
+adequate...’ alongside examples of acceptable practice [@oclcNDdla].]
+
+The problem with copyleft licences is they prevent the licensed data
+being combined with data released under a different copyleft licence:
+the derived dataset would not be able to satisfy both sets of licence
+terms simultaneously. Some copyleft licences, however, demonstrate a
+small amount of flexibility in allowing derivative works to be released
+under a compatible licence, that is, one that applies approximately the
+same conditions.[^copyleft]
+
+[^copyleft]: For example, the GNU Project maintains a list of licences 
+for code which permit redistribution under the GNU General Public 
+Licence (GPL) and whose terms the GPL can accommodate [@gnu2010vlc].
+
+Creative Commons maintains lists of licences into which its Share
+Alike licences may be converted by derived works, but these are
+currently empty [@ccNDcl].
+
+Non-commercial licences may have wider implications than intended due to
+the ambiguity of what constitutes a commercial use
+[@creativecommons2009dnc]. Depending on one’s interpretation, it may or
+may not preclude the data being used in support of works for which an
+author is given recompense (such as textbooks), and might preclude the
+data being used in support of works that are sold (such as journal
+articles) even if the author does not benefit financially.
+
+Standard licences {#sec:standard}
+=================
+
+While bespoke licences are useful for catering for very specific
+circumstances, most research projects would be better served using one
+of the standard licences. Below is a selection of the standard licences
+available, along with reasons for and against using each one. Please
+note that these licences can be terminated only by expiry of the
+licensor’s IPR or, for a particular licensee, through breach of terms.
+
+Creative Commons {#sec:cc}
 ----------------
 
-Where a dataset is assembled from very many contributions, crediting
-each contributor individually becomes unfeasible using traditional
-techniques. Microattribution is a way of crediting contributors in a
-more compact fashion, to keep the operation manageable. It can also be
-used to credit people or organisations whose contributions don’t fit the
-roles of creator or compiler: for example, those who implement or carry
-out intermediate data processing steps.
+Creative Commons is a non-profit corporation set up in 2001 for the
+purpose of producing simple yet robust licences for creative
+works.^[Creative Commons Website, URL: <http://creativecommons.org/>]
+These licences give the creators of such works finer-grained control
+over how they may be used than simply declaring them public domain or
+reserving all rights. As well as the legal text, the licences all have
+quick clear summaries and a canonical URL for use in HTML, RDF and other
+code. A rights expression language is also provided for use with 
+RDF.^[RDF and rights expression languages are discussed under 
+‘[Mechanisms for licensing data](#sec:mechanism)’ below.] While 
+originally aimed at works such as music, images and video, Creative 
+Commons licences have been used widely for most forms of original 
+content, including data.
 
-Instead of providing a traditional citation to the data collection paper
-associated with each contribution, a table is produced that lists each
-contribution and the agent responsible. Where possible, standard
-identifiers (for both contributions and contributors) are used to
-abbreviate the entries, and the table is included in the paper’s
-supplementary data.
+There are six main Creative Commons licences. While the spirit behind
+them has remained constant, the wording of their legal deeds has been
+revised over time, resulting in different *versions*, and adapted to
+different legal jurisdictions, resulting in different *ports*.
 
-This technique is still relatively new: the first paper to use
-microattribution to encourage comprehensive sharing of genetic variation
-data in a defined system was published in 2011 [@giardine.etal2011sda].
-Once the technique is more established, repositories should consider
-making microattribution data available in machine-interpretable form,
-rather than as supplementary spreadsheets, to aid its use in metrics and
-other services.
+Each licence includes the *Attribution* condition. In the version 3
+licences and earlier, it is left up to the licensor to specify the way
+in which credit is given. Recognising the difficulties this may cause in
+the context of attribution stacking, the version 4 licences can be
+satisfied by a link to a Web page containing attribution information,
+though licensors can specify additional, alternative mechanisms.
 
-Contributor identifiers {#sec:ids}
------------------------
+There are three other conditions that licensors can add, and the various
+possible combinations produce the six licences. Using just the
+Attribution condition is known as the CC BY licence.
 
-If contributors have a common name, or move between many different
-institutions, giving them an unambiguous credit is somewhat problematic.
-A possible solution is for each contributor to be given a unique
-identifier, to be used in connection with all their publications, data
-contributions, and so on. While several identifier schemes are already
-well established, most are arguably unsatisfactory because they are
-either too narrowly scoped, proprietary or focused on authentication
-rather than attribution. There are however two schemes being developed
-specifically for attribution.
+There is a *Non-Commercial* condition, where commercial is defined as
+“primarily intended for or directed toward commercial advantage or
+monetary compensation” [@creativecommons2010faq].
 
-The Open Researcher and Contributor Identifier (ORCID) is a scheme
-specifically aimed at academic authors.^[ORCID Initiative Website,
-URL: <http://about.orcid.org/>.] It has gained support from
-over 200 organisations, including major academic publishers. The
-underlying infrastructure is still being developed as of mid-2011, but
-the intention is to maintain a registry of IDs, each associated with a
-researcher profile and a list of publications to which that researcher
-has contributed. The registry will also allow the profile to be linked
-to identifiers and profiles from other schemes such as Thomson Reuters’
-ResearcherID,^[ResearcherID Website, URL: <http://www.researcherid.com/>.
-] Scopus,^[Scopus Website, URL: <http://www.scopus.com/>.] Scholar
-Universe,^[Scholar Universe, URL: <http://www.scholaruniverse.com/>.] and
-RePEc.^[RePEc Author Service Website, URL: <http://authors.repec.org/>.]
+The *Share Alike* condition inserts a strong copyleft clause into the
+licence.^[The strength of a copyleft clause refers to the range of 
+derivations to which it applies, with weaker clauses applying to a 
+narrower range. For example, giving a software library a weak copyleft 
+licence means that all future versions/modifications of that library 
+inherit the licence, but software that merely depends on that library 
+does not.] The version 1 licences are very strict: derivations may only 
+use the exact same version 1 licence. The version 2 licences onwards, 
+however, allow derivations to use a later version or a different port 
+of the same license. Nevertheless, derivations may not use a Creative 
+Commons licence with a different set of conditions.
 
-The International Standard Name Identifier (ISNI) scheme is a draft ISO
-standard for registering ‘Public Identities’: people, pseudonyms,
-personas and legal entities involved in the creation or distribution of
-intellectual property [@iso27729]. It is thus a broader scheme than
-ORCID, allowing organisations to be identified as well as individuals.
-ISNIs take the form of a 16-digit number (though the last digit may be
-‘X’); each identifier is supported by a metadata record containing
-details such as name(s), date of birth, fields of endeavour and roles
-within them, titles of creations and a URI for further information.
+Finally, including the *No Derivatives* condition in the version 3
+licences and earlier means that the licensee is forbidden from altering,
+transforming or building upon the work. The version 4 condition is more
+flexible: it allows these things for private use, but prevents the
+licensee from sharing the derivations. It and the Share Alike condition
+are mutually exclusive.
 
-As the primary utility for such identifiers will be to support software
-tools, they will probably be better placed in machine-readable metadata
-than written out for human inspection. Nevertheless, the ORCID
-Initiative envisages ORCID IDs being included in parentheses after
-author names in textual citations, as in [Figure 4](#fig:orcid).
+The six permutations are therefore
+
+-   Attribution (CC BY);^[CC BY, URL:
+    <http://creativecommons.org/licenses/by/4.0>]
+
+-   Attribution Share Alike (CC BY-SA);^[CC BY-SA, URL:
+     <http://creativecommons.org/licenses/by-sa/4.0>]
+
+-   Attribution No Derivatives (CC BY-ND);^[CC BY-ND, URL:
+    <http://creativecommons.org/licenses/by-nd/4.0>]
+
+-   Attribution Non-Commercial (CC BY-NC);^[CC BY-NC, URL:
+    <http://creativecommons.org/licenses/by-nc/4.0>]
+
+-   Attribution Non-Commercial Share Alike (CC BY-NC-SA);^[CC BY-NC-SA,
+    URL: <http://creativecommons.org/licenses/by-nc-sa/4.0>]
+
+-   Attribution Non-Commercial No Derivatives (CC BY-NC-ND).^[CC
+    BY-NC-ND, URL: <http://creativecommons.org/licenses/by-nc-nd/4.0>]
+
+The versions of the licences prior to version 4 were not specifically
+aimed at data, so using them for such presents some problems. The most
+significant is that they do not explicitly cover *sui generis* database
+rights such as the one in force in the European Union.^[More precisely, 
+the ports of the version 3 licences to European jurisdictions fully 
+waive the *sui generis* database right, while all other ports and the 
+unported versions fully reserve it.] This means, for example, that use 
+of substantial portions of a database licensed using the unported terms 
+of version 3 or earlier may constitute a rights infringement in such 
+jurisdictions. The version 4 licences, however, do explicitly include 
+*sui generis* database rights unless the licensor specifically reserves 
+them.
+
+All versions of the licences treat datasets and databases as a whole:
+they do not treat the individual data themselves differently from the
+collection/database. This might be considered an advantage in terms of
+simplicity, but means they cannot be used without difficulty in certain
+complex cases such as collections of variously copyrighted works.
+
+Similarly, the licences do not distinguish using data as part of a new
+collection/database from using them to generate content (graphs, models,
+maps, etc.). This means the Share Alike and No Derivatives conditions
+might have further reaching consequences than intended. Indeed, the No
+Derivatives condition would likely disallow most substantive types of
+reuse, leaving only such cases as checking that data within the set
+derive from each other as claimed. It should therefore be avoided.
+
+In addition to the six main licences, Creative Commons provides tools
+for entering works into the public domain, or certifying works as
+already being in the public domain (see ‘[Public domain](sec:pd)’,
+below).
+
+Open Data Commons {#sec:odc}
+-----------------
+
+The Open Data Commons Project^[Open Data Commons Website, URL:
+<http://opendatacommons.org/>] was set up in 2007 to develop a
+successor to the Talis Community Licence (TCL).^[TCL, URL:
+<http://web.archive.org/web/20130923083859/http://tdnarchive.capita-
+libraries.co.uk/tcl>] 
+The first licence to be produced was a public domain dedication for 
+databases. The project transferred to the Open Knowledge Foundation in 
+2009 and has produced two further licences having some of the character 
+of the Creative Commons licences, but designed specifically for 
+databases. All three follow the Creative Commons model of providing a 
+clear summary and canonical URL alongside the full legal text.
+
+The Open Data Commons Attribution Licence (ODC-By) allows licensees to
+copy, distribute and use the database, to produce works from it and to
+modify, transform and build upon it for any purpose.^[ODC-By, URL: 
+<http://opendatacommons.org/licenses/by/>] If content is generated from 
+the data, that content should include or accompany a notice explaining 
+that the database was used in its creation.^[Example notice: ‘Contains 
+information from \<*database*\> which is made available under the [ODC 
+Attribution License](http://opendatacommons.org/licenses/by/).’] If the 
+database is used substantially to create a new database or collection 
+of databases, the licence URL or text and copyright/database right 
+notices must be distributed with the new database or collection.
+
+The Open Data Commons Open Database Licence (ODC-ODbL) is the same as
+ODC-By but for a couple of additional conditions.^[ODC-ODbL, URL:
+<http://opendatacommons.org/licenses/odbl/>] It adds a copyleft 
+condition that applies to new databases derived from the database (but 
+not collections of databases or non-database content produced directly 
+from it); this condition would be satisfied by future versions of the 
+same licence or a compatible one as judged by the licensor. The other 
+condition is that technological restrictions such as Digital Rights 
+Management (DRM) mechanisms can only be applied to the database or a 
+new database derived from it if an alternative copy without the 
+restrictions is made equally available.
+
+Being written in database terms, these licences are suited to a wider
+range of research data than the Creative Commons equivalents. The
+ODC-ODbL copyleft condition is also slightly more flexible than Creative
+Commons’ Share Alike, though the ODC attribution requirement is slightly
+less flexible.
+
+Multiple licensing {#sec:multi}
+==================
+
+In cases where none of the above licences are entirely satisfactory, it
+may be possible to use a multiple licensing approach. This would allow
+recipients of the data to choose from a specified set the licence under
+which they use the data.
+
+Multiple licensing is usually used in the open source software world to
+achieve one of two aims. The first is to control, rather than freely
+permit or forbid outright, use of the software in commercial or
+proprietary applications, thereby providing a means of generating income
+from the open source code. The second is to resolve the compatibility
+problems that exist between copyleft licences [@blanco2010dl]. In the
+language of the Creative Commons licences, it allows owners of source
+code to address the issues associated with the Non-Commercial and
+Share-Alike clauses, respectively.
+
+In the first case, a typical scenario would be for the owners of the
+source code to release it under an open source licence with a strong
+copyleft clause, such as the GNU General Public Licence (GPL). At the
+same time, they offer the source code under an alternative licence
+without the copyleft clause, and charge a fee for the use of this
+less-demanding licence.[@valimaki2003dlo] This dual licensing regime 
+gives developers the choice of using the code for free in free, open 
+source software, or paying a fee to use the code in closed source, 
+possibly commercial
+software.
+
+In the second case, the owners of the source code allow developers to
+use it under one of several open source licences, broadening the range
+of code with which it can be combined. For example, the source code of
+the SeaMonkey Internet application suite is triple-licensed under the
+Mozilla Public Licence (MPL), the GNU General Public Licence (GPL) and
+the GNU Lesser General Public Licence (LGPL) [@seamonkey2012slr].
+
+While multiple licensing can be a useful strategy, there are some issues
+that need to be borne in mind. The option to multiply license a dataset
+is certainly available to you if you hold all the rights that pertain to
+the dataset: that is, you hold rights over the dataset, and any aspect
+of the data for which you do not hold rights is public domain or exempt
+from copyright/database right restrictions. If this is not the case then
+what you can do is, of course, determined by the terms of the licensed
+data that contributes to your dataset:
+
+-   If the licence applies a copyleft condition to derived
+works/databases, you must respect that and license the derived
+dataset in the same way.
+
+-   If the licence applies a non-commercial condition to uses of the
+licensed data, then you should not charge others for any of the
+licences under which you release your derived dataset, though this
+does not prevent you using multiple licensing as a compatibility
+strategy.
+
+In any event, whenever licensing a dataset containing data licensed to
+you, you should be careful not to claim rights you do not hold.
+
+Multiple licensing works both ways, of course. If the ability to license
+your derived dataset as you please is important to you, you may be able
+to negotiate a special licence or contractual arrangement with the other
+rights holders that allows you to do this, in which case the rights
+holders are setting up a multiple licensing regime of their own.
+Another, more extreme, possibility is to negotiate a rights assignment.
+[@meeker2005dlo][@gnu2010wca]
 
 \bgroup\figure[ht]\fillboxout\small
-\noindent{}Chaturvedi, V. (AAA-1019-2010). (2004). Editorial.
-*Mycopathologia, 157,* iii–iv. Retrieved from
-<http://dx.doi.org/10.1023/B:MYCO.0000020677.89178.15>
+\input{fig-dual-licence}
 
 \endfillboxout
-\caption{Example citation using an ORCID ID}
-\label{fig:orcid}
+
+\caption[Licence streams of a core product in a simplified dual 
+licensing model]{Licence streams of a core product in a simplified dual 
+licensing model (adapted from Välimäki, 2003).\protect\footref(fn:valimiki)}
+\label{fig:dual-licence}
 
 \endfigure\egroup
 
+By way of illustration, a dual licensing model working within these
+constraints is shown in [Figure 3](#fig:dual-licence). This model was 
+devised with software development in mind, though it could be applied 
+to situations where a data resource is expanded by many contributors 
+over time.
 
-Placement of data citations {#sec:place}
----------------------------
-
-Treating datasets as first-class records of research implies placing
-citations to them in the bibliography, works cited or references section
-of a document. This is required by Pensoft journals, for example, which
-also specify that the in-text pointer to the full citation should occur
-in a dedicated ‘Data Resources’ section [@penev.etal2011pdp].
-
-There is, however, a special relationship between a dataset and the
-paper describing its collection (as opposed to subsequent papers that
-cite it); it could be argued that the way to mark this would be to
-include the (full) data citation elsewhere in the document
-[@piwowar2011lfd]. The data publishing journal *Earth System Science
-Data*, for example, usually cites the collected data in a dedicated
-‘Data coverage and parameter measured’ section. Alternatively, if the
-acknowledgements section is already being mined for funder information,
-it may be appropriate to put the data citation there [@rin2008afs].
-
-On the other hand, there is value in citing datasets consistently across
-all papers, in terms of simplifying both editorial guidelines and author
-training. Bibliographies also tend to be better indexed and more freely
-available than the main texts of papers, and would therefore afford the
-citation greater visibility.
-
-\bgroup\boxout
-
-Summary for researchers {#sec:summary-researchers}
-=======================
-
-* If you have generated/collected data to be used as evidence in an
-academic publication, you should deposit them with a suitable data
-archive or repository as soon as you are able. If they do not provide
-you with a persistent identifier or URL for your data, encourage them to
-do so.
-
-* When citing a dataset in a paper, use the citation style required by the
-editor/publisher. If no form is suggested for datasets, take a standard
-data citation style (e.g. DataCite’s[@starr.gastl2011ims]) and adapt it to match the style
-for textual publications.
-
-* Give dataset identifiers in the form of a URL wherever possible, unless
-otherwise directed.
-
-* Include data citations alongside those for textual publications. Some
-reference management packages now include support for datasets, which
-should make this easier.
-
-* Cite datasets at the finest-grained level available that meets your
-need. If that is not fine enough, provide details of the subset of data
-you are using at the point in the text where you make the citation.
-
-* If a dataset exists in several versions, be sure to cite the exact
-version you used.
-
-* When you publish a paper that cites a dataset, notify the repository
-that holds the dataset, so it can add a link from that dataset to your
-paper.
-
-\endboxout\egroup
-
-The remainder of this guide is aimed at those responsible for the
-supporting infrastructure, rather than researchers.
-
-Building a citation infrastructure {#sec:building-infrastructure}
-==================================
-
-This section provides an overview of some of the technologies available
-to support data citation.
-
-Citation Notification Service {#sec:trackbacks}
------------------------------
-
-The TrackBack protocol is one of a family of linkback protocols that
-allow a blog article to list and link to later articles that mention or
-comment on it, allowing the reader to follow a debate across many blogs
-[@sixapart2002tts]. It works in the following way. On publication of an
-article, the blogging software looks up all the pages to which the
-article links, and scans them for embedded TrackBack URLs. Having found
-one, the software sends an HTTP POST request (as used by longer Web
-forms) to the TrackBack URL. At a minimum, the request contains a link
-to the article; it may also contain the article’s title, the title of
-the blog, and an excerpt typically showing the link in context. The blog
-responsible for the TrackBack URL then sends back a brief XML
-acknowledgement to indicate either success or failure in understanding
-the request, known as a TrackBack ‘ping’.
-
-The CLADDIER Project defined an extended version of the TrackBack
-protocol for use as a Citation Notification Service in digital object
-repositories.^[CLADDIER Project page, URL:
-<http://www.jisc.ac.uk/whatwedo/programmes/digitalrepositories2005/claddier>.]
-The main extensions were, at the sending
-end,[@matthews.etal2007rdp][@matthews.etal2009pes]
-
--   ‘metadata’ and ‘metadataformat’ fields for adding arbitrary metadata
-    to the TrackBack ping;
-
--   a ‘type’ field to allow the same protocol to be used for forward
-    citations (‘reverse TrackBacks’) and republications;
-
--   an ‘action’ field to allow existing TrackBacks to be removed (an
-    ‘anti-TrackBack’) or edited;
-
-and at the receiving end
-
--   additional RDF metadata that could be embedded alongside the
-    TrackBack URL, such as bibliographic information about the citable
-    resource (to permit reverse TrackBacks) or an alternative URL to
-    which to send anti-TrackBack pings;
-
--   the option to use a whitelist of trusted senders to prevent spam.
-
-As a demonstration, CLADDIER implemented the Citation Notification
-System in STFC’s ePub repository and the BADC repository. The follow-on
-project StoreLink implemented the system as plugins for EPrints, DSpace
-and Fedora repository software.^[StoreLink Project summary Web page, URL:
-<http://www.jisc.ac.uk/whatwedo/programmes/digitalrepositories2007/storelink.aspx>.]
-StoreLink was itself followed by
-the Webtracks Project, which is generalising the system to form the
-Inter-Repository Communication (InteRCom) protocol and extending its
-usage beyond e-print repositories to STFC’s ICAT data catalogue, open
-electronic notebooks and scientific publishers.^[Webtracks Project Web page, URL: 
-<http://www.stfc.ac.uk/e-Science/projects/medium-term/metadata/webtracks/22422.aspx>.]
-
-\bgroup\boxout
-\noindent{}**Example**
-
-\smallskip\noindent
-Knowledge Blog^[Knowledge Blog Website, URL: <http://knowledgeblog.org/>]
-is an alternative scholarly publication platform based on WordPress^[WordPress
-Website, URL: <http://wordpress.org/>] blogging software. It makes heavy use of linkbacks,
-for example as the mechanism for linking an article with its reviews,
-and could therefore be used together with the Citation Notification
-Service to provide bi-directional links to datasets. Its KCite plugin
-allows for the automatic generation of citations from just a DOI (using
-the metadata lookup API from the CrossRef registration agency) or a
-PubMed identifier,[@lord.etal2011okb] though this has not yet been extended
-to work with DataCite DOIs.
-
-\endboxout\egroup
-
-Nanopublications {#sec:nanopublications}
-----------------
-
-A nanopublication is, simply put, a statement and a set of annotations
-on it, the whole of which is citable in its own right
-[@groth.etal2010anp]. The idea is that a scientific publication or
-dataset is broken down into individual statements, expressed as RDF
-triples: that is, in the form subject–predicate–object, e.g. malaria
-is-carried-by mosquitoes. Each of these statements is assigned a URI and
-then made the object of further statements (annotations) that say, for
-example, who made the statement, the document or dataset from which the
-statement was extracted, the date the statement was published. The set
-formed by the original statement and these annotations is itself given a
-URI and thus becomes a nanopublication.
-
-The reason for doing this is to provide a robust mechanism for
-aggregating information and data into a knowledge base from which new
-inferences may be drawn. The robustness comes from the annotations,
-which provide a resource for assessing the reliability of the statement.
-A nanopublication of a statement is said to contribute to the
-‘S-Evidence’ for that statement; if, on aggregating a large number of
-nanopublications, one ends up with two conflicting statements, one would
-compare the S-Evidence for each statement to decide which should be used
-for further inference.
-
-In order to make this work, one needs to be able to identify
-unambiguously every concept and entity to which the nanopublications
-refer. Nanopublications are therefore best suited to disciplines which
-are already well supported by RDF-friendly ontologies. For concepts and
-entities that do not sit easily within a formal ontology, a more relaxed
-approach such as that provided by the Concept Wiki can be used.^[Concept
-Wiki Website, URL: <http://www.conceptwiki.org/>.]
-
-Citation Typing Ontology {#sec:cito}
-------------------------
-
-The Citation Typing Ontology (CiTO) is a formal language for specifying
-why one resource cites another [@shotton2010cct]. It contains several
-terms particularly relevant for data citation; additional terms can be
-found in the extension ontology CiTO4Data.[@shotton.peroni2011cct]
-[@shotton.peroni2011cdc]
-
--   *Uses data from/provides data for.* These terms describe the
-    relationship between a dataset and a paper describing work using
-    that dataset.
-
--   *Cites as data source/is cited as data source by.* These terms imply
-    the above relationship but also indicate that the paper formally
-    cites the dataset.
-
--   *Contains assertion from/provides assertion for.* These terms
-    describe, for example, the relationship between a full dataset and a
-    nanopublication based upon it.
-
--   *Compiles/is compiled by.* These terms describe, for example, the
-    relationship between a dataset and the software used to derive it.
-
-Certain of the other terms may be useful in clarifying how datasets or
-nanopublications relate to one another, e.g. *confirms/is confirmed by*,
-*corrects/is corrected by*, *disagrees with/is disagreed with by*,
-*extends/is extended by*, *updates/is updated by*.
-
-Data citation infrastructures {#sec:infrastructure}
+Mechanisms for licensing data {#sec:mechanism}
 =============================
 
-The following repositories and systems provide examples of data citation
-infrastructures in practice, both in terms of human workflows and
-software, that could be reused by other repositories. Sample citations
-provided by each of them can be found in [Figure 2](#fig:repo-cites) above.
+Once you have decided on a suitable licence, all that remains is to
+attach that licence to the data. There are a few different ways of doing
+this, but mostly they involve a *statement* that the data is released
+under a particular licence or public domain dedication, and a mechanism
+for retrieving the *full text* of the licence itself. As an example, the
+suggested text for attaching the Open Data Commons PDDL to a database is
+as follows.
 
-PANGAEA {#sec:pangaea}
--------
+\bgroup\fillboxout
 
-PANGAEA (Data Publisher for Earth and Environmental Science) is hosted
-by the Alfred Wegener Institute for Polar and Marine Research and the
-Center for Marine Environmental Sciences in Germany.^[PANGAEA Website,
-URL: <http://www.pangaea.de/>.] It is the data
-archive and distribution system for the World Data Centre for Marine
-Environmental Sciences (WDC-MARE) and the designated archive for the
-data publishing journal *Earth System Science Data*.
+> \[This database is/These data are/\<*name of dataset*\> is\] made
+> available under the Public Domain Dedication and License v1.0 whose
+> full text can be found at: 
+<http://opendatacommons.org/licenses/pddl/1.0/>
 
-Throughout its history, PANGAEA has collaborated extensively with
-scientific publishers; it provides links from data holdings to the
-traditional publications that reference them, and wherever possible,
-those publications reference the holdings in PANGAEA. Initially datasets
-were cited using standard URLs, but now DOIs are used as the canonical
-identifier for all PANGAEA holdings [@diepenbroek.etal2008piw].
+\endfillboxout\egroup
 
-Once the author has uploaded the data and metadata, a curator checks the
-completeness of the metadata and consistency of the data, then imports
-the data into the archive. Having checked that the data are properly
-indexed by the system, the curator performs technical quality control
-tests, sets appropriate access conditions and refers the result back to
-the author for proofing. Once the author and curator are both satisfied,
-the data are published and assigned a DOI. Once this has happened, the
-metadata and data are both considered static.
+The rights statement should be displayed prominently, so that any user
+of the data will realise that they are licensed or public domain. It is
+important to note, though, that the first inspection of the data might
+be done by an automated tool rather than a human. 
+CrystalEye,^[CrystalEye 
+Website, URL: <http://wwmm.ch.cam.ac.uk/crystaleye/>] for example, is a 
+database of crystal structures compiled by automatically parsing 
+journal articles and other data sources. The problem for such efforts 
+comes when the tool has to review the IPR status of a data source, 
+examine any available licence terms, and decide whether to accept them. 
+There are three possible ways to overcome this difficulty:
 
-The middleware component of PANGAEA, panFMP, has been released as open
-source software.^[PANGAEA Framework for Metadata Portals Website, URL:
-<http://www.panfmp.org/>.] Some of the associated visualisation and
-conversion tools have been made available as freeware.^[PANGAEA Software
-Web page, URL: <http://www.pangaea.de/software/>.]
+1.  a human could review each data source before letting the tool use
+    it;
 
-Dryad {#sec:dryad}
------
+2.  a human could decide in advance under which licences the tool would
+    be allowed to use data, and the data provider could label the data
+    source in such a way that a tool could tell under what licence it is
+    released;
 
-Dryad is a data repository specialising in evolutionary biology and
-ecology, developed by the National Evolutionary Synthesis Center and the
-University of North Carolina Metadata Research Center.^[Dryad Website, URL:
-<http://datadryad.org/>.] It is a
-preferred data archive for several journals including *The American
-Naturalist*, *Molecular Ecology*, *Molecular Biology and Evolution*,
-*Evolutionary Applications*, *Heredity* and *Nature*.
+3.  tool authors and data providers could agree a common vocabulary for
+    describing the capabilities of tools, and data providers could
+    associate with the data a machine-readable list of operations that
+    are, or are not, permitted.
 
-Dryad has now settled on DOIs to identify its datasets. As with PANGAEA,
-catalogue records for the data holdings in Dryad contain the citation of
-the accompanying publication as well as a sample citation for the data
-itself.
+The first of these is not scalable. The third requires extensive
+co-ordination and places limits on the capabilities an automated tool
+can have, but once set up requires very little human intervention. On a
+technical level it can be achieved through use of a Rights Expression
+Language such as MPEG-21 REL,^[ISO/IEC 21000-5:2004. *Information 
+technology – Multimedia framework (MPEG-21) – Part 5: Rights Expression 
+Language.* International Organization for Standardization.] Open 
+Digital Rights Language,^[ODRL Community Group, URL: 
+<http://www.w3.org/community/odrl/>] or METSRights.^[METSRights schema, 
+URL: <http://www.loc.gov/standards/rights/METSRights.xsd>] Permissions 
+and restrictions written in such a language represent an arrangement in 
+their own right: strictly speaking they can only be used as an 
+alternative to, or replacement for, an actual licence, not as a 
+machine-actionable ‘explanation’ of one. The exception to this is the 
+Creative Commons Rights Expression Language, which delegates the 
+precise definition of its terms to the respective full legal codes of 
+the Creative Commons licences.[@abelson.etal2008ccr][@ccNDcbe]
 
-After the author has submitted the data and metadata to Dryad, a curator
-checks that the files contain the right sort of information before
-performing a series of quality control procedures. When these have been
-completed, a DOI is assigned to the data and sent to the author, and the
-catalogue record goes live in the repository. The record is updated with
-the citation of the data collection paper once it is published
-[@feinstein2010wha].
+The second option is a compromise between the other two; it only works
+well when data providers use standard licences identified by standard
+URLs. For example, the machine-readable equivalent of the ODC PDDL
+statement above would be a Resource Description Framework (RDF) triple
+such as that shown in [Figure 4](#fig:rdf-rights).[@manola.miller2004rp]
 
-Dryad is based on the DSpace digital repository;^[DSpace Website, URL:
-<http://www.dspace.org/>.] the Dryad extensions have been released as open
-source software.^[Dryad code repository, URL: <http://dryad.googlecode.com/>.]
+\bgroup\csname figure*\endcsname[ht]\fillboxout\small
 
-Dataverse {#sec:dataverse}
----------
+~~~~ {.xml}
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns">
+<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/terms/">
+<dc:license rdf:resource="http://opendatacommons.org/licenses/pddl/1.0/" />
+</rdf:Description>
+</rdf:RDF>
+~~~~~~~~~~~
 
-The Dataverse Network is a software application for building data
-repositories called dataverses.^[Dataverse Network Project Website, URL:
-<http://thedata.org/>.] It is developed by a community led
-by the Institute for Quantitative Social Science (IQSS) at Harvard
-University. As well as the original Dataverse Network at IQSS, there are
-also instances at the University of North Carolina and the University of
-the Thai Chamber of Commerce. Dataverses within the same Network may be
-cross-searched, and Dataverse Networks may also be linked to provide
-cross-searching facilities.
+\endfillboxout
+\caption[RDF rights statement]{A rights statement encoded in RDF/XML. 
+Note that the `rdf:about` attribute should identify the data to 
+which the statement applies. In the context of an XMP packet, this 
+attribute is left blank to identify the resource in which the packet is 
+embedded.[@adobe2010xmp]}
+\label{fig:rdf-rights}
 
-Authors may set up their own dataverse or contribute to an existing one.
-After filling out a metadata entry form and uploading the data files
-associated with a study, the author submits the data for review. The
-curator for the dataverse can then modify the metadata before releasing
-the study [@king2007idn].
+\csname endfigure*\endcsname\egroup
 
-Where data have been uploaded in SPSS, SATA or GraphML formats, a Unique
-Numeric Fingerprint is calculated for each data file and the study as a
-whole. In the IQSS Dataverse Network, studies are automatically assigned
-Handles. The catalogue page can display a citation for the corresponding
-data collection paper alongside a sample citation for the data.
+Again, this should be made available somewhere the tool would look when
+downloading the data, such as within a dataset catalogue record or
+landing page. If possible you should also include the rights statement
+within each data file – the following list indicates how this may be
+done for some common data formats:
 
-Authors are welcome to upload data to the Henry A. Murray Research
-Archive at Harvard, or create their own dataverses in the IQSS Dataverse
-Network.^[Henry A. Murray Research Archive Website, URL: <http://www.murray.harvard.edu/>.]
-Alternatively, institutions can set up their own Dataverse
-Network using the open source software.^[Dataverse Network code repository, URL:
-<http://sourceforge.net/projects/dvn/>.]
+XML
+:   Find a point in the document at which arbitrary XML can be embedded
+    and insert an RDF/XML block similar to that shown in
+    [Figure 2](#fig:rdf-rights).
+
+MS Excel
+:   Add the human-readable statement to the Comments document property.
+
+MS Access
+:   Add the human-readable statement to the Comments database property.
+
+XHTML [@adida.birbeck2008rp]
+:   Add the attributes `version="XHTML+RDFa 1.0"` and
+    `xmlns:dc="http://purl.org/dc/terms/"` to the root `<html>` element.
+    Add the human-readable statement somewhere in the document, marking
+    up the link to the full licence text as an `<a>` element with the
+    attribute `rel="dc:license"`.
+
+Failing that, you should incorporate the rights statement when packaging
+data; indeed, it is good practice to do this anyway. The following table
+shows where the statement should be added for some common packaging
+standards. In most cases, the insertion points specified permit
+arbitrary XML to be included; the simplest option is therefore to insert
+an RDF/XML statement like that in within the specified element, though
+in future it may be possible to include an XHTML/RDFa fragment instead,
+along the lines of the XHTML method given in the above list.
+
 
 Current implementation issues {#sec:implementation-issues}
 =============================
@@ -1310,112 +1249,6 @@ the data files or instructions on how to access them, licence terms –
 they are still experimenting with the information they provide to
 software tools.
 
-\bgroup\boxout
-\noindent{}**Example**
-
-\smallskip
-\noindent{}*Acta Crystallographica Section E* (*Acta Cryst E*) is an online,
-open access data journal published by the International Union of
-Crystallographers.^[Acta Cryst E Website, URL: <http://journals.iucr.org/e/journalhomepage.html>]
-It operates a workflow whereby data are submitted by
-authors at the same time as the data collection paper. The data are
-checked automatically for validity, and the validation report passed to
-reviewers. On publication, the data are made available for download from
-the page for the paper.
-
-The XYZ Project has developed additional tools to support workflows like
-these.^[XYZ Project blog, URL: <http://projectxyz.wordpress.com/>]
-It also explored, with *Acta Cryst E*, the possibility of
-embedding data directly within the Web pages of journal papers, using
-RDF and microformats in a profile of HTML known as Scholarly HTML [@sefton2011shc].
-
-\endboxout\egroup
-
-Versioning {#sec:versions}
-----------
-
-One of the important features of the citation system is that a reader
-should be able to identify and retrieve the exact same resource that the
-author used when answering the research question. This is critical in
-the case of data as even typographical corrections may significantly
-change the conclusions drawn from a dataset. There is also the potential
-for many more versions from which to choose, since data may be made
-available in versions from different stages of processing,^[Whether data
-from intermediate stages of processing should be made citable depends on
-the value added by processing, the reversibility of the technique and the
-utility of such data within the discipline.] as well
-as from different points in time. With this in mind, data repositories
-should ensure that different versions are independently citable (with
-their own identifiers).
-
-The problem comes when repositories have to deal with rapidly changing
-datasets, and it is a slightly different problem depending on whether
-the dataset is frequently *revised*, that is, data points are
-continually improved or updated, or frequently *expanded*, such as
-sensor data maintained as a time series. Either way, to keep the
-versions manageable there are two possible approaches the data
-repository can take: time slices and snapshots.
-
-With the *snapshot* approach, at regular intervals or at the request of
-a citing author, a snapshot is taken of the dataset and made citable.
-This is the better solution for revised datasets, as after retrieving
-the data the reader or author need not perform any additional operations
-to arrive at the required data. It is also better for expanding datasets
-where authors are concerned with the whole time series.
-
-With the *time slice* approach, the citable entity becomes the set of
-updates made to a dataset during a particular time period rather than
-the full dataset itself (e.g. the 2008 data from a series running since
-1950). This would be inappropriate for revised datasets, as the author
-or reader would need to assemble the data from a base file and several
-incremental change files. To a lesser extent, it would also be
-cumbersome for authors using a large proportion of an expanding dataset,
-as they would need to cite multiple time slices to build up the required
-range; but if an author is only concerned with data from a short period
-of time this approach is more suitable than a full snapshot.
-
-Note that these discussions only concern how datasets are presented to
-users as citable resources. It does not affect how a repository might
-store the data, so long as it can guarantee that the same identifier
-always returns the same data.
-
-\bgroup\boxout
-
-Summary for data repositories {#sec:summary-repositories}
-=============================
-
-* Ensure that anyone wishing to cite a dataset you host can use a
-persistent identifier that you provide to do so. For this, choose an
-identifier scheme which allows the identifier to be resolved to a URL.
-This URL should belong to a landing page that contains descriptive
-information about the dataset, as well as links or instructions for
-accessing it.
-
-* Once an identifier has been assigned to a (version/snapshot of) a
-dataset, ensure that it and any explanatory metadata remain static over
-time. Ensure that the identifiers remain unique and associated with the
-correct versions.
-
-* Assign identifiers to static datasets only when no further changes or
-corrections are expected (i.e. after quality control checks are
-complete). For dynamic datasets, assign identifiers when new snapshots
-or time slices are created, whether this is on a regular basis or on
-demand.
-
-* Provide data depositors with a sample citation for their dataset, for
-use in academic publications.
-
-* Provide links from dataset landing pages to those published papers of
-which you are aware that cite the dataset. This may require
-collaboration with authors and publishers.
-
-* For more information about registering DOIs for datasets, contact your
-local DataCite member.^[List of DataCite members, URL: <http://datacite.org/members>]
-For more information about registering Archival Resource Keys,^[Archival
-Resource Keys Website, URL: <https://confluence.ucop.edu/display/Curation/ARK>]
-contact the California Digital Library.
-
-\endboxout\egroup
 
 Acknowledgements {#sec:acknowledgements}
 ================
@@ -2172,6 +2005,153 @@ The following may also be of interest:
   location = {Chicago, IL},
   timestamp = {2011-06-09}
 }
+
+@ONLINE{sciencecommons2007pio,
+title = {Protocol for Implementing Open Access Data \bibopenparen\S 5.3\bibcloseparen},
+date = {2007-12-20},
+urldescription = {Science Commons website},
+timestamp = {2010-09-27},
+url = {http://sciencecommons.org/projects/publishing/open-access-data-protocol/},
+urldate = {2010-09-27}
+}
+
+@ONLINE{oclcNDdla,
+title = {Data licenses and attribution},
+url = {http://www.oclc.org/data/attribution.en.html},
+urldescription = {OCLC Website},
+urldate = {2014-07-30}
+}
+
+@ONLINE{ccNDcl,
+title = {Compatible Licenses},
+url = {https://creativecommons.org/compatiblelicenses},
+urldescription = {Creative Commons Website},
+urldate = {2014-07-10}
+}
+
+@ONLINE{gnu2010vlc,
+title = {Various Licenses and Comments about Them},
+date = {2010-08-09},
+urldescription = {GNU website},
+timestamp = {2010-09-29},
+url = {http://www.gnu.org/licenses/license-list.html},
+urldate = {2010-09-29}
+}
+
+@REPORT{creativecommons2009dnc,
+title = {Defining \enquote{Noncommercial}},
+subtitle = {A Study of How the Online Population Understands \enquote{Noncommercial Use}},
+date = {2009-09},
+author = {{Netpop Research}},
+institution = {Creative Commons},
+location = {San Francisco, CA},
+url = {http://wiki.creativecommons.org/Defining_Noncommercial},
+urldate = {2014-07-10}
+}
+
+@ONLINE{creativecommons2010faq,
+title = {Frequently Asked Questions \bibopenparen section entitled \enquote{Does my use violate the NonCommercial clause of the licenses?}\bibcloseparen},
+date = {2014-06-24},
+urldescription = {Creative Commons wiki},
+timestamp = {2010-09-28},
+url = {http://wiki.creativecommons.org/Frequently_Asked_Questions},
+urldate = {2014-07-10}
+}
+
+@ONLINE{blanco2010dl,
+author = {Elena Blanco},
+title = {Dual-Licensing as a Business Model},
+date = {2012-09-09},
+urldescription = {OSS Watch website},
+timestamp = {2010-09-03},
+url = {http://oss-watch.ac.uk/resources/duallicence2},
+urldate = {2014-07-09}
+}
+
+@ARTICLE{valimaki2003dlo,
+author = {Mikko Välimäki},
+title = {Dual Licensing in Open Source Software Industry},
+journal = {Systemes d'Information et Management},
+volume = {8},
+number = {1},
+date = {2003},
+issn = {1260-4984},
+pages = {63-75},
+timestamp = {2010-09-03},
+url = {http://ssrn.com/abstract=1261644},
+urldate = {2011-10-18}
+}
+
+@ONLINE{seamonkey2012slr,
+title = {{SeaMonkey} Legal Resources},
+date = {2012-05-07},
+urldescription = {SeaMonkey Project website},
+timestamp = {2014-07-15},
+url = {http://www.seamonkey-project.org/legal/},
+urldate = {2014-07-15}
+}
+
+@ONLINE{meeker2005dlo,
+author = {Heather Meeker},
+title = {Dual-Licensing Open Source Business Models},
+date = {2005-04-06},
+timestamp = {2010-09-03},
+url = {http://linux.sys-con.com/node/49061/print},
+urldate = {2010-09-03}
+}
+
+@ONLINE{gnu2010wca,
+title = {When a Company Asks For Your Copyright},
+date = {2010-10-03},
+urldescription = {GNU Project website},
+timestamp = {2010-11-17},
+url = {http://www.gnu.org/philosophy/assigning-copyright.html},
+urldate = {2010-11-17}
+}
+
+@MANUAL{abelson.etal2008ccr,
+author = {Hal Abelson and Ben Adida and Mike Linksvayer and Nathan Yergler},
+title = {{ccREL}},
+date = {2008-03-03},
+publisher = {Creative Commons},
+version = {1.0},
+subtitle = {The {Creative} {Commons} {Rights} {Expression} {Language}},
+timestamp = {2010-11-11},
+url = {http://wiki.creativecommons.org/images/d/d6/Ccrel-1.0.pdf},
+urldate = {2010-11-11}
+}
+
+@ONLINE{ccNDcbe,
+title = {{CC} {REL} by Example},
+urldescription = {Creative Commons website},
+url = {http://labs.creativecommons.org/2011/ccrel-guide/},
+urldate = {2014-07-15}
+}
+
+@MANUAL{manola.miller2004rp,
+editor = {Frank Manola and Eric Miller},
+title = {{RDF} Primer},
+date = {2004-02-10},
+publisher = {W3C},
+series = {W3C Recommendation},
+timestamp = {2010-11-23},
+url = {http://www.w3.org/TR/rdf-primer/},
+urldate = {2010-11-23}
+}
+
+@MANUAL{adobe2010xmp,
+title = {Extensible {Metadata} {Platform} {(XMP)} Specification, Part 1},
+date = {2010-07},
+publisher = {Adobe Systems},
+location = {San Jose, CA},
+subtitle = {Data model, Serialization, and Core Properties},
+timestamp = {2010-11-08},
+url = {http://www.adobe.com/content/dam/Adobe/en/devnet/xmp/pdfs/XMPSpecificationPart1.pdf},
+urldate = {2010-11-08}
+}
+
+
+
 %LITERAL
 %</bib>
 %<*template>

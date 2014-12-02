@@ -22,16 +22,20 @@ tmp: $(NAME).pdf $(EG).md
 	perl -0777 -p -i -e 's@\\endboxout\\egroup@</div>@ig' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\(end)?fillboxout@@ig' $(EG)-tmp.md
 pdf: tmp $(EG).bib $(NAME)-apa.csl
+	# The next line is peculiar to the particular sample content
+	perl -0777 -p -i -e 's@\\footref\(fn:valimiki\)@\\footref{fn:valimiki}@ig' $(EG)-tmp.md
 	pandoc -s -S --latex-engine=lualatex --biblio $(EG).bib --csl $(NAME)-apa.csl -N -V fontsize=11pt -V papersize=a4paper -V lang=british -V geometry:hmargin=3cm -V geometry:vmargin=2.5cm -V mainfont=Charis\ SIL -V monofont=DejaVu\ Sans\ Mono -V header-includes="\usepackage{footmisc}\usepackage[svgnames]{xcolor}\colorlet{dccblue}{Blue}\let\nonzeroparskip\relax\let\fullcite\textbf" $(EG)-tmp.md -o $(EG)-preview.pdf
 html: tmp $(EG).bib $(NAME)-apa.csl
-	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\[([^\]]+)\]\{[^}]+\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p style="text-align:center;"><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
-	perl -0777 -p -i -e 's@\\bgroup\\figure(?:\[[^\]]+\])?(.*?)\\caption\{([^}]+)\}\n\\label\{[^}]+\}\n\n\\endfigure\\egroup@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p style="text-align:center;"><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@(?:\\begin\{figure\*?\}|\\bgroup\\figure|\\bgroup\\csname figure*\\endcsname)(?:\[[^\]]+\])?(.*?)\\caption\[([^\]]+)\]\{[^}]+\}\n\\label\{[^}]+\}\n\n(?:\\end\{figure\*?\}|\\endfigure\\egroup|\\endcsname figure*\endcsname\\egroup)@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p style="text-align:center;"><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@(?:\\begin\{figure\*?\}|\\bgroup\\figure|\\bgroup\\csname figure*\\endcsname)(?:\[[^\]]+\])?(.*?)\\caption\{([^}]+)\}\n\\label\{[^}]+\}\n\n(?:\\end\{figure\*?\}|\\endfigure\\egroup|\\endcsname figure*\endcsname\\egroup)@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p style="text-align:center;"><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\input\{([^}]+)\}@open+F,"$$1.html";join"",<F>@ige' $(EG)-tmp.md
-	# The next 4 lines are peculiar to the particular sample content
+	# The next 5 lines are peculiar to the particular sample content
 	perl -0777 -p -i -e 's@\\footref\{fn:altman.king\}@<a href="#fn7" class="footnoteRef"><sup>[7]</sup></a>@ig' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\footref\{fn:lawrence.etal\}@<a href="#fn8" class="footnoteRef"><sup>[8]</sup></a>@ig' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\footref\{fn:green\}@<a href="#fn9" class="footnoteRef"><sup>[9]</sup></a>@ig' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\footref\{fn:starr.gastl\}@<a href="#fn10" class="footnoteRef"><sup>[10]</sup></a>@ig' $(EG)-tmp.md
+	perl -0777 -p -i -e 's@\\footref\(fn:valimiki\)@<a href="#fn55" class="footnoteRef"><sup>[55]</sup></a>@ig' $(EG)-tmp.md
+	# General lines
 	pandoc -s -S --toc --toc-depth=1 --biblio $(EG).bib --csl $(NAME)-apa.csl --template=$(NAME)-template $(EG)-tmp.md -o $(EG).html
 	perl -0777 -p -i -e 's@<p></p>@@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h5 id="([^"]+)">(?:<a href="[^"]+">)?([^<]+)(?:</a>)?</h5>@<h6 id="\1">\2</h6>@ig' $(EG).html
@@ -43,12 +47,17 @@ html: tmp $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@<h1><a href="#sec:refs">References</a></h1>@<h2 id="#sec:refs">References</h2>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<sup>(\d+)</sup>@<sup>[\1]</sup>@ig' $(EG).html
 dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME)-template.latex
-	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME)-template $(EG).md -t latex -o $(EG).tex
-	# The next 4 lines are peculiar to the particular sample content
+	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME)-template -V header-includes="\usetikzlibrary{positioning}" $(EG).md -t latex -o $(EG).tex
+	# The next 8 lines are peculiar to the particular sample content
 	perl -0777 -p -i -e 's@\\autocite\{altman\.king2007pss\}@\\footnote{\\fullcite{altman.king2007pss}\\label{fn:altman.king}}@i' $(EG).tex
 	perl -0777 -p -i -e 's@\\autocite\{lawrence\.etal2008dp\}@\\footnote{\\fullcite{lawrence.etal2008dp}\\label{fn:lawrence.etal}}@i' $(EG).tex
 	perl -0777 -p -i -e 's@\\autocite\{green2010wnp\}@\\footnote{\\fullcite{green2010wnp}\\label{fn:green}}@i' $(EG).tex
 	perl -0777 -p -i -e 's@\\autocite\{starr\.gastl2011ims\}@\\footnote{\\fullcite{starr\.gastl2011ims}\\label{fn:starr.gastl}}@i' $(EG).tex
+	perl -0777 -p -i -e 's@\\footref\(fn:valimiki\)@\\footref{fn:valimiki}@ig' $(EG).tex
+	perl -0777 -p -i -e 's@\\autocite\{valimaki2003dlo\}@\\footnote{\\fullcite{valimaki2003dlo}\\label{fn:valimiki}}@i' $(EG).tex
+	perl -0777 -p -i -e 's/\[\@adobe2010xmp\]/\\autocite{adobe2010xmp}/ig' $(EG).tex
+	# General lines
+	perl -0777 -p -i -e 's/\\item\[([^\]]+) \\autocite\{([^}]+)\}\]\n/\\item[\1]\n\\hskip-\\labelsep\\autocite{\2}\\hskip\\labelsep /ig' $(EG).tex
 	perl -0777 -p -i -e 's@,\sURL:@, \\smallcaps{URL}:@igms' $(EG).tex
 	perl -0777 -p -i -e 's@\\texttt\{\\textless\{\}\}@\$$\\langle\$$@ig' $(EG).tex
 	perl -0777 -p -i -e 's@\\texttt\{\\textgreater\{\}\}@\$$\\rangle\$$@ig' $(EG).tex
