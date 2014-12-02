@@ -2631,6 +2631,12 @@ The following options are recognised:
   \docValue{rc} for a release candidate.
 \end{docKey}
 
+\begin{docKey}{morefloats}{=\meta{number}}{no default, initially \texttt{0}}
+  Increases the number of boxes available for floating material by the given
+  \meta{number}. This may help avoid unprocessed-float errors when using
+  one-column mode.
+\end{docKey}
+
 \subsection{Preamble}
 
 The class loads \pkg{biblatex} to handle references.
@@ -2687,6 +2693,17 @@ For joint branding two further commands are defined:
   Use this to set off some content using a peachy background.
   It is intended for use with figures.
   Note that the box will not break over columns or pages.
+\end{docEnvironment}
+
+\begin{docEnvironment}{marginfillboxout}{}
+  A version of \texttt{fillboxout} more suited for use with
+  marginal material. (For one, it is wider.)
+\end{docEnvironment}
+
+\begin{docEnvironment}{marginbox}{}
+  Use this to insert some boxed content into the margin. Works
+  well wrapped around the above boxout environments in
+  one-column mode.
 \end{docEnvironment}
 
 \StopEventually{^^A
