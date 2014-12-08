@@ -2727,6 +2727,14 @@ For joint branding two further commands are defined:
 %    \begin{macrocode}
 \RequirePackage{xkeyval}
 \define@boolkey{dcchowto}{twocolumn}[true]{}
+\define@boolkey{dcchowto}{onecolumn}[true]{
+  \ifKV@dcchowto@onecolumn
+    \setkeys{dcchowto}{twocolumn=false}
+  \else
+    \setkeys{dcchowto}{twocolumn=true}
+  \fi
+}
+\setkeys{dcchowto}{twocolumn=true}
 \define@boolkey{dcchowto}{press}[true]{}
 \define@boolkey{dcchowto}{numbers}[true]{}
 \define@choicekey*{dcchowto.cls}{mark}[\dcchowto@mark@input\dcchowto@mark@index]{draft,rc}[draft]{%
