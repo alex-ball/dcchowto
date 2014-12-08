@@ -12,7 +12,7 @@ all:	$(NAME).pdf clean
 $(NAME).pdf: $(NAME).dtx
 	pdflatex -shell-escape -recorder -interaction=batchmode $(NAME).dtx >/dev/null
 	if [ -f $(NAME).glo ]; then makeindex -q -s gglo.ist -o $(NAME).gls $(NAME).glo; fi
-	if [ -f $(NAME).idx ]; then makeindex -q -s gind.ist -o $(NAME).ind $(NAME).idx; fi
+	if [ -f $(NAME).idx ]; then makeindex -q -o $(NAME).ind $(NAME).idx; fi
 	pdflatex -shell-escape -recorder -interaction=nonstopmode $(NAME).dtx > /dev/null
 	pdflatex -shell-escape -recorder -synctex=1 -interaction=nonstopmode $(NAME).dtx > /dev/null
 tmp: $(NAME).pdf $(EG).md
