@@ -485,8 +485,9 @@ author:
 - 'Another Author (ETC)'
 date: \today
 classoption:
-- morefloats=3
+- morefloats=4
 - onecolumn
+- mark=rc
 ...
 
 > This guide will help you create working-level guidance for inclusion
@@ -2498,6 +2499,9 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
   \def\MyName{#1}%
   \index{\MyName@\tcbIndexPrintComC {\MyName}|(emph}%
 }{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed a macro environment you have not opened on \the\inputlineno.}%
+  }
   \index{\MyName@\tcbIndexPrintComC {\MyName}|)}%
 }
 \renewenvironment{environment}[1]{%
@@ -2505,6 +2509,9 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
   \index{\MyName@\tcbIndexPrintEnvCA {\MyName}|(emph}%
   \index{Environments!\MyName@\tcbIndexPrintEnvC {\MyName}|(emph}%
 }{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed an environment environment you have not opened on \the\inputlineno.}%
+  }
   \index{Environments!\MyName@\tcbIndexPrintEnvC {\MyName}|)}%
   \index{\MyName@\tcbIndexPrintEnvCA {\MyName}|)}%
 }
@@ -2513,6 +2520,9 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
   \index{\MyName@\tcbIndexPrintKeyCA {\MyName}|(emph}%
   \index{Keys!\MyName@\tcbIndexPrintKeyC {\MyName}|(emph}%
 }{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed an optionkey environment you have not opened on \the\inputlineno.}%
+  }
   \index{Keys!\MyName@\tcbIndexPrintKeyC {\MyName}|)}%
   \index{\MyName@\tcbIndexPrintKeyCA {\MyName}|)}%
 }
@@ -2521,6 +2531,9 @@ Copyright (C) 2014 by Alex Ball <a.ball@ukoln.ac.uk>
   \index{\MyName@\tcbIndexPrintValCA {\MyName}|(emph}%
   \index{Values!\MyName@\tcbIndexPrintValC {\MyName}|(emph}%
 }{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed an optionvalue environment you have not opened on \the\inputlineno.}%
+  }
   \index{Values!\MyName@\tcbIndexPrintValC {\MyName}|)}%
   \index{\MyName@\tcbIndexPrintValCA {\MyName}|)}%
 }
@@ -2773,9 +2786,9 @@ For joint branding two further commands are defined:
 % \iffalse
 %<*class>
 % \fi
-% 
+%
 % \subsection{Options}
-% 
+%
 % We use \pkg{xkeyval} for setting options.
 %
 %    \begin{macrocode}
@@ -2867,7 +2880,7 @@ For joint branding two further commands are defined:
   \PassOptionsToClass{oneside}{memoir}%
 \fi  
 %    \end{macrocode}
-% 
+%
 % \subsection{Fonts}
 %
 % The class uses Gill Sans if available. Specifically, it looks for a version of
@@ -2878,9 +2891,9 @@ For joint branding two further commands are defined:
 % the omnipresent Helvetica from \pkg{psnfss}. Note that Helvetica does not have
 % a commonly available light series. Both fallback options are scaled so they
 % give vaguely similar results to Gill Sans.
-% 
+%
 % TODO: add option to load Gill Sans using \pkg{fontspec}.
-% 
+%
 %    \begin{macrocode}
 \IfFileExists{gillsans.sty}{%
   \newcommand*{\memfontfamily}{bgs}
@@ -2918,7 +2931,7 @@ For joint branding two further commands are defined:
 % To save a lot of hard work, this class loads and configures \pkg{memoir}.
 % (This is why we loaded fonts above rather than below; it is one of
 % \pkg{memoir}'s quirks that it is more efficient this way round.)
-%    
+%
 %    \begin{macrocode}
 \LoadClass[a4paper,11pt,extrafontsizes]{memoir}[2008/05/26]
 %    \end{macrocode}
@@ -2967,8 +2980,7 @@ For joint branding two further commands are defined:
 %   first column of the last page to make the columns of equal length.
 %   \item
 %   In two-column mode,
-%   \pkg{fix2col} ensures floats are processed in the right order. (It also
-%   fixes issues with section information in headers, but we don't use that.)
+%   \pkg{dblfloatfix} ensures floats are processed in the right order.
 %   \item
 %   In one-column mode,
 %   \pkg{morefloats} ensures there are enough slots for all the side notes to be
@@ -2980,7 +2992,7 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \ifKV@dcchowto@twocolumn
-  \RequirePackage{balance,fix2col}
+  \RequirePackage{balance,dblfloatfix}
 \else
   \RequirePackage{morefloats,marginfix}
 \fi
@@ -3033,12 +3045,14 @@ For joint branding two further commands are defined:
 % We will of course need to include graphics, hence we load \pkg{graphicx}.
 % By default graphics are scaled to fill the available space while keeping
 % their original aspect ratio.
-% We also load TikZ (\pkg{pgf}) for drawing the DCC logo.
-% 
+% We also load TikZ (\pkg{pgf}) for drawing the DCC logo, and \pkg{tcolorbox}
+% for boxed material.
+%
 %    \begin{macrocode}
 \RequirePackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
 \RequirePackage{tikz}
+\RequirePackage{tcolorbox}
 %    \end{macrocode}
 %
 % We load \pkg{hyperref} for all the good things it gives us. But we remove the
@@ -3317,7 +3331,7 @@ For joint branding two further commands are defined:
 }
 %    \end{macrocode}
 %
-% The key{width} option sets the maximum width for the logo.
+% The \key{width} option sets the maximum width for the logo.
 % With \cs{dccl@unit} set to 1\,pt, the logo ends up 149.891\,pt wide. So we
 % calculate what \cs{dccl@unit} would need to be to achieve the target width.
 % We store this in \cs{dccl@unit@calc} unless \cs{dccl@unit@calc} is a shorter
@@ -3492,9 +3506,69 @@ For joint branding two further commands are defined:
 %
 % Subsequent page geometry is set by \cs{maketitle}.
 %
+% As a general rule, we would like the content to stretch to fill the page,
+% and for text to be ragged right but not \emph{too} ragged.
+%
+%    \begin{macrocode}
+\flushbottom
+\raggedyright
+%    \end{macrocode}
+%
+% \subsection{General typography}
+%
+% \begin{macro}{allcaps}
+%   \begin{macro}{smallcaps}
+% Small capitals are great, but sometimes you don't want to mix them with full
+% capitals. We provide two new commands to help: \cs{smallcaps} acts like
+% \cs{textsc} but also shrinks full capitals, while \cs{allcaps} provides a kind
+% of simulation of \cs{smallcaps} using uniformly full capitals.
+%
+%    \begin{macrocode}
+\newcommand{\allcaps}[1]{\MakeTextUppercase{\textls[100]{#1}}}
+\newcommand{\smallcaps}[1]{\MakeTextLowercase{\textsc{#1}}}
+%    \end{macrocode}
+%   \end{macro}
+% \end{macro}
+%
+% \begin{macro}{oldstylenums}
+% None of the fonts loaded by this class have true old style numerals.
+% We therefore fake them by scaling down lining figures to about the same height
+% as the (possibly also fake) small capitals.
+%
+%    \begin{macrocode}
+\renewcommand*{\oldstylenums}[1]{\textsmaller[2]{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% Where it is used, \cs{today} is printed in small caps. The preferred font uses
+% fake small caps, but sadly old style numbers aren't faked. By marking up the
+% figures explicitly, we can allow them to be faked.
+%
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \renewcommand*{\today}{%
+    \oldstylenums{\number\day}\space
+    \ifcase\month
+    \or January\or February\or March\or April\or May\or June \or July%
+    \or August\or September\or October\or November\or December%
+    \fi
+    \space\oldstylenums{\number\year}%
+  }%
+}
+%    \end{macrocode}
+%
+% The \pkg{biblatex-apa} package helpfully switches URLs to use the roman font.
+% We restore the default monospace style here.
+%
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \urlstyle{tt}%
+}
+%    \end{macrocode}
+%
 % \subsection{Headers and footers}
 %
-% The cover page has a 'tab' top left. we ensure that the text box it
+% The cover page has a ‘tab’ top left. we ensure that the text box it
 % encapsulates is exactly wide enough to accommodate the default text,
 % by measuring the same and saving the length as \cs{TitleTabWidth}.
 %
@@ -3575,7 +3649,10 @@ For joint branding two further commands are defined:
 %
 % The title page header supplies the coloured tab (though the text within it is
 % actually part of the page contents) in the left-hand slot and the procession
-% of organisational logos in the right-hand slot.
+% of organisational logos in the right-hand slot. We only supply the odd side as
+% we only expect to use it on page 1.
+%
+% The title tab is \cs{TitleTabWidth} wide plus 22\,pt padding on each side.
 %
 %    \begin{macrocode}
 \makepagestyle{title}
@@ -3593,8 +3670,15 @@ For joint branding two further commands are defined:
     }%
   }%
 }{}{%
+%    \end{macrocode}
+%
+% The box juggling here is to give the DCC logo approximately equal separation
+% from the title tab and the paper’s top edge and right-hand edges.
+% (It works out as 12\,mm on the right and 34\,pt above.)
+%
+%    \begin{macrocode}
   \makebox[39mm][l]{%
-    \raisebox{10pt-\height}[0pt][0pt]{%
+    \raisebox{9pt-\height}[0pt][0pt]{%
       \begin{minipage}{52mm}
         \raggedleft
         \dcclogo[width=52mm]\quad
@@ -3629,7 +3713,7 @@ For joint branding two further commands are defined:
 % a back cover. It is configurable, inasmuch as the maroon band that forms the
 % header can be given an arbitrary depth with \cs{lastheadheight}. The default
 % is 200\,pt.
-% 
+%
 %    \begin{macrocode}
 \makepagestyle{last}
 \makeheadposition{last}{flushright}{flushleft}{flushright}{flushleft}
@@ -3656,7 +3740,7 @@ For joint branding two further commands are defined:
     }%
   }%
 }{}
-% \end{macro}
+%    \end{macrocode}
 %
 % The last page footer mimics the plain page style header; that is, it is empty
 % apart from the optional draft markings.
@@ -3669,13 +3753,28 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 %
 % \subsection{Title page}
-% 
+%
+% \begin{macro}{maketitle}
+% We replace the regular \cs{maketitle} with one of our own devising.
+% This one takes an optional argument which becomes the introductory ‘abstract’.
+% While this may seem odd at first, it does at least ensure we get a reliable
+% transition from the cover page to the rest of the document.
+%
 %    \begin{macrocode}
-\newbox\TitleBox
 \let\maketitle\relax
 \newcommand{\maketitle}[1][]{%
-  \thispagestyle{title}
-  \vspace*{6pt}
+  \thispagestyle{title}%
+%    \end{macrocode}
+%
+% The first element is the white text in the title tab box.
+% We arrange a \env{minipage} so the baseline of its last line aligns with the
+% start of the curvy bit of the title tab, and it can extend upwards as much as
+% it needs to. Note the use of \cs{TitleTabWidth} to ensure the default text
+% fits snugly on one line.
+%
+%    \begin{macrocode}
+
+  \vspace*{6pt}%
   \noindent
   \raisebox{0pt}[1em][0pt]{%
     \begin{minipage}[b]{\TitleTabWidth}
@@ -3689,6 +3788,13 @@ For joint branding two further commands are defined:
     \end{minipage}
   }
   \par\vspace{3.5\baselineskip}
+%    \end{macrocode}
+%
+% Then we have the title, author information, and draft markings (if defined,
+% and including the date) coming down from the top, and the licence information
+% aligned at the bottom.
+%
+%    \begin{macrocode}
   \begin{flushleft}
     \fontsize{36pt}{40pt}\selectfont
     \bfseries\color{dccmaroon}%
@@ -3715,33 +3821,51 @@ For joint branding two further commands are defined:
     Licensed under Creative Commons Attribution 4.0 International:\\
     \url{http://creativecommons.org/licenses/by/4.0/}
   \end{flushleft}
+  \clearpage
 %    \end{macrocode}
 %
-% Here is where we set the geometry for the rest of the document,
-% and begin by printing the title (again) and the abstract.
+% That concludes the cover page.
+% We now need to start a new page with the geometry we'll use for the rest of
+% the document, but with a full-width title and abstract.
+%
+% In two-column mode, that means setting left and right margins to 15\,mm and a
+% column separation of 10\,mm. Then (before inserting any content at all) we
+% use \cs{twocolumn} to switch to two columns, using its optional argument to
+% give the opening title and abstract full width. This also has the useful
+% side-effect of cementing in the new geometry.
 %
 %    \begin{macrocode}
   \ifKV@dcchowto@twocolumn
-    \clearpage
     \setlrmarginsandblock{15mm}{15mm}{*}%
     \setcolsepandrule{10mm}{0pt}%
     \checkandfixthelayout
     \twocolumn[%
-    \begin{@twocolumnfalse}
-      \raggedright
-      \HUGE\color{dccmaroon}\textbf{\thetitle}\par
-    \end{@twocolumnfalse}
-    \par\vspace{1\onelineskip plus \onelineskip minus \onelineskip}\par
-    \ifstrempty{#1}{}{%
-      \begin{abstract}
-        \raggedright #1
-      \end{abstract}
+      \begin{@twocolumnfalse}
+        \raggedright
+        \HUGE\color{dccmaroon}\textbf{\thetitle}\par
+      \end{@twocolumnfalse}
       \par\vspace{1\onelineskip plus \onelineskip minus \onelineskip}\par
-    }%
-    \vskip\dbltextfloatsep
+      \ifstrempty{#1}{}{%
+        \begin{abstract}
+          \raggedright #1
+        \end{abstract}
+        \par\vspace{1\onelineskip plus \onelineskip minus \onelineskip}\par
+      }%
+      \vskip\dbltextfloatsep
     ]
+%    \end{macrocode}
+%
+% In one-column mode, we set things up for a similar end result (15\,mm margins
+% left and right, 10\,mm column separation) except the right-hand column is
+% actually marginal space and only 60\,mm wide (this implies a left-hand text
+% width of 110\,mm instead of 85\,mm as in two-column mode).
+%
+% We have to issue \cs{ch@ngetext} to get all these changes noticed.
+% We then use a primitive \cs{vbox}, much like \cs{twocolumn} does,
+% to give the title and abstract full width.
+%
+%    \begin{macrocode}
   \else
-    \clearpage
     \setlrmarginsandblock{15mm}{85mm}{*}%
     \setmarginnotes{10mm}{60mm}{\baselineskip}%
     \setsidecaps{10mm}{60mm}
@@ -3763,23 +3887,23 @@ For joint branding two further commands are defined:
   \fi
 }
 %    \end{macrocode}
+% \end{macro}
 %
-% \subsection{Typography}
+% \subsection{Typographical elements}
+%
+% \begin{macro}{dottedblue}
+% It turns out we could do with a command that turns its argument blue and
+% ensures it ends with a full stop or similar. Hence \cs{dottedblue}.
+%
 %    \begin{macrocode}
-\newcommand{\allcaps}[1]{\MakeTextUppercase{\textls[100]{#1}}}
-\newcommand{\smallcaps}[1]{\MakeTextLowercase{\textsc{#1}}}
-\renewcommand*{\oldstylenums}[1]{\textsmaller[2]{#1}}
-\firmlists
-\flushbottom
-\raggedyright
+\newcommand{\dottedblue}[1]{\textcolor{dccblue}{\addperiod{#1}}}
 %    \end{macrocode}
-% 
-% Abstract
-% 
+% \end{macro}
+%
+% The abstract (‘Introduction’) is big, blue and italic,
+% with a bigger, bolder, upright, left-aligned heading.
+%
 %    \begin{macrocode}
-\AtBeginDocument{%
-  \urlstyle{tt}%
-}
 \AtBeginDocument{%
   \renewcommand{\abstractname}{Introduction}%
   \setlength{\absparindent}{0pt}%
@@ -3799,33 +3923,42 @@ For joint branding two further commands are defined:
 \renewcommand{\absnamepos}{flushleft}
 %    \end{macrocode}
 %
-% Headings
+% The sectional headings are unnumbered by default;
+% perhaps that makes them look friendlier?
+% We have to make them more distinctive than usual, therefore.
 %
 %    \begin{macrocode}
+\setsecnumdepth{part}
 \setsecheadstyle{%
-  \normalfont\LARGE\bfseries\raggedright\textcolor{dccblue}%
+  \raggedright\normalfont\LARGE\bfseries\textcolor{dccblue}%
 }
 \setsubsecheadstyle{%
-  \normalfont\Large\raggedright\textcolor{dccblue}%
+  \raggedright\normalfont\Large\textcolor{dccblue}%
 }
 \setsubsubsecheadstyle{%
-  \normalfont\normalsize\itshape\raggedright\textcolor{dccblue}%
+  \raggedright\normalfont\normalsize\itshape\textcolor{dccblue}%
 }
-\newcommand{\dottedblue}[1]{\textcolor{dccblue}{\addperiod{#1}}}
 \setparaheadstyle{%
   \normalfont\normalsize\bfseries\dottedblue
 }
 \setsubparaheadstyle{%
   \normalfont\normalsize\itshape\dottedblue
 }
-\setsecnumdepth{part}
 %    \end{macrocode}
 %
-% Footnotes
+% There is not much horizontal space for footnotes, so we save some by setting
+% them tight to the margin.
 %
 %    \begin{macrocode}
 \setlength{\footmarkwidth}{0pt}
 \setlength{\footmarksep}{0pt}
+%    \end{macrocode}
+%
+% In two-column mode, we allow a normal space between the superscript number
+% and the footnote text. We use the \cs{raggedyright} paragraph shape and
+% make the separating rule maroon.
+%
+%    \begin{macrocode}
 \ifKV@dcchowto@twocolumn
   \footmarkstyle{\textsuperscript{#1} }
   \renewcommand*{\footnoterule}{%
@@ -3834,17 +3967,28 @@ For joint branding two further commands are defined:
     \kern 2.6pt%
   }
   \renewcommand{\makefootmarkhook}{\raggedyright}
+%    \end{macrocode}
+%
+% In one-column mode, footnotes are floated off to the side so we have to repeat
+% ourselves a bit with the side-footnote settings. Because things are even
+% tighter, we put a thin space between the superscript number and the footnote
+% text.
+%
+%    \begin{macrocode}
 \else
   \footnotesinmargin
   \setlength{\sidefootmarkwidth}{0pt}
   \setlength{\sidefootmarksep}{0pt}
-  % Gap between consecutive (saved) footnotes
-  \setlength{\footnotesep}{\baselineskip}
-  \addtolength{\footnotesep}{\marginparpush}
   \footmarkstyle{\textsuperscript{#1}\,}
   \sidefootmarkstyle{\textsuperscript{#1}\,}
-  \renewcommand{\makefootmarkhook}{\sidefootform}
-  % The width of saved footnotes...
+%    \end{macrocode}
+%
+% While the footnotes generated by the \pkg{footnote} package do float to the
+% margin, they don't pick up the special side-footnote settings. So we manually
+% set their width to \cs{marginparwidth} and give them \cs{marginparpush} of
+% top padding. We also ensure the \cs{sidefootform} paragraph shape is used.
+%
+%    \begin{macrocode}
   \let\fn@colwidth\marginparwidth
   \patchcmd{\savenotes}{%
     \columnwidth
@@ -3853,19 +3997,53 @@ For joint branding two further commands are defined:
   }{}{%
     \typeout{Failed to patch savenotes}
   }
+  \setlength{\footnotesep}{\baselineskip}
+  \addtolength{\footnotesep}{\marginparpush}
+  \renewcommand{\makefootmarkhook}{\sidefootform}
 \fi
-\newcommand{\marginnote}[1]{%
-  \marginpar{%
-    \def\baselinestretch{\m@m@footnote@spacing}%
-    \sidefootform
-    \reset@font
-    \foottextfont
-    \ignorespaces#1%
-  }%
+%    \end{macrocode}
+%
+% The \cs{footref} command provided by \pkg{memoir} (and others) stuffs up
+% links generated by \pkg{hyperref}, so we patch it.
+%    \begin{macrocode}
+\patchcmd{\footref}{%
+  \@footnotemark
+}{%
+  \H@@footnotemark
+}{}{%
+  \typeout{Failed to patch \string\footref.}%
 }
 %    \end{macrocode}
 %
-% Lists
+% \begin{macro}{marginnote}
+% A \cs{marginnote} is essentially an unnumbered side-footnote. Since there is
+% no room for marginal material in two-column mode, in case it is used in that
+% context we provide a parallel definition that corresponds to an
+% unnumbered regular footnote.
+%
+%    \begin{macrocode}
+\ifKV@dcchowto@twocolumn
+  \newcommand{\marginnote}[1]{%
+    \bgroup
+    \gdef\@thefnmark{}\@footnotetext{\phantom{\textsuperscript{8}}#1}%
+    \egroup
+  }
+\else
+  \newcommand{\marginnote}[1]{%
+    \marginpar{%
+      \def\baselinestretch{\m@m@footnote@spacing}%
+      \sidefootform
+      \reset@font
+      \foottextfont
+      \ignorespaces#1%
+    }%
+  }
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% We liven up lists by introducing some colour to the labels.
+% Description list labels end in punctuation, just like paragraph headings.
 %
 %    \begin{macrocode}
 \newcommand{\bluelabel}[1]{\color{dccblue}#1}
@@ -3874,32 +4052,33 @@ For joint branding two further commands are defined:
 \setlist[description]{font=\dottedblue}
 %    \end{macrocode}
 %
-% Boxouts
-%
-%    \begin{macrocode}
-\RequirePackage{tcolorbox}
-%    \end{macrocode}
-%
+% \begin{environment}{fullwidth}
 % The fullwidth environment is only really useful in one-column mode,
 % where it is used to span content across both the textblock and marginal
 % column.
 %
-% \begin{environment}{fullwidth}
 %    \begin{macrocode}
 \newsavebox{\dcchowto@fwbox}
 \newenvironment{fullwidth}{%
   \begin{lrbox}{\dcchowto@fwbox}
     \begin{minipage}[t]{180mm}
-    }{%
-  \end{minipage}
-\end{lrbox}
-\rlap{\usebox{\dcchowto@fwbox}}%
+}{%
+    \end{minipage}
+  \end{lrbox}
+  \rlap{\usebox{\dcchowto@fwbox}}%
 }
 %    \end{macrocode}
 % \end{environment}
 %
-% 
 % \begin{environment}{boxout}
+% We use \pkg{tcolorbox} to create \env{boxout}s, and \pkg{footnote} to make them
+% footnote friendly (unfortunately the footnote hyperlinks cannot be fixed,
+% but you cannot have everything, I suppose).
+%
+% This provides a red border and blue text. The text width is not narrowed, so
+% the border overhangs the margins.
+% Note that lists are made more compact but retain the blue labels.
+%
 %    \begin{macrocode}
 \newtcolorbox{boxout}%
   { colback=white
@@ -3911,17 +4090,25 @@ For joint branding two further commands are defined:
       { leftmargin=*
       , font=\color{dccblue}
       }%
+      \setlist[description]%
+      { font=\color{dccblue}
+        , style=nextline
+        , leftmargin=0pt
+      }%
     }
-  , left=2mm
-  , right=2mm
+  , left=1ex
+  , right=1ex
   , oversize
   }
 \makesavenoteenv{boxout}
 %    \end{macrocode}
 % \end{environment}
 %
-% 
 % \begin{environment}{fillboxout}
+% A \env{fillboxout} has a peach background, maroon text and no border.
+% Unlike a \env{boxout}, it fits within the text block.
+% Again, lists are made more compact.
+%
 %    \begin{macrocode}
 \newtcolorbox{fillboxout}%
   { colback=dccpeach
@@ -3946,10 +4133,14 @@ For joint branding two further commands are defined:
   , top=1ex
   , bottom=1ex
 }
+\makesavenoteenv{fillboxout}
 %    \end{macrocode}
 % \end{environment}
 %
 % \begin{environment}{marginfillboxout}
+% A \env{marginfillboxout} is just a \env{fillboxout} that overhangs the margins
+% to give a little more horizontal space.
+%
 %    \begin{macrocode}
 \newtcolorbox{marginfillboxout}%
 { colback=dccpeach
@@ -3969,101 +4160,145 @@ For joint branding two further commands are defined:
     }%
   }
   , before upper=\raggedyright
-  , left=2mm
-  , right=2mm
-  , top=2mm
-  , bottom=2mm
+  , left=1ex
+  , right=1ex
+  , top=1ex
+  , bottom=1ex
   , oversize
 }
+\makesavenoteenv{marginfillboxout}
 %    \end{macrocode}
 % \end{environment}
 %
-% Where it is used, \cs{today} is printed in small caps. The preferred font uses
-% fake small caps, but sadly old style numbers aren't faked. By marking up the
-% figures explicitly, we can allow them to be faked.
-%
-%    \begin{macrocode}
-\AtBeginDocument{%
-  \renewcommand*{\today}{%
-    \oldstylenums{\number\day}\space
-    \ifcase\month
-      \or January\or February\or March\or April\or May\or June \or July%
-      \or August\or September\or October\or November\or December%
-    \fi
-    \space\oldstylenums{\number\year}%
-  }%
-}
-%    \end{macrocode}
-%
 % \subsection{Floats}
 %
-% The following code puts captions in the margins. It is adapted from \pkg{tufte-latex}
-% for use with \pkg{memoir}. It needs thoroughly rewriting.
+% The following code puts captions in the margins in one-column mode.
+% It is adapted from \pkg{memoir}'s existing side caption support with
+% additional inspiration from \pkg{tufte-latex}.
+%
+% We start by setting the default caption placement (outer margin).
+% We ensure these side captions look a bit like footnotes (\cs{sidefootform})
+% and are treated like footnotes by \pkg{biblatex}.
 %
 %    \begin{macrocode}
 \ifKV@dcchowto@twocolumn\else
-  \setsidecappos{b}
   \sidecapmargin{outer}
   \renewcommand*{\sidecapstyle}{\sidefootform\toggletrue{blx@footnote}}
-  \newcommand{\floatalignment}{x}% holds the current float alignment (t, b, h, p)
-  \newcommand{\setfloatalignment}[1]{\renewcommand{\floatalignment}{#1}}% manually sets the float alignment
-  % % % Save original LaTeX float environment
-  \let\memtufte@orig@float\@float
-  \let\memtufte@orig@endfloat\end@float
-  % % % Save original LaTeX \caption and \label commands
+%    \end{macrocode}
+%
+% We provide a command, \cs{setfloatalignment} for saving the float alignment
+% in \cs{floatalignment}. TODO: Check if this can\slash should be removed.
+%
+%    \begin{macrocode}
+  \newcommand{\floatalignment}{x}
+  \newcommand{\setfloatalignment}[1]{\renewcommand{\floatalignment}{#1}}
+%    \end{macrocode}
+%
+% We make copies of the \pkg{memoir} \env{float} environment and \cs{caption}
+% and \cs{label} commands.
+% TODO: check if \cs{dcchowto@orig@caption} needs to be saved here.
+%
+%    \begin{macrocode}
+  \let\dcchowto@orig@float\@float
+  \let\dcchowto@orig@endfloat\end@float
   \AtBeginDocument{%
-    \let\memtufte@orig@caption\caption%
-    \let\memtufte@orig@label\label%
+    \let\dcchowto@orig@caption\caption%
+    \let\dcchowto@orig@label\label%
   }
-  % % % Store the caption and label contents
-  \newcommand{\memtufte@caption}[2][]{%
-    \ifstrempty{#1}%
-    {\gdef\m@mscap@fortoc{#2}}%
-    {\gdef\m@mscap@fortoc{#1}}%
+%    \end{macrocode}
+%
+% We provide replacement caption and label commands that do exactly what
+% \pkg{memoir}'s own \env{sidecaption} would do with the information.
+%
+%    \begin{macrocode}
+  \newcommand{\dcchowto@caption}[2][]{%
+    \ifx\@empty#1\@empty
+      \gdef\m@mscap@fortoc{#2}%
+    \else
+      \gdef\m@mscap@fortoc{#1}%
+    \fi
     \gdef\m@mscap@forcap{#2}%
   }
-  \newcommand{\memtufte@label}[1]{%
+  \newcommand{\dcchowto@label}[1]{%
     \ifx\@empty#1\@empty
-    \gdef\m@mscaplabel{}%
+      \gdef\m@mscaplabel{}%
     \else
-    \gdef\m@mscaplabel{\@bsphack\memtufte@orig@label{#1}\@esphack}%
+      \gdef\m@mscaplabel{\@bsphack\dcchowto@orig@label{#1}\@esphack}%
     \fi
   }
-  % % % Two temporary lengths
+%    \end{macrocode}
+%
+% These two lengths will be used for reserving space in the margin.
+% \cs{dcchowto@tmpa} is where the reserved space will begin relative to the
+% bottom of the float.
+% \cs{dcchowto@tmpb} is how much space will be reserved.
+%
+%    \begin{macrocode}
   \newlength\dcchowto@tmpa
   \newlength\dcchowto@tmpb
-  % % % Define a float environment to place the captions in the margin space
-  \newenvironment{memtufte@float}[2][htbp]
-  {% If the float placement specifier is 't' and only 't', then top-align the mini-pages, otherwise bottom-align them.
+%    \end{macrocode}
+%
+% Here is our new basic float environment on which our replacement \env{figure}
+% and \env{table} will be based.
+%
+% If the float placement specifier is ‘t’ and only ‘t’, then we align the
+% caption to the top of the figure (in case it is long and exceeds the figure
+% height). Otherwise we align it with the bottom. (This gives more room for
+% marginal material floating down from above.)
+%
+%    \begin{macrocode}
+  \newenvironment{dcchowto@float}[2][htbp]{%
     \ifthenelse{\equal{#1}{t}\OR\equal{#1}{T}}{%
       \setsidecappos{t}
     }{%
       \setsidecappos{b}%
     }%
-    % Reset captions
+%    \end{macrocode}
+%
+% We clear away any caption or label left over from an earlier float.
+% Then we save and replace the current \cs{caption} and \cs{label} with our
+% simplified versions.
+%
+%    \begin{macrocode}
     \gdef\m@mscap@fortoc{}%
     \gdef\m@mscap@forcap{}%
     \gdef\m@mscaplabel{}%
-    \let\memtufte@orig@caption\caption%
-    \let\memtufte@orig@label\label%
-    \renewcommand{\caption}[2][]{\memtufte@caption[##1]{##2}}%
-    \renewcommand{\label}[1]{\memtufte@label{##1}}%
-    \memtufte@orig@float{#2}[#1]%
+    \let\dcchowto@orig@caption\caption%
+    \let\dcchowto@orig@label\label%
+    \renewcommand{\caption}[2][]{\dcchowto@caption[##1]{##2}}%
+    \renewcommand{\label}[1]{\dcchowto@label{##1}}%
+%    \end{macrocode}
+%
+% We insert the code that \pkg{memoir} would normally execute at the beginning of a
+% float that contained a \env{sidecaption} environment
+%
+%    \begin{macrocode}
+    \dcchowto@orig@float{#2}[#1]%
     \@mem@scap@beforehook%
     \setlength{\m@mscapmainwidth}{\sidecapfloatwidth}%
     \setm@mscaplkern
     \begin{lrbox}{\m@mscap@fbox}%
-      \begin{minipage}[c]{\m@mscapmainwidth}}
-      {\par\hbox{}\vspace{-\baselineskip}%
-        \ifthenelse{\prevdepth>0}{\vspace{-\prevdepth}}{}% align baselines of boxes
+      \begin{minipage}[c]{\m@mscapmainwidth}%
+  }{%
+%    \end{macrocode}
+%
+% At the end of the environment, we put in an adjustment to tidy up any extra
+% space introduced by the user's label and caption commands, then continue as
+% \pkg{memoir}'s \env{sidecaption} normally would (apart from skipping the
+% captioning part if no caption was provided, and not bothering to check on
+% which side the caption should go).
+%
+%    \begin{macrocode}
+        \par\hbox{}\vspace{-\baselineskip}%
+        \ifthenelse{\prevdepth>0}{\vspace{-\prevdepth}}{}
       \end{minipage}%
     \end{lrbox}%
     \ifthenelse{\equal{\m@mscap@forcap}{}}{}{%
       \ifx\undefined\H@refstepcounter
-      \refstepcounter\@captype
+        \refstepcounter\@captype
       \else
-      \H@refstepcounter{\@captype}%
-      \hyper@makecurrent{\@captype}%
+        \H@refstepcounter{\@captype}%
+        \hyper@makecurrent{\@captype}%
       \fi
       \m@mscaplabel
       \begin{lrbox}{\m@mscap@capbox}%
@@ -4072,84 +4307,131 @@ For joint branding two further commands are defined:
           \@caption\@captype[\m@mscap@fortoc]{\m@mscap@forcap}%
         \end{minipage}%
       \end{lrbox}%
+%    \end{macrocode}
+%
+% We set \cs{dcchowto@tmpa} to the total height of the caption plus
+% \cs{marginparpush}, and \cs{dcchowto@tmpb} to that plus another
+% \cs{marginparpush}.
+%
+% TODO: consider case where caption is top-aligned.
+%
+%    \begin{macrocode}
       \global\dcchowto@tmpa=\z@
       \global\advance\dcchowto@tmpa \ht\m@mscap@capbox
       \global\advance\dcchowto@tmpa \dp\m@mscap@capbox
       \global\advance\dcchowto@tmpa \marginparpush
-      \global\dcchowto@tmpb=\marginparpush
-      \m@mscapopboxes
+      \global\dcchowto@tmpb=\dcchowto@tmpa
+      \global\advance\dcchowto@tmpb \marginparpush
+%    \end{macrocode}
+%
+% Now we insert the float and caption, using a simplified version of
+% \pkg{memoir}'s \cs{m@mscapopboxes}.
+%
+%    \begin{macrocode}
+      \m@mcalcscapraise
+      \usebox{\m@mscap@fbox}%
+      \rlap{%
+        \kern\sidecapsep\raisebox{\m@mscapraise}{%
+          \usebox{\m@mscap@capbox}%
+        }%
+      }%
+      \@mem@scap@afterhook%
     }
-    \memtufte@orig@endfloat
-    % Reset commands and temp boxes
-    \let\caption\memtufte@orig@caption
-    \let\label\memtufte@orig@label
+%    \end{macrocode}
+%
+% Lastly, we insert the normal float end code, reset \cs{caption} and \cs{label}
+% to their normal meaning, reserve space in the margin and clear the two saved
+% boxes.
+%
+%    \begin{macrocode}
+    \dcchowto@orig@endfloat
+    \let\caption\dcchowto@orig@caption
+    \let\label\dcchowto@orig@label
     \marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
     \begin{lrbox}{\m@mscap@fbox}\hbox{}\end{lrbox}%
     \begin{lrbox}{\m@mscap@capbox}\hbox{}\end{lrbox}%
   }
-  % % % Redefine the figure environment to place the captions in the margin space
-  \renewenvironment{figure}[1][htbp]
-  {\begin{memtufte@float}[#1]{figure}}
-    {\end{memtufte@float}}
-  % % % Redefine the table environment to place the captions in the margin space
-  \renewenvironment{table}[1][htbp]
-  {\begin{memtufte@float}[#1]{table}}
-    {\end{memtufte@float}}
 %    \end{macrocode}
 %
-% Now we define full width floats using a similar technique. For compatibility
-% we use the same names (the starred variants of table and figure) as for floats
-% spanning two columns, which is approximately what this is doing.
+% \begin{environment}{figure}
+%   \begin{environment}{table}
+% Now we redefine \env{figure} and \env{table} in terms of our new float.
 %
 %    \begin{macrocode}
-  \newcommand*{\sidecappos}[1]{%
-    \gdef\m@mscappos{#1}\def\@tempb{t}%
-    \ifx\@tempb\m@mscappos
-    \else
-    \gdef\@tempb{b}%
-    \ifx\@tempb\m@mscappos
-    \else
-    \gdef\@tempb{c}%
-    \ifx\@tempb\m@mscappos
-    \else
-    \@memerror{Argument to \string\sidecappos\space is not t or c or b.
-      \MessageBreak Set to c}{\@ehc}%
-    \gdef\m@mscappos{c}%
-    \fi
-    \fi
-    \fi}
-  \newenvironment{memtufte@float@star}[2][htbp]
-  {% If the float placement specifier is 'b' and only 'b', then bottom-align the mini-pages, otherwise top-align them.
-    \ifthenelse{\equal{#1}{b}\OR\equal{#1}{B}}%
-    {\setsidecappos{b}}%
-    {\setsidecappos{t}}%
-    % Reset captions
+  \renewenvironment{figure}[1][htbp]{%
+    \begin{dcchowto@float}[#1]{figure}%
+  }{%
+    \end{dcchowto@float}%
+  }
+  \renewenvironment{table}[1][htbp]{%
+    \begin{dcchowto@float}[#1]{table}%
+  }{%
+    \end{dcchowto@float}%
+  }
+%    \end{macrocode}
+%   \end{environment}
+% \end{environment}
+%
+% Now we define full width floats using a similar technique.
+%
+% This time captions will normally go beneath the float, unless the float is
+% known to be placed at the bottom, in which case the caption will go above it.
+%
+%    \begin{macrocode}
+  \newenvironment{dcchowto@float@star}[2][htbp]{%
+    \ifthenelse{\equal{#1}{b}\OR\equal{#1}{B}}{%
+      \setsidecappos{b}%
+    }{%
+      \setsidecappos{t}%
+    }%
+%    \end{macrocode}
+%
+% We clear away any caption or label left over from an earlier float.
+% Then we save and replace the current \cs{caption} and \cs{label} with our
+% simplified versions.
+%
+%    \begin{macrocode}
     \gdef\m@mscap@fortoc{}%
     \gdef\m@mscap@forcap{}%
     \gdef\m@mscaplabel{}%
-    \let\memtufte@orig@caption\caption%
-    \let\memtufte@orig@label\label%
-    \renewcommand{\caption}[2][]{\memtufte@caption[##1]{##2}}%
-    \renewcommand{\label}[1]{\memtufte@label{##1}}%
-    \memtufte@orig@float{#2}[#1]%
+    \let\dcchowto@orig@caption\caption%
+    \let\dcchowto@orig@label\label%
+    \renewcommand{\caption}[2][]{\dcchowto@caption[##1]{##2}}%
+    \renewcommand{\label}[1]{\dcchowto@label{##1}}%
+%    \end{macrocode}
+%
+% We insert the code that \pkg{memoir} would normally execute at the beginning of a
+% float that contained a \env{sidecaption} environment
+%
+%    \begin{macrocode}
+    \dcchowto@orig@float{#2}[#1]%
     \@mem@scap@beforehook%
     \setlength{\m@mscapmainwidth}{\sidecapfloatwidth}%
     \setm@mscaplkern
     \begin{lrbox}{\m@mscap@fbox}%
       \begin{minipage}[c]{\m@mscapmainwidth}
         \begin{fullwidth}
-        }
-        {\par\hbox{}\vspace{-\baselineskip}%
-          \ifthenelse{\prevdepth>0}{\vspace{-\prevdepth}}{}% align baselines of boxes
+  }{%
+%    \end{macrocode}
+%
+% At the end of the environment, we put in an adjustment to tidy up any extra
+% space introduced by the user's label and caption commands, then continue as
+% \pkg{memoir}'s \env{sidecaption} normally would (apart from skipping the
+% captioning part if no caption was provided, and not bothering to check on
+% which side the caption should go).
+%
+%    \begin{macrocode}
+          \par\hbox{}\vspace{-\baselineskip}%
+          \ifthenelse{\prevdepth>0}{\vspace{-\prevdepth}}{}
         \end{fullwidth}
       \end{minipage}
     \end{lrbox}
     \ifthenelse{\equal{\m@mscap@forcap}{}}{}{%
       \ifx\undefined\H@refstepcounter
-      \refstepcounter\@captype
+        \refstepcounter\@captype
       \else
-      \H@refstepcounter{\@captype}%
-      \hyper@makecurrent{\@captype}%
+        \H@refstepcounter{\@captype}%
+        \hyper@makecurrent{\@captype}%
       \fi
       \m@mscaplabel
       \begin{lrbox}{\m@mscap@capbox}%
@@ -4158,11 +4440,30 @@ For joint branding two further commands are defined:
           \@caption\@captype[\m@mscap@fortoc]{\m@mscap@forcap}%
         \end{minipage}%
       \end{lrbox}%
-      \let\memtufte@sidecapstyle\sidecapstyle
+%    \end{macrocode}
+%
+% This time, we measure the caption box to figure out not only what space to
+% reserve, but also how far to push it so it sits in the right place
+% (for this we adapt \pkg{memoir}'s \cs{m@mcalcscapraise}).
+% We start by setting \cs{dcchowto@tmpa} to the total height of the float plus
+% \cs{marginparpush} so marginal material will not run under the float from
+% above. But now we have to consider the three cases of ‘t’
+% (hanging below), ‘b’ (sat above) and ‘c’ (floating in the middle).
+%
+%    \begin{macrocode}
       \global\dcchowto@tmpa=\z@
       \global\advance\dcchowto@tmpa \ht\m@mscap@fbox
       \global\advance\dcchowto@tmpa \dp\m@mscap@fbox
       \global\advance\dcchowto@tmpa \marginparpush
+%    \end{macrocode}
+%
+% If hanging below, the caption needs to be lowered by the total height of the
+% caption plus the depth of the figure plus 0.5\,ex plus \cs{abovecaptionskip}.
+% The amount of space reserved in the margin is \cs{dcchowto@tmpa} plus the
+% total height of the caption, plus \cs{abovecaptionskip} and
+% \cs{marginparpush}.
+%
+%    \begin{macrocode}
       \def\@tempb{t}%
       \ifx\m@mscappos\@tempb
         \setlength{\m@mscapraise}{0pt}%
@@ -4178,63 +4479,98 @@ For joint branding two further commands are defined:
         \global\advance\dcchowto@tmpb \dp\m@mscap@capbox
         \global\advance\dcchowto@tmpb \marginparpush
       \else
+%    \end{macrocode}
+%
+% If sat above, the caption needs to be raised by the total height of the
+% figure plus the depth of the caption plus \cs{belowcaptionskip}.
+% The reserved space in the margin needs to start higher, by the total height of
+% the caption plus \cs{belowcaptionskip}. The amount of space reserved needs to
+% be \cs{dcchowto@tmpa} plus \cs{marginparpush}.
+%
+%    \begin{macrocode}
         \def\@tempb{b}%
         \ifx\m@mscappos\@tempb
           \settodepth{\m@mscapraise}{\strut\usebox{\m@mscap@capbox}}%
           \settoheight{\m@m@tempdima}{\usebox{\m@mscap@fbox}}%
           \advance\m@mscapraise \m@m@tempdima
           \advance\m@mscapraise \belowcaptionskip
-          \global\dcchowto@tmpb=\z@
           \global\advance\dcchowto@tmpa \belowcaptionskip
           \global\advance\dcchowto@tmpa \ht\m@mscap@capbox
           \global\advance\dcchowto@tmpa \dp\m@mscap@capbox
+          \global\dcchowto@tmpb=\dcchowto@tmpa
+          \global\advance\dcchowto@tmpb \marginparpush
         \else
+%    \end{macrocode}
+%
+% If sat centrally, the caption need only be raised by 0.25\,ex.
+% As the caption and figure overlap, we need only worry about the larger of the
+% two for reserving marginal space. We temporarily repurpose \cs{dcchowto@tmpb}
+% for measuring the caption (plus \cs{marginparpush}). Whichever is bigger is
+% used for \cs{dcchowto@tmpa}, and \cs{dcchowto@tmpb} is set bigger again by
+% \cs{marginparpush}.
+%
+%    \begin{macrocode}
           \m@mscapraise=\z@
           \advance\m@mscapraise 0.25ex
           \global\dcchowto@tmpb=\z@
-          \global\advance\dcchowto@tmpb \marginparpush
           \global\advance\dcchowto@tmpb \ht\m@mscap@capbox
           \global\advance\dcchowto@tmpb \dp\m@mscap@capbox
+          \global\advance\dcchowto@tmpb \marginparpush
           \ifdim\dcchowto@tmpb>\dcchowto@tmpa
-            \global\advance\dcchowto@tmpb -\dcchowto@tmpa
-            \global\advance\dcchowto@tmpa .5\dcchowto@tmpb
-            \global\advance\dcchowto@tmpb -.5\dcchowto@tmpb
+            \global\dcchowto@tmpa=\dcchowto@tmpb
           \else
-            \global\dcchowto@tmpb=\z@
+            \global\dcchowto@tmpb=\dcchowto@tmpa
           \fi
+          \global\advance\dcchowto@tmpb \marginparpush
         \fi
       \fi
-      \advance\m@mscapraise  \sidecapraise
+      \advance\m@mscapraise \sidecapraise
     }
-    \m@mscapcheckside
-    \ifscapmargleft%
-    \makebox[\textwidth][r]{\usebox{\m@mscap@fbox}}%
-    \rlap{\kern-\m@mscaplkern
-      \raisebox{\m@mscapraise}[0pt][0pt]{\usebox{\m@mscap@capbox}}}%
-    \else%
+%    \end{macrocode}
+%
+% Now we insert the float and caption, using a modified version of
+% \pkg{memoir}'s \cs{m@mscapopboxes}.
+%
+%    \begin{macrocode}
     \makebox[\textwidth][l]{\usebox{\m@mscap@fbox}}%
-    \rlap{\kern\sidecapsep
-      \raisebox{\m@mscapraise}[0pt][0pt]{\usebox{\m@mscap@capbox}}}%
-    \fi
-    \gdef\m@mscapthisside{}%
+    \usebox{\m@mscap@fbox}%
+    \rlap{%
+      \kern\sidecapsep\raisebox{\m@mscapraise}[0pt][0pt]{%
+        \usebox{\m@mscap@capbox}%
+      }%
+    }%
     \@mem@scap@afterhook%
-    \memtufte@orig@endfloat%
-    % reset commands and temp boxes
-    \let\caption\memtufte@orig@caption%
-    \let\label\memtufte@orig@label%
-    \let\sidecapstyle\memtufte@sidecapstyle%
+%    \end{macrocode}
+%
+% Lastly, we insert the normal float end code, reset \cs{caption} and \cs{label}
+% to their normal meaning, reserve space in the margin and clear the two saved
+% boxes.
+%
+%    \begin{macrocode}
+    \dcchowto@orig@endfloat%
+    \let\caption\dcchowto@orig@caption%
+    \let\label\dcchowto@orig@label%
     \marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
     \begin{lrbox}{\m@mscap@fbox}\hbox{}\end{lrbox}%
     \begin{lrbox}{\m@mscap@capbox}\hbox{}\end{lrbox}%
   }
-  % % % Full-width figure
-  \renewenvironment{figure*}[1][htbp]%
-  {\begin{memtufte@float@star}[#1]{figure}}
-    {\end{memtufte@float@star}}
-  % % % Full-width table
-  \renewenvironment{table*}[1][htbp]%
-  {\begin{memtufte@float@star}[#1]{table}}
-    {\end{memtufte@float@star}}
+%    \end{macrocode}
+%
+% For compatibility we use the same names (the starred variants of table and
+% figure) for our text-and-margin floats as for floats spanning two columns,
+% since they do approximately the same things.
+%
+%    \begin{macrocode}
+  \renewenvironment{figure*}[1][htbp]{%
+    \begin{dcchowto@float@star}[#1]{figure}%
+  }{%
+    \end{dcchowto@float@star}%
+  }
+  \renewenvironment{table*}[1][htbp]{%
+    \begin{dcchowto@float@star}[#1]{table}%
+  }{%
+    \end{dcchowto@float@star}%
+  }
 \fi
 %    \end{macrocode}
 %
@@ -4250,31 +4586,50 @@ For joint branding two further commands are defined:
 \fi
 \captionnamefont{\footnotesize\bfseries}
 \captiontitlefont{\footnotesize}
+%    \end{macrocode}
+%
+% We ensure float environments can host normal footnotes,
+% and ensure they are numbered with a single number.
+%
+%    \begin{macrocode}
 \makesavenoteenv{figure}
+\makesavenoteenv{table}
 \makesavenoteenv{figure*}
+\makesavenoteenv{table*}
 \counterwithout{figure}{chapter}
 \counterwithout{table}{chapter}
 %    \end{macrocode}
 %
-% Memoir provides marginfigure and margintable environments, but here is a new
-% environment for plain, uncaptioned marginal floats.
+% \begin{environment}{marginbox}
+% Memoir provides \env{marginfigure} and \env{margintable} environments,
+% but here is a new environment for plain, uncaptioned marginal floats.
+% All three need to be converted to regular floats in two-column mode.
 %
 %    \begin{macrocode}
-\newsavebox{\dcchowto@mflt}
-\newenvironment{marginbox}{%
-  \begin{lrbox}{\dcchowto@mflt}
-    \begin{minipage}{\marginparwidth}
-      \footnotesize
-      \toggletrue{blx@footnote}%
-      \raggedright
-      \setlength{\parindent}{0pt}%
-      \setlength{\parskip}{\smallskipamount}%
-}{%
-    \end{minipage}
-  \end{lrbox}
-  \marginpar{\usebox{\dcchowto@mflt}}%
-}
+\ifKV@dcchowto@twocolumn
+  \let\marginfigure=\figure
+  \let\endmarginfigure=\endfigure
+  \let\margintable=\table
+  \let\endmargintable=\table
+  \newfloat{marginbox}{lom}{Box}
+\else
+  \newsavebox{\dcchowto@mflt}
+  \newenvironment{marginbox}{%
+    \begin{lrbox}{\dcchowto@mflt}
+      \begin{minipage}{\marginparwidth}
+        \footnotesize
+        \toggletrue{blx@footnote}%
+        \raggedright
+        \setlength{\parindent}{0pt}%
+        \setlength{\parskip}{\smallskipamount}%
+  }{%
+      \end{minipage}
+    \end{lrbox}
+    \marginpar{\usebox{\dcchowto@mflt}}%
+  }
+\fi
 %    \end{macrocode}
+% \end{environment}
 %
 % \subsection{Citations and references}
 %
