@@ -3575,9 +3575,19 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \newlength\TitleTabWidth
-\settowidth{\TitleTabWidth}{\fontsize{16pt}{20pt}%
-  \ifdef{\lightseries}{\lightseries}{\mdseries}%
-  A Digital Curation Centre `working level' guide}
+\settowidth{\TitleTabWidth}{%
+  \fontsize{16pt}{20pt}\ifdef{\lightseries}{\lightseries}{\mdseries}%
+  A Digital Curation Centre `working level' guide%
+}
+%    \end{macrocode}
+%
+% The \pkg{footnote} package, as part of its note-spewing routine, kills
+% some horizontal-mode commands like \cs{rule}. In certain circumstances
+% this redefinition can leak into the footer. To prevent this causing problems
+% we save our own copy of \cs{rule} and use that instead.
+%
+%    \begin{macrocode}
+\let\dcchowto@rule\rule
 %    \end{macrocode}
 %
 % The plain (default) header is empty apart from the optional draft markings.
@@ -3600,7 +3610,7 @@ For joint branding two further commands are defined:
   \makebox[0pt][l]{%
     \makebox[\paperwidth - 30mm][c]{%
       \raisebox{-44.4pt}[0pt][0pt]{%
-        \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+        \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{41pt}%
       }%
     }%
   }%
@@ -3635,7 +3645,7 @@ For joint branding two further commands are defined:
   \makebox[0pt][l]{%
     \makebox[\paperwidth - 30mm][c]{%
       \raisebox{-44.4pt}[0pt][0pt]{%
-        \color{dccmaroon}\rule{\paperwidth + 18pt}{41pt}%
+        \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{41pt}%
       }%
     }%
   }%
@@ -3703,7 +3713,7 @@ For joint branding two further commands are defined:
 \makeoddfoot{title}{}{%
   \makebox[0pt][c]{%
     \raisebox{-44.4pt}[0pt][0pt]{%
-      \color{dccmaroon}\rule{\paperwidth + 18pt}{57pt}%
+      \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{57pt}%
     }%
   }%
 }{}
@@ -3730,14 +3740,14 @@ For joint branding two further commands are defined:
 \makeevenhead{last}{}{%
   \makebox[0pt][c]{%
     \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
-      \color{dccmaroon}\rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
+      \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
     }%
   }%
 }{}
 \makeoddhead{last}{}{%
   \makebox[0pt][c]{%
     \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
-      \color{dccmaroon}\rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
+      \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
     }%
   }%
 }{}
