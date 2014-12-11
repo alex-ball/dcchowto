@@ -1193,7 +1193,8 @@ embedded.[@adobe2010xmp]}
 
 \csname endfigure*\endcsname\egroup
 
-Again, this should be made available somewhere the tool would look when
+\keepmarginfor{fig:rdf-rights}Again,
+this should be made available somewhere the tool would look when
 downloading the data, such as within a dataset catalogue record or
 landing page. If possible you should also include the rights statement
 within each data file – the following list indicates how this may be
@@ -2842,7 +2843,7 @@ For joint branding two further commands are defined:
 % value; this is used below in headers and the front cover.
 %
 %    \begin{macrocode}
-\define@choicekey*{dcchowto.cls}{mark}[%
+\define@choicekey*{dcchowto}{mark}[%
   \dcchowto@mark@input\dcchowto@mark@index
 ]{draft,rc}[draft]{%
   \ifcase\dcchowto@mark@index\relax
@@ -4159,7 +4160,7 @@ For joint branding two further commands are defined:
       , leftmargin=0pt
     }%
   }
-  , before upper=\raggedyright
+  , before upper=\unskip\raggedyright
   , left=1ex
   , right=1ex
   , top=1ex
@@ -4208,7 +4209,8 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 %
 % We provide replacement caption and label commands that do exactly what
-% \pkg{memoir}'s own \env{sidecaption} would do with the information.
+% \pkg{memoir}'s own \env{sidecaption} would do with the information,
+% except we also save the label separately (in \cs{m@mscap@forlbl}).
 %
 %    \begin{macrocode}
   \newcommand{\dcchowto@caption}[2][]{%
@@ -4221,8 +4223,10 @@ For joint branding two further commands are defined:
   }
   \newcommand{\dcchowto@label}[1]{%
     \ifx\@empty#1\@empty
+      \gdef\m@mscap@forlbl{}%
       \gdef\m@mscaplabel{}%
     \else
+      \gdef\m@mscap@forlbl{#1}%
       \gdef\m@mscaplabel{\@bsphack\dcchowto@orig@label{#1}\@esphack}%
     \fi
   }
@@ -4262,6 +4266,7 @@ For joint branding two further commands are defined:
 %    \begin{macrocode}
     \gdef\m@mscap@fortoc{}%
     \gdef\m@mscap@forcap{}%
+    \gdef\m@mscap@forlbl{}%
     \gdef\m@mscaplabel{}%
     \let\dcchowto@orig@caption\caption%
     \let\dcchowto@orig@label\label%
@@ -4340,14 +4345,24 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 %
 % Lastly, we insert the normal float end code, reset \cs{caption} and \cs{label}
-% to their normal meaning, reserve space in the margin and clear the two saved
-% boxes.
+% to their normal meaning, create a macro for reserving space in the margin,
+% and clear the two saved boxes.
 %
 %    \begin{macrocode}
     \dcchowto@orig@endfloat
     \let\caption\dcchowto@orig@caption
     \let\label\dcchowto@orig@label
-    \marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
+    \ifthenelse{\equal{\m@mscap@forlbl}{}}{}{%
+      \expandafter\xdef\csname dcchowto@push@\m@mscap@forlbl\endcsname{%
+        \noexpand\marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
+      }%
+      \protected@write\@mainaux{}{%
+        \string\expandafter\string\def\string\csname\space
+        dcchowto@push@\m@mscap@forlbl\string\endcsname{%
+          \string\marginphantom[-\the\dcchowto@tmpa]{\the\dcchowto@tmpb}%
+        }%
+      }%
+    }%
     \begin{lrbox}{\m@mscap@fbox}\hbox{}\end{lrbox}%
     \begin{lrbox}{\m@mscap@capbox}\hbox{}\end{lrbox}%
   }
@@ -4393,6 +4408,7 @@ For joint branding two further commands are defined:
 %    \begin{macrocode}
     \gdef\m@mscap@fortoc{}%
     \gdef\m@mscap@forcap{}%
+    \gdef\m@mscap@forlbl{}%
     \gdef\m@mscaplabel{}%
     \let\dcchowto@orig@caption\caption%
     \let\dcchowto@orig@label\label%
@@ -4533,7 +4549,6 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
     \makebox[\textwidth][l]{\usebox{\m@mscap@fbox}}%
-    \usebox{\m@mscap@fbox}%
     \rlap{%
       \kern\sidecapsep\raisebox{\m@mscapraise}[0pt][0pt]{%
         \usebox{\m@mscap@capbox}%
@@ -4543,14 +4558,24 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 %
 % Lastly, we insert the normal float end code, reset \cs{caption} and \cs{label}
-% to their normal meaning, reserve space in the margin and clear the two saved
-% boxes.
+% to their normal meaning, create a macro for reserving space in the margin,
+% and clear the two saved boxes.
 %
 %    \begin{macrocode}
     \dcchowto@orig@endfloat%
     \let\caption\dcchowto@orig@caption%
     \let\label\dcchowto@orig@label%
-    \marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
+    \ifthenelse{\equal{\m@mscap@forlbl}{}}{}{%
+      \expandafter\xdef\csname dcchowto@push@\m@mscap@forlbl\endcsname{%
+        \noexpand\marginphantom[-\dcchowto@tmpa]{\dcchowto@tmpb}%
+      }%
+      \protected@write\@mainaux{}{%
+        \string\expandafter\string\def\string\csname\space
+        dcchowto@push@\m@mscap@forlbl\string\endcsname{%
+          \string\marginphantom[-\the\dcchowto@tmpa]{\the\dcchowto@tmpb}%
+        }%
+      }%
+    }%
     \begin{lrbox}{\m@mscap@fbox}\hbox{}\end{lrbox}%
     \begin{lrbox}{\m@mscap@capbox}\hbox{}\end{lrbox}%
   }
@@ -4572,6 +4597,25 @@ For joint branding two further commands are defined:
     \end{dcchowto@float@star}%
   }
 \fi
+%    \end{macrocode}
+%
+% \begin{macro}{keepmarginfor}
+% Since we don't know where a float will end up, and \LaTeX\ won't tell us,
+% we provide a simple command that can be used to protect manually a float or
+% caption from being overlapped by other marginal material. \cs{keepmarginfor}
+% takes a single argument, which is the label of the float being protected.
+% If a corresponding \cs{marginphantom} command has not been defined (e.g.\ 
+% we are in two-column mode), we issue a warning but otherwise do nothing.
+%
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\keepmarginfor}[1]{%
+  \ifcsdef{dcchowto@push@#1}{%
+    \csname dcchowto@push@#1\endcsname
+  }{%
+    \typeout{dcchowto Warning: no marginphantom defined for #1.}%
+  }%
+}
 %    \end{macrocode}
 %
 % Captions should be small, set ragged if long and (in two column mode) centred
