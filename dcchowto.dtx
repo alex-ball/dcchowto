@@ -3002,6 +3002,7 @@ For joint branding two further commands are defined:
 % For handling colour, we load \pkg{xcolor}.
 % The DCC logo contains three shades of orange and two of blue.
 % The How-to Guide design adds a maroon and a peach.
+% The Jisc logo contains a further orange.
 % 
 %    \begin{macrocode}
 \RequirePackage[svgnames]{xcolor}
@@ -3012,6 +3013,7 @@ For joint branding two further commands are defined:
 \xdefinecolor{dccpaleblue}{RGB}{119,161,219}
 \xdefinecolor{dccmaroon}{RGB}{157,22,27}
 \xdefinecolor{dccpeach}{RGB}{255,235,213}
+\xdefinecolor{jiscorange}{RGB}{232,94,18}
 %    \end{macrocode}
 %
 % \begin{itemize}
@@ -3472,6 +3474,234 @@ For joint branding two further commands are defined:
     +(  0.000,  3.571) --
     cycle;
   }
+  \end{tikzpicture}%
+  \egroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Jisc Logo}
+%
+% The code for drawing the Jisc logo is very similar to that for the DCC logo;
+% it relies on two lengths:
+%
+% \begin{itemize}
+%   \item
+%   \cs{jscl@unit} is the actual scale factor used in the logo;
+%   \item
+%   \cs{jscl@unit@calc} is the scale factor calculated from the options.
+% \end{itemize}
+%
+%    \begin{macrocode}
+\newlength{\jscl@unit}
+\newlength{\jscl@unit@calc}
+%    \end{macrocode}
+%
+% The \key{height} option sets the maximum height for the logo.
+% With \cs{jscl@unit} set to 1\,pt, the logo ends up 577\,pt high. So we
+% calculate what \cs{jscl@unit} would need to be to achieve the target height.
+% We store this in \cs{jscl@unit@calc} unless \cs{jscl@unit@calc} is a shorter
+% (but non-zero) length.
+%
+%    \begin{macrocode}
+\define@key{jscl}{height}{%
+  \setlength{\@tempdima}{#1}%
+  \setlength{\@tempdimb}{\@tempdima / \real{577}}%
+  \ifthenelse{%
+    \lengthtest{\jscl@unit@calc = 0pt}\OR
+    \lengthtest{\@tempdimb < \jscl@unit@calc}%
+  }{%
+  \setlength{\jscl@unit@calc}{\@tempdimb}%
+}{}%
+}
+%    \end{macrocode}
+%
+% The \key{width} option sets the maximum width for the logo.
+% With \cs{jscl@unit} set to 1\,pt, the logo ends up 992\,pt wide. So we
+% calculate what \cs{jscl@unit} would need to be to achieve the target width.
+% We store this in \cs{jscl@unit@calc} unless \cs{jscl@unit@calc} is a shorter
+% (but non-zero) length.
+%
+%    \begin{macrocode}
+\define@key{jscl}{width}{%
+  \setlength{\@tempdima}{#1}%
+  \setlength{\@tempdimb}{\@tempdima / \real{992}}%
+  \ifthenelse{%
+    \lengthtest{\jscl@unit@calc = 0pt}\OR
+    \lengthtest{\@tempdimb < \jscl@unit@calc}%
+  }{%
+  \setlength{\jscl@unit@calc}{\@tempdimb}%
+}{}%
+}
+%    \end{macrocode}
+%
+% The option \key{xheight} unconditionally sets the height of the lowercase
+% letters (237\,pt when \cs{jscl@unit} equals 1\,pt).
+%
+%    \begin{macrocode}
+\define@key{jscl}{xheight}{%
+  \setlength{\@tempdima}{#1}%
+  \setlength{\jscl@unit@calc}{\@tempdima / \real{237}}%
+}
+%    \end{macrocode}
+%
+% We also provide the option \key{scale} for unconditionally setting the scale
+% to a given numeric factor, where 1 means \cs{jscl@unit} equals 0.08\,pt.
+%
+%    \begin{macrocode}
+\define@key{jscl}{scale}{%
+  \setlength{\@tempdima}{0.08pt}%
+  \setlength{\jscl@unit@calc}{#1\@tempdima}%
+}
+%    \end{macrocode}
+%
+% We provide the option \key{fg} for changing the colour of the writing from
+% the default white, and \key{bg} for changing the color of the background from
+% the default orange.
+%
+%    \begin{macrocode}
+\colorlet{jiscfg}{white}
+\define@key{jscl}{fg}[white]{\colorlet{jiscfg}{#1}}
+\colorlet{jiscbg}{jiscorange}
+\define@key{jscl}{bg}[jiscorange]{\colorlet{jiscbg}{#1}}
+%    \end{macrocode}
+%
+% \begin{macro}{jisclogo}
+% The logo itself is drawn with the \cs{dcclogo} command. The \pkg{xkeyval}
+% options are read from the optional argument. There is no mandatory argument.
+%
+%    \begin{macrocode}
+\newcommand{\jisclogo}[1][]{%
+  \bgroup
+%    \end{macrocode}
+%
+% First we reset \cs{jscl@unit@calc} to 0\,pt, then read in the user keys.
+%
+%    \begin{macrocode}
+  \setkeys{jscl}{scale=0,#1}%
+%    \end{macrocode}
+%
+% If \cs{jscl@unit@calc} has been set, we scale the logo accordingly. Otherwise
+% we use the default scale of \cs{jscl@unit} = 0.08\,pt.
+%
+%    \begin{macrocode}
+  \ifthenelse{\lengthtest{\jscl@unit@calc > 0pt}}{%
+    \setlength{\jscl@unit}{\jscl@unit@calc}%
+  }{%
+  \setlength{\jscl@unit}{0.08pt}%
+  }%
+%    \end{macrocode}
+%
+% Now we come to draw the logo.
+%
+%    \begin{macrocode}
+  \begin{tikzpicture}
+  [ y=\jscl@unit
+  , x=\jscl@unit
+  , inner sep=0pt
+  , outer sep=0pt
+  , nonzero rule
+  , line join=miter
+  , miter limit=4.00
+  , line cap=butt
+  , line width=\jscl@unit
+  , baseline
+  ]
+%    \end{macrocode}
+%
+% We start with the background rectangle.
+%
+%    \begin{macrocode}
+  \path[fill=jiscbg]
+  (0.0000,-127.0000) rectangle (992.0000,450.0000);
+%    \end{macrocode}
+%
+% We construct the letter ‘J’.
+%
+%    \begin{macrocode}
+  \path[fill=jiscfg]
+  (249.0000,326.0000) --
+  (313.1119,326.0000) --
+  (312.7149,207.7500) .. controls (312.2813, 78.6170) and (312.5328, 84.3047) ..
+  (306.3954, 64.8447) .. controls (294.4985, 27.1230) and (266.2558,  3.5746) ..
+  (225.6865, -2.4493) .. controls (213.1150, -4.3160) and (195.7178, -4.3067) ..
+  (183.6291, -2.4268) .. controls (159.7167,  1.2918) and (136.9468, 12.4482) ..
+  (119.6555, 28.9180) .. controls (116.4410, 31.9797) and (113.3984, 35.2556) ..
+  (112.8942, 36.1977) .. controls (112.1890, 37.5153) and (113.9762, 41.0934) ..
+  (120.6399, 51.7053) .. controls (125.4043, 59.2924) and (129.8068, 66.0564) ..
+  (130.4234, 66.7365) .. controls (131.2974, 67.7006) and (132.6411, 67.1777) ..
+  (136.5222, 64.3633) .. controls (143.7988, 59.0866) and (160.4882, 51.3085) ..
+  (169.5868, 48.9535) .. controls (180.8177, 46.0466) and (195.6063, 45.3941) ..
+  (205.0000, 47.3909) .. controls (230.7871, 52.8725) and (245.0302, 72.1189) ..
+  (248.0032,105.5000) .. controls (248.5658,111.8170) and (248.9865,161.0948) ..
+  (248.9914,221.2500) --
+  cycle;
+%    \end{macrocode}
+%
+% We construct the letter ‘i’ from a rectangle and a circle.
+%
+%    \begin{macrocode}
+  \path[fill=jiscfg]
+  (353.0000,  0.0000) rectangle (408.0000,237.0000);
+  \path[fill=jiscfg]
+  (381.2126,309.8403) circle [radius=35.449];
+%    \end{macrocode}
+%
+% We construct the letter ‘s’.
+%
+%    \begin{macrocode}
+  \path[fill=jiscfg]
+  (440.1187, 28.0513) --
+  (447.0463, 42.2366) .. controls (450.8565, 50.0385) and (454.0989, 56.7966) ..
+  (454.2516, 57.2547) .. controls (454.4042, 57.7127) and (458.0012, 56.4832) ..
+  (462.2448, 54.5226) .. controls (473.1512, 49.4835) and (488.8870, 44.4157) ..
+  (500.0000, 42.3632) .. controls (514.1661, 39.7468) and (546.3985, 39.7720) ..
+  (554.0000, 42.4053) .. controls (560.0615, 44.5052) and (565.5775, 47.7079) ..
+  (568.2119, 50.6569) .. controls (573.0699, 56.0951) and (574.4291, 67.2570) ..
+  (571.1203, 74.5413) .. controls (566.7703, 84.1180) and (557.7903, 88.3864) ..
+  (520.7455, 98.4858) .. controls (494.2066,105.7211) and (480.0614,111.5792) ..
+  (467.3391,120.6037) .. controls (455.6162,128.9192) and (448.0861,140.9576) ..
+  (445.4888,155.5356) .. controls (437.4294,200.7705) and (464.2665,233.7047) ..
+  (514.2985,239.9782) .. controls (541.5362,243.3935) and (575.5572,237.2823) ..
+  (603.5000,223.9548) .. controls (616.6693,217.6737) and (616.0805,219.8692) ..
+  (609.5330,201.4598) .. controls (606.4182,192.7019) and (603.7137,185.3803) ..
+  (603.5229,185.1896) .. controls (603.3322,184.9989) and (598.2804,186.4255) ..
+  (592.2966,188.3600) .. controls (564.4793,197.3527) and (529.6963,200.4562) ..
+  (514.0373,195.3427) .. controls (499.1279,190.4739) and (493.3321,174.2795) ..
+  (502.7630,163.8406) .. controls (508.8775,157.0725) and (518.5318,153.1694) ..
+  (552.8558,143.5889) .. controls (599.9824,130.4350) and (619.8710,115.2383) ..
+  (625.6073, 88.0000) .. controls (628.0530, 76.3871) and (627.0861, 56.0567) ..
+  (623.5723, 45.2081) .. controls (615.6321, 20.6939) and (594.5143,  4.6643) ..
+  (562.0000, -1.5284) .. controls (553.7835, -3.0934) and (523.8438, -4.3438) ..
+  (517.5000, -3.3869) .. controls (505.2806, -1.5438) and (491.2387,  1.6145) ..
+  (482.4194,  4.5035) .. controls (469.1445,  8.8521) and (451.9878, 17.6320) ..
+  (445.3093, 23.4947) --
+  cycle;
+%    \end{macrocode}
+%
+% Last, we construct the letter ‘c’.
+%
+%    \begin{macrocode}
+  \path[fill=jiscfg]
+  (853.9653, 37.0007) --
+  (847.2419, 29.8736) .. controls (826.3141,  7.6890) and (798.1383, -4.2353) ..
+  (767.5000, -3.8740) .. controls (762.0000, -3.8091) and (754.8000, -3.3670) ..
+  (751.5000, -2.8915) .. controls (729.4392,  0.2875) and (707.5565, 10.8806) ..
+  (691.4441, 26.1807) .. controls (668.3241, 48.1350) and (656.0158, 76.8767) ..
+  (654.3342,112.8379) .. controls (652.4914,152.2464) and (664.6301,186.3102) ..
+  (688.9579,210.0000) .. controls (721.0348,241.2357) and (770.8320,249.7030) ..
+  (812.5000,231.0066) .. controls (825.9913,224.9531) and (849.2337,207.5374) ..
+  (852.8573,200.7667) .. controls (854.1323,198.3842) and (853.7215,197.5310) ..
+  (845.0841,184.6256) .. controls (840.0684,177.1315) and (835.7173,171.0000) ..
+  (835.4149,171.0000) .. controls (835.1125,171.0000) and (832.4119,172.9984) ..
+  (829.4136,175.4408) .. controls (795.7998,202.8224) and (755.2760,205.2053) ..
+  (729.9256,181.2910) .. controls (714.1790,166.4365) and (707.2506,145.8544) ..
+  (708.2835,117.0000) .. controls (709.7641, 75.6430) and (728.5721, 48.5711) ..
+  (760.8064, 41.3997) .. controls (781.6398, 36.7647) and (810.7230, 44.6234) ..
+  (829.8877, 60.0665) .. controls (833.3535, 62.8593) and (836.2947, 64.9993) ..
+  (836.4237, 64.8221) .. controls (836.5528, 64.6450) and (840.5524, 58.3127) ..
+  (845.3118, 50.7504) --
+  cycle;
   \end{tikzpicture}%
   \egroup
 }
