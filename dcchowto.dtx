@@ -488,6 +488,7 @@ classoption:
 - morefloats=4
 - onecolumn
 - mark=rc
+- press
 ...
 
 > This guide will help you create working-level guidance for inclusion
@@ -3610,10 +3611,18 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 %
 % We start with the background rectangle.
+% If the \key{press} option is in effect we extend it to the right so it
+% bleeds into the trimmed area.
+% TODO: use a command option instead of a class one, for portability.
 %
 %    \begin{macrocode}
-  \path[fill=jiscbg]
-  (0.0000,-127.0000) rectangle (992.0000,450.0000);
+  \ifKV@dcchowto@press
+    \path[fill=jiscbg]
+    (0.0000,-127.0000) rectangle (1105.0000,450.0000);
+  \else
+    \path[fill=jiscbg]
+    (0.0000,-127.0000) rectangle (992.0000,450.0000);
+  \fi
 %    \end{macrocode}
 %
 % We construct the letter ‘J’.
@@ -3926,7 +3935,7 @@ For joint branding two further commands are defined:
         \dcchowto@partner@logos
         \raisebox{0pt}[\height+24pt][0pt]{%
           \makebox[16mm][l]{%
-            \includegraphics[width=28mm]{jisc-tab}%
+            \jisclogo[width=28mm]%
           }%
         }%
       \end{minipage}
