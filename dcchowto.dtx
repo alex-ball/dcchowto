@@ -2278,7 +2278,7 @@ $endif$
 Follow the DCC on Twitter: \href{http://twitter.com/#!/digitalcuration}{@digitalcuration}, \href{https://twitter.com/hashtag/ukdcc}{\#ukdcc}
 
 \vfill
-\raggedleft\mdseries\footnotesize Revised: \ifx\undefined\thedate\today\else\thedate\fi\par
+\raggedleft\mdseries\footnotesize\theversion\par
 \endgroup
 $for(include-after)$
 $include-after$
@@ -2695,8 +2695,9 @@ The following options are recognised:
   This marks the PDF as not being ready for public release.
   The two possible values for \meta{mark type} are
   \docValue{draft} for a working draft,
+  \docValue{rc} for a release candidate,
   and
-  \docValue{rc} for a release candidate.
+  \docValue{rev} for a revision.
 \end{docKey}
 
 \begin{docKey}{morefloats}{=\meta{number}}{no default, initially \val{0}}
@@ -2839,9 +2840,11 @@ For joint branding two further commands are defined:
 % \begin{optionkey}{mark}
 %   \begin{optionvalue}{draft}
 %     \begin{optionvalue}{rc}
-% The \key{mark} option is defined as a choice key, where the two acceptable
-% values are \val{draft} and \val{rc}. Both set \cs{dcchowto@mark} to a sensible
-% value; this is used below in headers and the front cover.
+% The \key{mark} option is defined as a choice key, where the three acceptable
+% values are \val{draft}, \val{rc} and \val{rev}. The first two set
+% \cs{dcchowto@mark} to a sensible value; this is used in the headers and on the
+% front cover. All three define the similar \cs{dcchowto@rev}, used at the end
+% of the \LaTeX\ template for version control.
 %
 %    \begin{macrocode}
 \define@choicekey*{dcchowto}{mark}[%
@@ -2849,8 +2852,12 @@ For joint branding two further commands are defined:
 ]{draft,rc}[draft]{%
   \ifcase\dcchowto@mark@index\relax
     \def\dcchowto@mark{Draft}
+    \def\dcchowto@rev{Draft}
   \or
     \def\dcchowto@mark{Release Candidate}
+    \def\dcchowto@rev{Release Candidate}
+  \or
+    \def\dcchowto@rev{Revised}
   \fi
 }
 %    \end{macrocode}
@@ -3294,6 +3301,40 @@ For joint branding two further commands are defined:
   {pdfauthor=\dcchowto@author@pdf
   ,pdftitle=\thetitle
   }%
+}
+%    \end{macrocode}
+%
+% For displaying the revision date, we define \cs{theversion}.
+%
+%    \begin{macrocode}
+\newcommand{\theversion}{%
+  \ifx\undefined\dcchowto@rev
+    Published:
+  \else
+    \dcchowto@rev:
+  \fi
+  \ifx\undefined\thedate
+    \today
+  \else
+    \ifx\empty\thedate
+      \today
+    \else
+      \thedate
+    \fi
+  \fi
+}
+%    \end{macrocode}
+%
+% For displaying a cautionary pre-publication message, we define
+% \cs{versionmark}.
+%
+%    \begin{macrocode}
+\newcommand{\versionmark}{%
+  \ifx\undefined\dcchowto@mark
+    \relax
+  \else
+    \textsmaller[2]{\allcaps{\dcchowto@mark: \today}}
+  \fi
 }
 %    \end{macrocode}
 %
@@ -3780,19 +3821,27 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % \end{macro}
 %
-% Where it is used, \cs{today} is printed in small caps. The preferred font uses
-% fake small caps, but sadly old style numbers aren't faked. By marking up the
-% figures explicitly, we can allow them to be faked.
+% We redefine \cs{today} to give a British date with what the \pkg{isodate}
+% package calls a ‘clean look’. The bare redefinition affects the body of the
+% document, while the one \cs{AtBeginDocument} affects the header.
 %
 %    \begin{macrocode}
-\AtBeginDocument{%
-  \renewcommand*{\today}{%
-    \oldstylenums{\number\day}\space
-    \ifcase\month
+\renewcommand*{\today}{%
+  \number\day\space
+  \ifcase\month
     \or January\or February\or March\or April\or May\or June \or July%
     \or August\or September\or October\or November\or December%
-    \fi
-    \space\oldstylenums{\number\year}%
+  \fi\space
+  \number\year%
+}%
+\AtBeginDocument{%
+  \renewcommand*{\today}{%
+    \number\day\space
+    \ifcase\month
+      \or January\or February\or March\or April\or May\or June \or July%
+      \or August\or September\or October\or November\or December%
+    \fi\space
+    \number\year%
   }%
 }
 %    \end{macrocode}
@@ -3833,8 +3882,8 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \ifdef{\dcchowto@mark}{%
-  \makeevenhead{plain}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
-  \makeoddhead{plain}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
+  \makeevenhead{plain}{}{\versionmark}{}
+  \makeoddhead{plain}{}{\versionmark}{}
 }{}
 %    \end{macrocode}
 %
@@ -3997,8 +4046,8 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \ifdef{\dcchowto@mark}{%
-  \makeevenfoot{last}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
-  \makeoddfoot{last}{}{\smallcaps{\dcchowto@mark:\quad\today}}{}
+  \makeevenfoot{last}{}{\versionmark}{}
+  \makeoddfoot{last}{}{\versionmark}{}
 }{}
 %    \end{macrocode}
 %
@@ -4060,7 +4109,7 @@ For joint branding two further commands are defined:
   
   \ifx\undefined\dcchowto@mark\else
     \begin{flushleft}
-      \smallcaps{\dcchowto@mark:\quad\today}
+      \versionmark
     \end{flushleft}
   \fi
   \par\vfill
