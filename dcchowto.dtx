@@ -3308,20 +3308,16 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \newcommand{\theversion}{%
-  \ifx\undefined\dcchowto@rev
+  \ifundef{\dcchowto@rev}{%
     Published:
-  \else
+  }{%
     \dcchowto@rev:
-  \fi
-  \ifx\undefined\thedate
+  }%
+  \ifundef{\thedate}{%
     \today
-  \else
-    \ifx\empty\thedate
-      \today
-    \else
-      \thedate
-    \fi
-  \fi
+  }{%
+    \thedate
+  }%
 }
 %    \end{macrocode}
 %
@@ -3330,11 +3326,11 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \newcommand{\versionmark}{%
-  \ifx\undefined\dcchowto@mark
+  \ifundef{\dcchowto@mark}{%
     \relax
-  \else
-    \textsmaller[2]{\allcaps{\dcchowto@mark: \today}}
-  \fi
+  }{%
+    \textsmaller[2]{\allcaps{\dcchowto@mark: \today}}%
+  }%
 }
 %    \end{macrocode}
 %
