@@ -3036,7 +3036,7 @@ For joint branding two further commands are defined:
 \xdefinecolor{dccblue}{RGB}{47,72,158}
 \xdefinecolor{dccpaleblue}{RGB}{119,161,219}
 \xdefinecolor{dccmaroon}{RGB}{157,22,27}
-\xdefinecolor{dccpeach}{RGB}{255,235,213}
+\xdefinecolor{dccpeach}{RGB}{255,236,217}
 \xdefinecolor{jiscorange}{RGB}{232,94,18}
 %    \end{macrocode}
 %
@@ -4476,7 +4476,7 @@ For joint branding two further commands are defined:
 \newsavebox{\dcchowto@fwbox}
 \newenvironment{fullwidth}{%
   \begin{lrbox}{\dcchowto@fwbox}
-    \begin{minipage}[t]{180mm}
+    \begin{minipage}{180mm}
 }{%
     \end{minipage}
   \end{lrbox}
@@ -4495,7 +4495,7 @@ For joint branding two further commands are defined:
 % Note that lists are made more compact but retain the blue labels.
 %
 %    \begin{macrocode}
-\newtcolorbox{boxout}%
+\newtcolorbox{boxout}[1][]%
   { colback=white
   , colframe=dccmaroon
   , coltext=dccblue
@@ -4514,6 +4514,7 @@ For joint branding two further commands are defined:
   , left=1ex
   , right=1ex
   , oversize
+  , #1
   }
 \makesavenoteenv{boxout}
 %    \end{macrocode}
@@ -4525,7 +4526,7 @@ For joint branding two further commands are defined:
 % Again, lists are made more compact.
 %
 %    \begin{macrocode}
-\newtcolorbox{fillboxout}%
+\newtcolorbox{fillboxout}[1][]%
   { colback=dccpeach
   , colframe=dccpeach
   , coltext=dccmaroon
@@ -4547,6 +4548,7 @@ For joint branding two further commands are defined:
   , right=1ex
   , top=1ex
   , bottom=1ex
+  , #1
 }
 \makesavenoteenv{fillboxout}
 %    \end{macrocode}
@@ -4557,7 +4559,7 @@ For joint branding two further commands are defined:
 % to give a little more horizontal space.
 %
 %    \begin{macrocode}
-\newtcolorbox{marginfillboxout}%
+\newtcolorbox{marginfillboxout}[1][]%
 { colback=dccpeach
   , colframe=dccpeach
   , coltext=dccmaroon
@@ -4580,6 +4582,7 @@ For joint branding two further commands are defined:
   , top=1ex
   , bottom=1ex
   , oversize
+  , #1
 }
 \makesavenoteenv{marginfillboxout}
 %    \end{macrocode}
