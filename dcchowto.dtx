@@ -637,6 +637,14 @@ Location
     schemes provide these via an identifier resolver
     service.\footref{fn:altman.king}\footref{fn:lawrence.etal}\footref{fn:green}\footref{fn:starr.gastl}
 
+\marginbox
+
+> ‘An intellectual property (IP) licence is effectively a promise not to sue
+> for infringement of an intellectual property right (IPR).’
+> \quotefrom – \fullcite{irish2005ipr}[@irish2005ipr]
+
+\endmarginbox
+
 The most important of these elements – the ones that should be present
 in any citation – are the author, the title and date, and the location.
 These give due credit, allow the reader to judge the relevance of the
@@ -1116,14 +1124,10 @@ for retrieving the *full text* of the licence itself. As an example, the
 suggested text for attaching the Open Data Commons PDDL to a database is
 as follows.
 
-\bgroup\fillboxout
-
 > \[This database is/These data are/\<*name of dataset*\> is\] made
 > available under the Public Domain Dedication and License v1.0 whose
 > full text can be found at:
 > <http://opendatacommons.org/licenses/pddl/1.0/>
-
-\endfillboxout\egroup
 
 The rights statement should be displayed prominently, so that any user
 of the data will realise that they are licensed or public domain. It is
@@ -1599,6 +1603,17 @@ The following may also be of interest:
   keywords = {Semantic Web, disambiguation, publication, rich RDF-triples},
   publisher = {IOS Press},
   timestamp = {2011-05-18}
+}
+
+@BOOK{irish2005ipr,
+  author = {Vivien Irish},
+  title = {{IEE} {Management} of {Technology:} {No.}~22. {Intellectual} Property Rights for Engineers},
+  date = {2005},
+  publisher = {Institution of Electrical Engineers},
+  isbn = {0-86341-490-7},
+  edition = {2nd ed., p. 173},
+  location = {London},
+  timestamp = {2010-11-15}
 }
 
 @MANUAL{iso19101gir,
@@ -4472,6 +4487,51 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % \end{environment}
 %
+% \begin{environment}{quote}
+% We provide several redefinitions of the standard \env{quote} environment to
+% make it look prettier.
+%
+%    \begin{macrocode}
+\let\dcchowto@quote=\quote
+\let\dcchowto@endquote=\endquote
+\newcommand{\normalquotes}{%
+  \let\quote=\dcchowto@quote
+  \let\endquote=\dcchowto@endquote
+}
+\newcommand{\italicquotes}{%
+  \renewenvironment{quote}{%
+    \bigskip\par
+    \itshape
+    \iftoggle{blx@footnote}{\normalsize\color{dccblue}}{}%
+  }{%
+    \par\bigskip
+  }
+}
+\newlength{\dcchowto@parindent}
+\setlength{\dcchowto@parindent}{\parindent}
+\newcommand{\fillboxoutquotes}{%
+  \renewenvironment{quote}{%
+    \begin{fillboxout}[left=\dcchowto@parindent,right=\dcchowto@parindent]
+  }{%
+    \end{fillboxout}%
+  }
+}
+\fillboxoutquotes
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{quotefrom}
+% For cases where we want to include a separate attribution line,
+% \cs{quotefrom} starts a new paragraph and sets it ragged-left and slightly
+% smaller.
+%
+%    \begin{macrocode}
+\newcommand{\quotefrom}{%
+  \par\vspace{-\parskip}\raggedleft\upshape\smaller\hbox{}~%
+}
+%    \end{macrocode}
+% \end{macro}
+%
 % \subsection{Floats}
 %
 % The following code puts captions in the margins in one-column mode.
@@ -4964,6 +5024,7 @@ For joint branding two further commands are defined:
       \begin{minipage}{\marginparwidth}
         \footnotesize
         \toggletrue{blx@footnote}%
+        \italicquotes
         \raggedright
         \setlength{\parindent}{0pt}%
         \setlength{\parskip}{\smallskipamount}%
