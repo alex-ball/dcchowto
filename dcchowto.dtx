@@ -1316,6 +1316,8 @@ Diepenbroek (WDC-MARE), Margaret Henty (ANDS), Catherine Jones (STFC),
 Sarah Jones (DCC), Florance Kennedy (DCC), Phillip Lord (Newcastle
 University) and Tom Pollard (BL) for helpful comments.
 
+\finalpage
+
 Further information {#sec:further-information}
 ===================
 
@@ -3013,6 +3015,9 @@ For joint branding two further commands are defined:
 %   \item
 %   In one-column mode,
 %   \pkg{marginfix} helps to make sure the marginal material floats correctly.
+%   \item
+%   In one-column mode,
+%   \pkg{multicol} is used to put the concluding material in two equal columns.
 % \end{itemize}
 %
 %    \begin{macrocode}
@@ -3020,6 +3025,8 @@ For joint branding two further commands are defined:
   \RequirePackage{balance,dblfloatfix}
 \else
   \RequirePackage{morefloats,marginfix}
+  \RequirePackage{multicol}
+  \setlength{\columnsep}{10mm}
 \fi
 %    \end{macrocode}
 %
@@ -4134,20 +4141,20 @@ For joint branding two further commands are defined:
 % As previously mentioned, the last page header is a big maroon band.
 %
 %    \begin{macrocode}
-\makeevenhead{last}{}{%
-  \makebox[0pt][c]{%
+\makeevenhead{last}{%
+  \rlap{\makebox[180mm][c]{%
     \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
       \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
     }%
-  }%
-}{}
-\makeoddhead{last}{}{%
-  \makebox[0pt][c]{%
+  }}%
+}{}{}
+\makeoddhead{last}{%
+  \rlap{\makebox[180mm][c]{%
     \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
       \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
     }%
-  }%
-}{}
+  }}%
+}{}{}
 %    \end{macrocode}
 %
 % The last page footer mimics the plain page style header; that is, it is empty
@@ -4155,8 +4162,8 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \ifdef{\dcchowto@mark}{%
-  \makeevenfoot{last}{}{\versionmark}{}
-  \makeoddfoot{last}{}{\versionmark}{}
+  \makeevenfoot{last}{\rlap{\makebox[180mm][c]{\versionmark}}}{}{}
+  \makeoddfoot{last}{\rlap{\makebox[180mm][c]{\versionmark}}}{}{}
 }{}
 %    \end{macrocode}
 %
@@ -4474,12 +4481,15 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \newsavebox{\dcchowto@fwbox}
+\newlength{\fwbheight}
 \newenvironment{fullwidth}{%
   \begin{lrbox}{\dcchowto@fwbox}
     \begin{minipage}{180mm}
 }{%
     \end{minipage}
   \end{lrbox}
+  \setlength{\fwbheight}{\ht\dcchowto@fwbox + \dp\dcchowto@fwbox}%
+  \global\fwbheight=\fwbheight
   \rlap{\usebox{\dcchowto@fwbox}}%
 }
 %    \end{macrocode}
@@ -5547,12 +5557,6 @@ For joint branding two further commands are defined:
 \addtoiargdef{\nocite}{\addtocategory{notcited}{#1}}{}
 %    \end{macrocode}
 %
-% end bibliography is in two columns
-%
-%    \begin{macrocode}
-\RequirePackage{multicol}
-%    \end{macrocode}
-%
 % We provide \cs{refurl} as a convenience command for providing quick website
 % references.
 %
@@ -5564,6 +5568,65 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{Last page}
+%
+% We provide several options for finishing off the document.
+%
+% The \cs{finishpage} command inserts a rule and lays out the remaining content
+% in two columns.
+%
+%    \begin{macrocode}
+\ifKV@dcchowto@twocolumn
+  \newcommand{\finishpage}{}
+\else
+  \newcommand{\finishpage}{%
+    \AtEndEnvironment{document}{%
+      \end{multicols}
+    \end{fullwidth}%
+      \marginphantom[-\fwbheight]{-\fwbheight}%
+    }
+    \begin{fullwidth}
+      \noindent\textcolor{dccmaroon}{\rule{\hsize}{1.2pt}}
+      \begin{multicols}{2}%
+  }
+\fi
+%    \end{macrocode} 
+%
+% The \cs{finalpage} command starts a new page and lays out the remaining content
+% in two columns.
+%
+%    \begin{macrocode}
+\ifKV@dcchowto@twocolumn
+  \newcommand{\finalpage}{}
+\else
+  \newcommand{\finalpage}{%
+    \AtEndEnvironment{document}{%
+      \end{multicols}
+    \end{fullwidth}%
+      \setlength{\LastHeadHeight}{\paperheight - 64pt - \fwbheight - 3\onelineskip}
+    }
+    \clearpage
+    \thispagestyle{last}
+    \vspace*{\stretch{1}}
+    \begin{fullwidth}
+      \begin{multicols}{2}%
+  }
+\fi
+%    \end{macrocode} 
+%
+% The \cs{backcover} command simply adds an extra maroon page at the end.
+%
+%    \begin{macrocode}
+\newcommand{\backcover}{%
+  \AtEndEnvironment{document}{%
+    \clearpage
+    \thispagestyle{empty}%
+    \pagecolor{dccmaroon}%
+    \vbox{}
+  }
+}
+%    \end{macrocode} 
+% 
 % There is no more.
 %
 %    \begin{macrocode}
