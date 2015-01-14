@@ -551,6 +551,7 @@ Requirements for data citations {#sec:requirements}
 The SageCite Project has identified a set of requirements for dataset
 citations and any services set up to support them.[@duke2011rdc]
 
+\marginbox\datagrid[10\onelineskip]\endmarginbox
 \bgroup\boxout
 
   * The citation itself must be able to identify uniquely the object cited,
@@ -3071,13 +3072,14 @@ For joint branding two further commands are defined:
 % We will of course need to include graphics, hence we load \pkg{graphicx}.
 % By default graphics are scaled to fill the available space while keeping
 % their original aspect ratio.
-% We also load TikZ (\pkg{pgf}) for drawing the DCC logo, and \pkg{tcolorbox}
-% for boxed material.
+% We also load TikZ (\pkg{pgf}) for drawing logos and the datagrid
+% illustration, and \pkg{tcolorbox} for boxed material.
 %
 %    \begin{macrocode}
 \RequirePackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
 \RequirePackage{tikz}
+\usetikzlibrary{fadings}
 \RequirePackage{tcolorbox}
 %    \end{macrocode}
 %
@@ -3765,6 +3767,102 @@ For joint branding two further commands are defined:
   cycle;
   \end{tikzpicture}%
   \egroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Datagrid illustration}
+%
+% \begin{macro}{datagrid}
+% To solve the problem of empty-looking margins (without resorting to lots of
+% images, for which there is a cost implication), \cs{datagrid} provides a
+% random pattern of ones and zeroes. The optional argument is a target height;
+% the default behaviour is to generate a square.
+%
+%    \begin{macrocode}
+\newcommand{\datagrid}[1][\hsize]{%
+  \bgroup\centerfloat
+  \begin{tikzpicture}[x=1em,y=1em]
+  %    \end{macrocode}
+  %
+  % The grid will have \cs{maxwid} columns and \cs{maxhgt} rows, spaced so their
+  % centres are 1em apart. To prevent errors below, we ensure both numbers are
+  % greater than or equal to 3. For later convenience, we also calculate
+  % \cs{smaxwid} $=$ \cs{maxwid} $-$ 1 and \cs{smaxhgt} $=$ \cs{maxhgt} $-$ 1.
+  %
+  %    \begin{macrocode}
+  \pgfmathparse{floor(\hsize / 1em)}\edef\maxwid{\pgfmathresult}
+  \pgfmathparse{(\maxwid < 3) ? 3 : \maxwid}\edef\maxwid{\pgfmathresult}
+  \pgfmathqparse{\maxwid pt - 1pt}\edef\smaxwid{\pgfmathresult}
+  \pgfmathparse{floor(#1 / 1em)}\edef\maxhgt{\pgfmathresult}
+  \pgfmathparse{(\maxhgt < 3) ? 3 : \maxhgt}\edef\maxhgt{\pgfmathresult}
+  \pgfmathqparse{\maxhgt pt - 1pt}\edef\smaxhgt{\pgfmathresult}
+  %    \end{macrocode}
+  %
+  % Each cell contains either ‘1’ or ‘0’, printed in a colour between 100\% and
+  % 33\% dccblue inclusive (randomly assigned).
+  %
+  % We start with the corner cells, which fade away to the outer corner.
+  %
+  %    \begin{macrocode}
+  \pgfmathrandom{33,100}
+  \node[dccblue!\pgfmathresult,scope fading=south,fading angle=-45]
+  at (1,1) {\pgfmathrandom{0,1}\pgfmathresult};
+  \pgfmathrandom{33,100}
+  \node[dccblue!\pgfmathresult,scope fading=south,fading angle=45]
+  at (\maxwid,1) {\pgfmathrandom{0,1}\pgfmathresult};
+  \pgfmathrandom{33,100}
+  \node[dccblue!\pgfmathresult,scope fading=north,fading angle=45]
+  at (1,\maxhgt) {\pgfmathrandom{0,1}\pgfmathresult};
+  \pgfmathrandom{33,100}
+  \node[dccblue!\pgfmathresult,scope fading=north,fading angle=-45]
+  at (\maxwid,\maxhgt) {\pgfmathrandom{0,1}\pgfmathresult};
+  %    \end{macrocode}
+  %
+  % The remaining cells in the top and bottom rows fade away to the top and bottom
+  % respectively.
+  %
+  %    \begin{macrocode}
+  \foreach \x in {2,...,\smaxwid}
+  {
+    \pgfmathrandom{33,100}
+    \node[dccblue!\pgfmathresult,scope fading=north]
+    at (\x,\maxhgt) {\pgfmathrandom{0,1}\pgfmathresult};
+    \pgfmathrandom{33,100}
+    \node[dccblue!\pgfmathresult,scope fading=south]
+    at (\x,1) {\pgfmathrandom{0,1}\pgfmathresult};
+  }
+  %    \end{macrocode}
+  %
+  % The remaining cells in the leftmost and rightmost columns fade away to the
+  % left and right respectively.
+  %
+  %    \begin{macrocode}
+  \foreach \y in {2,...,\smaxhgt}
+  {
+    \pgfmathrandom{33,100}
+    \node[dccblue!\pgfmathresult,scope fading=west]
+    at (1,\y) {\pgfmathrandom{0,1}\pgfmathresult};
+    \pgfmathrandom{33,100}
+    \node[dccblue!\pgfmathresult,scope fading=east]
+    at (\maxwid,\y) {\pgfmathrandom{0,1}\pgfmathresult};
+  }
+  %    \end{macrocode}
+  %
+  % All other cells are printed normally.
+  %
+  %    \begin{macrocode}
+  \foreach \x in {2,...,\smaxwid}
+  {
+    \foreach \y in {2,...,\smaxhgt}
+    {
+      \pgfmathrandom{33,100}
+      \node[dccblue!\pgfmathresult]
+      at (\x,\y) {\pgfmathrandom{0,1}\pgfmathresult};
+    }
+  }
+  \end{tikzpicture}
+  \par\egroup
 }
 %    \end{macrocode}
 % \end{macro}
