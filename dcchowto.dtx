@@ -3090,6 +3090,7 @@ For joint branding two further commands are defined:
 \RequirePackage{tikz}
 \usetikzlibrary{fadings}
 \RequirePackage{tcolorbox}
+\tcbuselibrary{breakable}
 %    \end{macrocode}
 %
 % We load \pkg{hyperref} for all the good things it gives us. But we remove the
@@ -4145,14 +4146,14 @@ For joint branding two further commands are defined:
 %    \begin{macrocode}
 \makeevenhead{last}{%
   \rlap{\makebox[180mm][c]{%
-    \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
+    \raisebox{28pt + \baselineskip - \LastHeadHeight}[0pt][0pt]{%
       \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
     }%
   }}%
 }{}{}
 \makeoddhead{last}{%
   \rlap{\makebox[180mm][c]{%
-    \raisebox{29.4pt - \LastHeadHeight}[0pt][0pt]{%
+    \raisebox{28pt + \baselineskip - \LastHeadHeight}[0pt][0pt]{%
       \color{dccmaroon}\dcchowto@rule{\paperwidth + 18pt}{\LastHeadHeight + 9pt}%
     }%
   }}%
@@ -4310,7 +4311,7 @@ For joint branding two further commands are defined:
 % \cs{makehowtotitle} instead.
 %
 %    \begin{macrocode}
-% \let\makehowtotitle=\maketitle
+\let\makehowtotitle=\maketitle
 %    \end{macrocode}
 %
 % \subsection{Typographical elements}
@@ -5166,6 +5167,20 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % \end{environment}
 %
+% \begin{environment}{fullwidth}
+% In two-column mode, the \env{fullwidth} environment as defined would have
+% rather dire effects, so we turn it into a full-width float instead.
+%    \begin{macrocode}
+\ifKV@dcchowto@twocolumn
+  \renewenvironment{fullwidth}{%
+    \begin{marginbox*}%
+  }{%
+    \end{marginbox*}%
+  }
+\fi
+%    \end{macrocode}
+% \end{environment}
+%
 % \subsection{Citations and references}
 %
 % We use \pkg{biblatex} and \pkg{biblatex-apa} for referencing (with tweaks).
@@ -5595,7 +5610,7 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \ifKV@dcchowto@twocolumn
-  \newcommand{\finishpage}{}
+  \newcommand{\finishpage}[1][]{#1}
 \else
   \newcommand{\finishpage}{%
     \AtEndEnvironment{document}{%
@@ -5615,7 +5630,7 @@ For joint branding two further commands are defined:
 %
 %    \begin{macrocode}
 \ifKV@dcchowto@twocolumn
-  \newcommand{\finalpage}{}
+  \newcommand{\finalpage}[1][]{#1}
 \else
   \newcommand{\finalpage}{%
     \AtEndEnvironment{document}{%
