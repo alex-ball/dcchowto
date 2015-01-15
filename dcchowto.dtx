@@ -552,7 +552,7 @@ The SageCite Project has identified a set of requirements for dataset
 citations and any services set up to support them.[@duke2011rdc]
 
 \marginbox\datagrid[10\onelineskip]\endmarginbox
-\bgroup\boxout
+\bgroup\framed
 
   * The citation itself must be able to identify uniquely the object cited,
     though different citations might use different methods or schemes to do
@@ -571,7 +571,7 @@ citations and any services set up to support them.[@duke2011rdc]
     the academic reward system, and services that can generate complete
     citations.
 
-\endboxout\egroup
+\endframed\egroup
 
 Elements of a data citation {#sec:elements}
 ===========================
@@ -660,7 +660,7 @@ together in the finished citation depends on the style in use for
 citations of textual publications. [Figure 1](#fig:common) provides example data citations drawn
 from commonly used style manuals.[@apa2010pma, p. 211][@ucp2010cms, p. 764][@gibaldi2008msm, pp. 213-214, 238-239][@ritter2002oms, p. 551]
 
-\bgroup\figure[ht]\fillboxout\small
+\bgroup\figure[ht]\shaded\small
 
 APA
 
@@ -690,7 +690,7 @@ Oxford
     Barton-upon-Humber* \[data-set\]. York: Archaeology Data Service \[distributor\]
     `<`DOI [10.5284/1000389](http://dx.doi.org/10.5284/1000389)`>`.
 
-\endfillboxout
+\endshaded
 
 \caption[Data citations in common styles]{Data citations in common styles}
 \label{fig:common}
@@ -715,10 +715,10 @@ themselves have the standard Handle structure of prefix, slash, suffix
 prefix may be further subdivided with dots, but otherwise the characters
 in a DOI have no special significance.
 
-\bgroup\figure[ht]\fillboxout\small
+\bgroup\figure[ht]\shaded\small
 \input{fig-doi}
 
-\endfillboxout
+\endshaded
 \caption{Anatomy of a DOI}
 \label{fig:doi}
 
@@ -730,7 +730,7 @@ the Handle resolver <http://hdl.handle.net/> can be used for any DOI.] the
 preferred one is <http://dx.doi.org/>. Appending a DOI to this URL creates a
 further URL that can be used to access the associated resource.
 
-\bgroup\boxout
+\bgroup\framed
 \noindent{}**Example**
 
 \smallskip
@@ -752,7 +752,7 @@ Bionetworks to demonstrate both capturing workflows using Taverna, and
 making them citable resources using DataCite DOIs.^[SageCite Project
 blog, URL: <http://blogs.ukoln.ac.uk/sagecite/>]
 
-\endboxout\egroup
+\endframed\egroup
 
 Common terms {#sec:terms}
 ------------
@@ -831,7 +831,7 @@ licensor’s IPR or, for a particular licensee, through breach of terms.
 Creative Commons {#sec:cc}
 ----------------
 
-\bgroup\marginbox\boxout
+\bgroup\marginbox\framed
 \noindent{}**Creative Commons at a glance**
 
 *Good for*
@@ -847,7 +847,7 @@ Creative Commons {#sec:cc}
   * the SA condition as it reduces interoperability
   * the ND condition as it severely restricts reuse
 
-\endboxout\endmarginbox\egroup
+\endframed\endmarginbox\egroup
 
 Creative Commons is a non-profit corporation set up in 2001 for the
 purpose of producing simple yet robust licences for creative
@@ -968,7 +968,7 @@ of the Creative Commons licences, but designed specifically for
 databases. All three follow the Creative Commons model of providing a 
 clear summary and canonical URL alongside the full legal text.
 
-\bgroup\marginbox\boxout
+\bgroup\marginbox\framed
 \noindent{}**ODC-By at a glance**
 
 *Good for*
@@ -981,7 +981,7 @@ clear summary and canonical URL alongside the full legal text.
 
   * attribution stacking
 
-\endboxout\endmarginbox\egroup
+\endframed\endmarginbox\egroup
 
 The Open Data Commons Attribution Licence (ODC-By) allows licensees to
 copy, distribute and use the database, to produce works from it and to
@@ -995,7 +995,7 @@ database is used substantially to create a new database or collection
 of databases, the licence URL or text and copyright/database right 
 notices must be distributed with the new database or collection.
 
-\bgroup\marginbox\boxout
+\bgroup\marginbox\framed
 \noindent{}**ODC-ODbL at a glance**
 
 *Good for*
@@ -1010,7 +1010,7 @@ notices must be distributed with the new database or collection.
   * the copyleft condition as it reduces interoperability
   * the DRM clause as it may put off some reusers
 
-\endboxout\endmarginbox\egroup
+\endframed\endmarginbox\egroup
 
 The Open Data Commons Open Database Licence (ODC-ODbL) is the same as
 ODC-By but for a couple of additional conditions.^[ODC-ODbL, URL:
@@ -1096,10 +1096,10 @@ holders are setting up a multiple licensing regime of their own.
 Another, more extreme, possibility is to negotiate a rights assignment.
 [@meeker2005dlo][@gnu2010wca]
 
-\bgroup\marginfigure\marginfillboxout\small
+\bgroup\marginfigure\snugshade\small
 \input{fig-dual-licence}
 
-\endmarginfillboxout
+\endsnugshade
 
 \caption[Licence streams of a core product in a simplified dual 
 licensing model]{Licence streams of a core product in a simplified dual 
@@ -1179,7 +1179,7 @@ URLs. For example, the machine-readable equivalent of the ODC PDDL
 statement above would be a Resource Description Framework (RDF) triple
 such as that shown in [Figure 4](#fig:rdf-rights).[@manola.miller2004rp]
 
-\bgroup\csname figure*\endcsname[ht]\fillboxout\small
+\bgroup\csname figure*\endcsname[ht]\shaded\small
 
 ~~~~ {.xml}
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns">
@@ -1189,7 +1189,7 @@ such as that shown in [Figure 4](#fig:rdf-rights).[@manola.miller2004rp]
 </rdf:RDF>
 ~~~~~~~~~~~
 
-\endfillboxout
+\endshaded
 \caption[RDF rights statement]{A rights statement encoded in RDF/XML. 
 Note that the `rdf:about` attribute should identify the data to 
 which the statement applies. In the context of an XMP packet, this 
@@ -1273,19 +1273,19 @@ This can be done using either RDFa as in [Figure 5](#fig:rdfa)
 [@adida.birbeck2008rp], or HTML5 microdata as in [Figure 6](#fig:html5)
 [@w3c2011hm].
 
-\bgroup\figure[ht]\fillboxout\small
+\bgroup\figure[ht]\shaded\small
 \input{fig-rdfa}
 
-\endfillboxout
+\endshaded
 \caption{Example of using RDFa to embed a link to a publication within a dataset's Web page}
 \label{fig:rdfa}
 
 \endfigure\egroup
 
-\bgroup\figure[ht]\fillboxout\small
+\bgroup\figure[ht]\shaded\small
 \input{fig-html5}
 
-\endfillboxout
+\endshaded
 \caption{Example of using HTML5 microdata to embed a link to a publication within a dataset's Web page}
 \label{fig:html5}
 
@@ -2771,19 +2771,21 @@ For joint branding two further commands are defined:
   \meta{abstract}. The argument is optional for compatibility reasons.
 \end{docCommand}
 
-\begin{docEnvironment}{boxout}{}
+\begin{docEnvironment}{framed}{\oarg{tcolorbox options}}
   Use this to set off some content in a red box.
-  Note that the box will not break over columns or pages.
+  Unlike the usual version the box will not, by default, break over columns or
+  pages; this is to avoid trouble with footnotes. If this does not concern you,
+  you can make it breakable using the \key{breakable} option.
 \end{docEnvironment}
 
-\begin{docEnvironment}{fillboxout}{}
+\begin{docEnvironment}{shaded}{\oarg{tcolorbox options}}
   Use this to set off some content using a peachy background.
   It is intended for use with figures.
-  Note that the box will not break over columns or pages.
+  The same remarks about breaking apply as for \env{framed}.
 \end{docEnvironment}
 
-\begin{docEnvironment}{marginfillboxout}{}
-  A version of \texttt{fillboxout} more suited for use with marginal material.
+\begin{docEnvironment}{snugshade}{\oarg{tcolorbox options}}
+  A version of \env{shaded} more suited for use with marginal material.
   (For one thing, it doesn't narrow the text width.)
 \end{docEnvironment}
 
@@ -4495,17 +4497,29 @@ For joint branding two further commands are defined:
 %    \end{macrocode}
 % \end{environment}
 %
-% \begin{environment}{boxout}
-% We use \pkg{tcolorbox} to create \env{boxout}s, and \pkg{footnote} to make them
-% footnote friendly (unfortunately the footnote hyperlinks cannot be fixed,
-% but you cannot have everything, I suppose).
+% We will shortly redefine some well-known environments, so first we remove the
+% existing definitions.
+%
+%    \begin{macrocode}
+\undef{\framed}
+\undef{\endframed}
+\undef{\shaded}
+\undef{\endshaded}
+\undef{\snugshade}
+\undef{\endsnugshade}
+%    \end{macrocode}
+%
+% \begin{environment}{framed}
+% We use \pkg{tcolorbox} to create \env{framed} boxes, and \pkg{footnote} to
+% make them footnote friendly (unfortunately the footnote hyperlinks cannot be
+% fixed, but you cannot have everything, I suppose).
 %
 % This provides a red border and blue text. The text width is not narrowed, so
 % the border overhangs the margins.
 % Note that lists are made more compact but retain the blue labels.
 %
 %    \begin{macrocode}
-\newtcolorbox{boxout}[1][]%
+\newtcolorbox{framed}[1][]%
   { colback=white
   , colframe=dccmaroon
   , coltext=dccblue
@@ -4526,17 +4540,18 @@ For joint branding two further commands are defined:
   , oversize
   , #1
   }
-\makesavenoteenv{boxout}
+\makesavenoteenv{framed}
 %    \end{macrocode}
 % \end{environment}
 %
-% \begin{environment}{fillboxout}
-% A \env{fillboxout} has a peach background, maroon text and no border.
-% Unlike a \env{boxout}, it fits within the text block.
+% \begin{environment}{shaded}
+% A \env{shaded} box has a peach background, maroon text and no border.
+% Unlike a \env{framed} box, it fits within the text block
+% (making it more like the traditional \env{shaded*} environment).
 % Again, lists are made more compact.
 %
 %    \begin{macrocode}
-\newtcolorbox{fillboxout}[1][]%
+\newtcolorbox{shaded}[1][]%
   { colback=dccpeach
   , colframe=dccpeach
   , coltext=dccmaroon
@@ -4560,16 +4575,17 @@ For joint branding two further commands are defined:
   , bottom=1ex
   , #1
 }
-\makesavenoteenv{fillboxout}
+\makesavenoteenv{shaded}
 %    \end{macrocode}
 % \end{environment}
 %
-% \begin{environment}{marginfillboxout}
-% A \env{marginfillboxout} is just a \env{fillboxout} that overhangs the margins
+% \begin{environment}{snugshade}
+% A \env{snugshade} box is just a \env{shaded} box that overhangs the margins
 % to give a little more horizontal space.
+% Additionally, lists within are set tighter.
 %
 %    \begin{macrocode}
-\newtcolorbox{marginfillboxout}[1][]%
+\newtcolorbox{snugshade}[1][]%
 { colback=dccpeach
   , colframe=dccpeach
   , coltext=dccmaroon
@@ -4594,7 +4610,7 @@ For joint branding two further commands are defined:
   , oversize
   , #1
 }
-\makesavenoteenv{marginfillboxout}
+\makesavenoteenv{snugshade}
 %    \end{macrocode}
 % \end{environment}
 %
@@ -4620,14 +4636,14 @@ For joint branding two further commands are defined:
 }
 \newlength{\dcchowto@parindent}
 \setlength{\dcchowto@parindent}{\parindent}
-\newcommand{\fillboxoutquotes}{%
+\newcommand{\shadedquotes}{%
   \renewenvironment{quote}{%
-    \begin{fillboxout}[left=\dcchowto@parindent,right=\dcchowto@parindent]
+    \begin{shaded}[left=\dcchowto@parindent,right=\dcchowto@parindent]
   }{%
-    \end{fillboxout}%
+    \end{shaded}%
   }
 }
-\fillboxoutquotes
+\shadedquotes
 %    \end{macrocode}
 % \end{environment}
 %
