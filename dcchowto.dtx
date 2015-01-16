@@ -4580,12 +4580,25 @@ environment).
 %
 % We liven up lists by introducing some colour to the labels.
 % Description list labels end in punctuation, just like paragraph headings.
+% At the same time we reduce the space above and below the lists.
 %
 %    \begin{macrocode}
 \newcommand{\bluelabel}[1]{\color{dccblue}#1}
-\setlist[itemize]{font=\color{dccblue}}
-\setlist[enumerate]{font=\color{dccblue}}
-\setlist[description]{font=\dottedblue}
+\setlist[itemize]%
+  {font=\color{dccblue}
+  ,topsep=.5\baselineskip
+  ,partopsep=0pt
+  }
+\setlist[enumerate]%
+  {font=\color{dccblue}
+  ,topsep=.5\baselineskip
+  ,partopsep=0pt
+  }
+\setlist[description]%
+  {font=\dottedblue
+  ,topsep=.5\baselineskip
+  ,partopsep=0pt
+  }
 %    \end{macrocode}
 %
 % \begin{environment}{fullwidth}
