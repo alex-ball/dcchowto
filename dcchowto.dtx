@@ -11,13 +11,68 @@ source. The Markdown could then be used to generate an HTML version as well.
 
 ## Installation
 
+### Dependencies
+
+To be able to compile the class from source, you will need a recent TeX
+distribution, including `biblatex`, `biber`, and sundry other packages.
+
+To generate the sample document from the makefile, you will need the Make
+utility and Perl.
+
+To generate the preview PDF from the makefile as it stands,
+you will need LuaLaTeX and the fonts
+[Charis SIL](http://scripts.sil.org/cms/scripts/page.php?item_id=CharisSIL_download)
+and [DejaVu Sans Mono](http://dejavu-fonts.org/wiki/Download).
+You can remove that dependency by editing the makefile.
+
 ### Automated way
 
 A makefile is provided which you can use with the Make utility:
 
-  * Running `make` generates the derived files README, dcchowto.pdf and dcchowto.cls.
+  * Running `make` generates the derived files
+      - README
+      - dcchowto.pdf
+      - dcchowto.cls
+      - dcchowto-template.html
+      - dcchowto-template.latex
+      - dcchowto-apa.csl
+      - dcchowto-example.md
+      - dcchowto-example.bib
+      - dcchowto-fig-doi.html
+      - dcchowto-fig-doi.tex
+      - dcchowto-fig-dual-licence.html
+      - dcchowto-fig-dual-licence.tex
+  * Running `make html` generates a sample HTML document from the example code.
+  * Running `make pdf` generates a sample preview PDF file from the example code.
+  * Running `make dtp` generates a sample camera-ready PDF file from the example code.
   * Running `make inst` installs the files in the user's TeX tree.
   * Running `make install` installs the files in the local TeX tree.
+
+### Manual way
+
+ 1. Compile dccpaper.dtx just as you would a normal LaTeX file.
+ 2. Generating the sample documents from the sample code is somewhat fiddly,
+    so if you are not comfortable working through the makefile and translating
+    what is going on, it might be better not to bother. If you just need some
+    hints, though, here they are:
+      * Variables like `$(NAME)` get replaced with the values at the top of the
+        file (`dcchowto` in this case).
+      * Before working on the HTML or preview PDF documents, you need to follow
+        the instructions for making `$(EG)-tmp.md`, i.e.
+        `dcchowto-example-tmp.md`.
+      * `cp` means copy.
+      * The lines of Perl perform regular expression search and replace.
+ 3. Move the files to your TeX tree as follows:
+      * `source/latex/dcchowto`: `dcchowto.dtx`, `dcchowto.ins`;
+      * `tex/latex/dcchowto`: `dcchowto.cls`, `dcchowto-apa.csl`,
+        `dcchowto-template.html`, `dcchowto-template.latex`;
+      * `doc/latex/dcchowto`: `dcchowto.pdf`, `dcchowto-example.bib`,
+        `dcchowto-example.md`, `dcchowto-fig-doi.html`, `dcchowto-fig-doi.tex`,
+        `dcchowto-fig-dual-licence.html`, `dcchowto-fig-dual-licence.tex`,
+        and if you generated them, `dcchowto-example.html`,
+        `dcchowto-example-preview.pdf`, `dcchowto-example.pdf`.
+ 4. You may then have to update your installation's file name database before
+    TeX and friends can see the files.
 
 ## Licence
 
@@ -716,7 +771,7 @@ prefix may be further subdivided with dots, but otherwise the characters
 in a DOI have no special significance.
 
 \bgroup\figure[ht]\shaded\small
-\input{fig-doi}
+\input{dcchowto-fig-doi}
 
 \endshaded
 \caption{Anatomy of a DOI}
@@ -1097,7 +1152,7 @@ Another, more extreme, possibility is to negotiate a rights assignment.
 [@meeker2005dlo][@gnu2010wca]
 
 \bgroup\marginfigure\snugshade\small
-\input{fig-dual-licence}
+\input{dcchowto-fig-dual-licence}
 
 \endsnugshade
 
@@ -1274,16 +1329,39 @@ This can be done using either RDFa as in [Figure 5](#fig:rdfa)
 [@w3c2011hm].
 
 \bgroup\figure[ht]\shaded\small
-\input{fig-rdfa}
+
+~~~~ {.xml}
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cito="http://purl.org/spar/cito/"
+      xmlns:dc="http://purl.org/dc/terms/"
+      version="XHTML+RDFa 1.0">
+  ...
+  <p>
+    Supplement to: Author, A. (2011). ... 
+    <a about="http://dx.doi.org/10.9876/data123"
+       rel="cito:providesDataFor"
+       href="http://dx.doi.org/10.123/paper45"
+    >doi:10.123/paper45</a>
+  </p>
+  ...
+</html>
+~~~~~~~~~~
 
 \endshaded
 \caption{Example of using RDFa to embed a link to a publication within a dataset's Web page}
-\label{fig:rdfa}
 
 \endfigure\egroup
 
 \bgroup\figure[ht]\shaded\small
-\input{fig-html5}
+
+~~~~ {.xml}
+<p itemscope itemid="http://dx.doi.org/10.9876/data123">
+  Supplement to: Author, A. (2011). ...
+  <a href="http://dx.doi.org/10.123/paper45"
+     itemprop="http://purl.org/spar/cito/providesDataFor"
+  >doi:10.123/paper45</a>
+</p>
+~~~~~~~~~~~
 
 \endshaded
 \caption{Example of using HTML5 microdata to embed a link to a publication within a dataset's Web page}
@@ -2225,6 +2303,127 @@ urldate = {2010-11-08}
 
 %LITERAL
 %</bib>
+%<*figdoihtml>
+  <table cellpadding="0" cellspacing="1" style="margin-right: auto; margin-left: auto; border-collapse: separate;">
+    <tbody>
+      <tr>
+        <td style="border: currentColor; text-align: center; color: gray; font-size: 180%; background-color: white;">http://dx.doi.org/</td>
+        <td style="border: currentColor; text-align: center; font-size: 180%;">10.5284</td>
+        <td style="border: currentColor; text-align: center; font-size: 180%;">/</td>
+        <td style="border: currentColor; text-align: center; font-size: 180%;">1000389</td>
+      </tr>
+      <tr>
+        <td style="border-width: 0px 2px 2px; border-style: solid; border-color: rgb(0, 0, 0); font-size: 25%; border-collapse: separate;">&nbsp;</td>
+        <td style="border-width: 0px 2px 2px; border-style: solid; border-color: rgb(0, 0, 0); font-size: 25%; border-collapse: separate;">&nbsp;</td>
+        <td style="border: currentColor; font-size: 25%; border-collapse: separate;">&nbsp;</td>
+        <td style="border-width: 0px 2px 2px; border-style: solid; border-color: rgb(0, 0, 0); font-size: 25%; border-collapse: separate;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="border: currentColor; text-align: center;">resolver service</td>
+        <td style="border: currentColor; text-align: center;">prefix<br />(assigning body)</td>
+        <td style="border: currentColor; text-align: center;">&nbsp;</td>
+        <td style="border: currentColor; text-align: center;">suffix<br />(resource)</td>
+      </tr>
+    </tbody>
+  </table>
+%</figdoihtml>
+%<*figdoiltx>
+\centering
+\begin{tabular}{c@{\,}c@{\,}c@{\,}c}
+\Large$\underbrace{\textsf{\color{gray}{http://dx.doi.org/}}}$
+& \Large$\underbrace{10\textsf{.}5284}$ 
+& \Large / 
+& \Large$\underbrace{1000389}$ \\
+resolver service& prefix & & suffix \\
+& (assigning & & (resource)\\
+& body) & & \\
+\end{tabular} 
+%</figdoiltx>
+%<*figdualhtml>
+<div style="text-align: center;"><img alt="Model showing a core product with a non-commercial copyleft licence stream (development community and copyleft users) and commercial licence stream (development partners, resellers and customers)." height="318" src="http://www.dcc.ac.uk/webfm_send/331" width="300" /></div>
+%</figdualhtml>
+%<*figdualltx>
+\centerfloat
+\tikzset{entity/.style={rectangle,text badly centered}}%
+\tikzset{lbl/.style={midway,fill=dccpeach,inner sep=0pt}}%
+\begin{tikzpicture}[>=to,very thick,rounded corners=2pt,line cap=round]
+  % boxes
+  \node
+    [ entity
+    , top color=Honeydew
+    , bottom color=Honeydew!90!black
+    , text width=21ex
+    ] (core) {\strut Core Product};
+  \node
+    [ entity
+    , top color=Ivory
+    , bottom color=Ivory!90!black
+    , text width=14ex
+    , above left=3em and -3.5em of core
+    ] (devcom) {\strut Development Community\strut};
+  \node
+    [ entity
+    , top color=AliceBlue
+    , bottom color=AliceBlue!90!black
+    , text width=14ex
+    , above right=3em and -3.5em of core
+    ] (devpart) {\strut Development Partners\strut};
+  \node
+    [ entity
+    , top color=AliceBlue
+    , bottom color=AliceBlue!90!black
+    , dotted
+    , below=3.25em of core.315
+    , anchor=center
+    ] (resell) {\strut Reseller};
+  \node
+    [ entity
+    , top color=Ivory
+    , bottom color=Ivory!90!black
+    , below left=6.5em and 0pt of core.south
+    ] (users) {\strut Copyleft Users};
+  \node
+    [ entity
+    , top color=AliceBlue
+    , bottom color=AliceBlue!90!black
+    , below right=6.5em and 0pt of core.south
+    ] (customers) {\strut Customers};
+  \coordinate
+    [ below=1em of users
+    ] (sub-users);
+  \coordinate
+    [ below=1em of customers
+    ] (sub-customers);
+  % arrows
+  \draw[dccmaroon,->]
+    (devcom) -| (core.135)
+    node[lbl,pos=0.85,xshift=-1.5ex] {\textcopyright};
+  \draw[dccmaroon,->]
+    (core) -| (devcom.225)
+    node[lbl,pos=0.8,xshift=0.5ex] {Copyleft};
+  \draw[dccmaroon,->]
+    (devpart) -| (core.45)
+    node[lbl,pos=0.85] {Licence};
+  \draw[dccmaroon,->]
+    (core) -| (devpart.315)
+    node[lbl,pos=0.8,xshift=-1.5ex] {Licence fees};
+  \draw[dccmaroon]
+    (core.315) -- (resell.north);
+  \draw[dccmaroon,<-]
+    (core.315) ++(0,-6.5em) -- (resell)
+    node[lbl] {Licence};
+  \draw[dccmaroon,<-]
+    (core.345) -- ++(0,-6.5em)
+    node [lbl,pos=0.2,xshift=1em] {Licence fees};
+  \draw[dccmaroon,<-]
+    (users.north) -- ++(0,6.5em)
+    node[lbl] {Copyleft};
+  \draw[Green,->,ultra thick]
+    (users) -- (sub-users) -- (sub-customers)
+    node[midway,below,Green] {Migration}
+    -- (customers);
+\end{tikzpicture}
+%</figdualltx>
 %<*template>
 \documentclass[numbers,$for(classoption)$$classoption$$sep$,$endfor$]{dcchowto}
 $if(biblio-files)$
@@ -2429,6 +2628,10 @@ Copyright (C) 2015 by Alex Ball <a.ball@ukoln.ac.uk>
   \file{README.md}{\from{\jobname.dtx}{readme}}
   \file{\jobname-example.md}{\from{\jobname.dtx}{example}}
   \file{\jobname-example.bib}{\from{\jobname.dtx}{bib}}
+  \file{\jobname-fig-doi.html}{\from{\jobname.dtx}{figdoihtml}}
+  \file{\jobname-fig-doi.tex}{\from{\jobname.dtx}{figdoiltx}}
+  \file{\jobname-fig-dual-licence.html}{\from{\jobname.dtx}{figdualhtml}}
+  \file{\jobname-fig-dual-licence.tex}{\from{\jobname.dtx}{figdualltx}}
 }
 \ifx\fmtname\nameofplainTeX
   \expandafter\endbatchfile
