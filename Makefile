@@ -91,5 +91,5 @@ workmf: $(NAME).pdf html pdf dtp clean
 	cp $(NAME).pdf $(EG).{bib,html,md,pdf,tex} $(NAME)-fig-{doi,dual-licence}.{html,tex} $(EG)-preview.pdf $(WORKMF)/doc/latex/$(NAME)
 zip: $(NAME).pdf html pdf dtp clean
 	mkdir $(TDIR)
-	cp $(NAME).{pdf,cls,dtx} $(NAME)-apa.csl $(NAME)-template.{latex,html} $(EG).{html,pdf} $(EG)-preview.pdf README.md $(TDIR)
+	cp $(NAME).{pdf,cls,dtx} $(NAME)-apa.csl $(NAME)-template.{latex,html} $(EG).{html,pdf} $(EG)-preview.pdf README.md Makefile $(TDIR)
 	cd $(TEMP); zip -Drq $(PWD)/$(NAME)-$(VERS).zip $(NAME)
