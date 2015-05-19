@@ -93,6 +93,161 @@ standalone form is separately licensed under a
 Licence](http://creativecommons.org/licenses/by-sa/4.0/).
 
 %</readme>
+%<*template>
+\documentclass[numbers,$for(classoption)$$classoption$$sep$,$endfor$]{dcchowto}
+$if(biblio-files)$
+\bibliography{$biblio-files$}
+$endif$
+\renewcommand*{\bibfont}{\small}
+\ifdraftdoc
+  \usepackage{embedfile}
+  \embedfile[desc={Source code for this document}]{\jobname.tex}
+  $if(biblio-files)$
+  \embedfile[desc={Biblatex database for this document}]{$biblio-files$}
+  $endif$
+%<internal>\iffalse
+%<template>\fi
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+$if(title)$
+\title{$title$}
+$endif$
+$for(author)$
+\author{$author$}
+$endfor$
+\date{$date$}
+$for(partner)$
+\partner{$partner$}
+$endfor$
+$for(partnerlogo)$
+\partnerlogo{$partnerlogo$}
+$endfor$
+
+\usepackage{environ}
+
+\let\oldquote=\quote
+\let\endoldquote=\endquote
+\let\quote\relax
+\let\endquote\relax
+
+\NewEnviron{quote}{%
+  \global\let\tmp\BODY\aftergroup\docoverandabstract
+}
+
+\def\docoverandabstract{%
+  \let\quote=\oldquote
+  \let\endquote=\endoldquote
+  \maketitle[\tmp]%
+}
+
+\begin{document}
+$for(include-before)$
+$include-before$
+$endfor$
+$body$
+$if(furtherinfo)$
+$for(furtherinfo)$
+\nocite{$furtherinfo$}
+$endfor$
+\printbibliography[category=notcited]
+$endif$
+
+\textbf{Please cite as:} \DCCHowtoAuthorAPA\ (\the\year). ‘\thetitle’. \emph{DCC How-to Guides}. Edinburgh: Digital Curation Centre. Available online: \url{http://www.dcc.ac.uk/resources/how-guides}
+
+\vfill
+\noindent\bfseries\begingroup\color{dccblue}
+Follow the DCC on Twitter: \href{http://twitter.com/#!/digitalcuration}{@digitalcuration}, \href{https://twitter.com/hashtag/ukdcc}{\#ukdcc}
+
+\vfill
+\raggedleft\mdseries\footnotesize\theversion\par
+\endgroup
+$for(include-after)$
+$include-after$
+$endfor$
+\end{document}
+%</template>
+%<*htemplate>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="generator" content="pandoc" />
+$for(author-meta)$
+<meta name="author" content="$author-meta$" />
+$endfor$
+$if(date-meta)$
+<meta name="date" content="$date-meta$" />
+$endif$
+<title>$if(title-prefix)$$title-prefix$ - $endif$$pagetitle$</title>
+<style type="text/css">
+code {
+  white-space: pre;
+}
+div.div_highlight {
+  border: 1px solid #C0C0C0;
+  padding: 1em 1em 0px;
+  margin-bottom: 1em;
+}
+</style>
+$if(quotes)$
+<style type="text/css">q { quotes: "“" "”" "‘" "’"; }</style>
+$endif$
+$if(highlighting-css)$
+<style type="text/css">
+$highlighting-css$
+</style>
+$endif$
+$for(css)$
+<link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
+$endfor$
+$if(math)$
+$math$
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+</head>
+<body>
+$for(include-before)$
+$include-before$
+$endfor$
+$if(title)$
+<div id="$idprefix$header">
+<h1 class="title">$title$</h1>
+$if(subtitle)$
+<h1 class="subtitle">$subtitle$</h1>
+$endif$
+<p>By $for(author)$$author$$sep$, $endfor$</p>
+$if(date)$
+<p>Last updated: $date$</p>
+$endif$
+</div>
+$endif$
+$if(title)$$if(date)$
+<div class="div_highlight">
+Please cite as: $for(author)$$author$$sep$, $endfor$ ($date$). ‘$title$’.
+<em>DCC How-to Guides.</em> Edinburgh: Digital Curation Centre. Available online:
+<a href="http://www.dcc.ac.uk/resources/how-guides">http://www.dcc.ac.uk/resources/how-guides</a>
+</div>
+$endif$$endif$
+$if(toc)$
+<div id="$idprefix$TOC">
+$toc$
+</div>
+$endif$
+$body$
+$for(include-after)$
+$include-after$
+$endfor$
+</body>
+</html>
+%</htemplate>
 %<*csl>
 %<<LITERAL
 <?xml version="1.0" encoding="utf-8"?>
@@ -2424,161 +2579,6 @@ resolver service& prefix & & suffix \\
     -- (customers);
 \end{tikzpicture}
 %</figdualltx>
-%<*template>
-\documentclass[numbers,$for(classoption)$$classoption$$sep$,$endfor$]{dcchowto}
-$if(biblio-files)$
-\bibliography{$biblio-files$}
-$endif$
-\renewcommand*{\bibfont}{\small}
-\ifdraftdoc
-  \usepackage{embedfile}
-  \embedfile[desc={Source code for this document}]{\jobname.tex}
-  $if(biblio-files)$
-  \embedfile[desc={Biblatex database for this document}]{$biblio-files$}
-  $endif$
-%<internal>\iffalse
-%<template>\fi
-$if(highlighting-macros)$
-$highlighting-macros$
-$endif$
-$for(header-includes)$
-$header-includes$
-$endfor$
-
-$if(title)$
-\title{$title$}
-$endif$
-$for(author)$
-\author{$author$}
-$endfor$
-\date{$date$}
-$for(partner)$
-\partner{$partner$}
-$endfor$
-$for(partnerlogo)$
-\partnerlogo{$partnerlogo$}
-$endfor$
-
-\usepackage{environ}
-
-\let\oldquote=\quote
-\let\endoldquote=\endquote
-\let\quote\relax
-\let\endquote\relax
-
-\NewEnviron{quote}{%
-  \global\let\tmp\BODY\aftergroup\docoverandabstract
-}
-
-\def\docoverandabstract{%
-  \let\quote=\oldquote
-  \let\endquote=\endoldquote
-  \maketitle[\tmp]%
-}
-
-\begin{document}
-$for(include-before)$
-$include-before$
-$endfor$
-$body$
-$if(furtherinfo)$
-$for(furtherinfo)$
-\nocite{$furtherinfo$}
-$endfor$
-\printbibliography[category=notcited]
-$endif$
-
-\textbf{Please cite as:} \DCCHowtoAuthorAPA\ (\the\year). ‘\thetitle’. \emph{DCC How-to Guides}. Edinburgh: Digital Curation Centre. Available online: \url{http://www.dcc.ac.uk/resources/how-guides}
-
-\vfill
-\noindent\bfseries\begingroup\color{dccblue}
-Follow the DCC on Twitter: \href{http://twitter.com/#!/digitalcuration}{@digitalcuration}, \href{https://twitter.com/hashtag/ukdcc}{\#ukdcc}
-
-\vfill
-\raggedleft\mdseries\footnotesize\theversion\par
-\endgroup
-$for(include-after)$
-$include-after$
-$endfor$
-\end{document}
-%</template>
-%<*htemplate>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="Content-Style-Type" content="text/css" />
-<meta name="generator" content="pandoc" />
-$for(author-meta)$
-<meta name="author" content="$author-meta$" />
-$endfor$
-$if(date-meta)$
-<meta name="date" content="$date-meta$" />
-$endif$
-<title>$if(title-prefix)$$title-prefix$ - $endif$$pagetitle$</title>
-<style type="text/css">
-code {
-  white-space: pre;
-}
-div.div_highlight {
-  border: 1px solid #C0C0C0;
-  padding: 1em 1em 0px;
-  margin-bottom: 1em;
-}
-</style>
-$if(quotes)$
-<style type="text/css">q { quotes: "“" "”" "‘" "’"; }</style>
-$endif$
-$if(highlighting-css)$
-<style type="text/css">
-$highlighting-css$
-</style>
-$endif$
-$for(css)$
-<link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
-$endfor$
-$if(math)$
-$math$
-$endif$
-$for(header-includes)$
-$header-includes$
-$endfor$
-</head>
-<body>
-$for(include-before)$
-$include-before$
-$endfor$
-$if(title)$
-<div id="$idprefix$header">
-<h1 class="title">$title$</h1>
-$if(subtitle)$
-<h1 class="subtitle">$subtitle$</h1>
-$endif$
-<p>By $for(author)$$author$$sep$, $endfor$</p>
-$if(date)$
-<p>Last updated: $date$</p>
-$endif$
-</div>
-$endif$
-$if(title)$$if(date)$
-<div class="div_highlight">
-Please cite as: $for(author)$$author$$sep$, $endfor$ ($date$). ‘$title$’.
-<em>DCC How-to Guides.</em> Edinburgh: Digital Curation Centre. Available online:
-<a href="http://www.dcc.ac.uk/resources/how-guides">http://www.dcc.ac.uk/resources/how-guides</a>
-</div>
-$endif$$endif$
-$if(toc)$
-<div id="$idprefix$TOC">
-$toc$
-</div>
-$endif$
-$body$
-$for(include-after)$
-$include-after$
-$endfor$
-</body>
-</html>
-%</htemplate>
 %<*internal>
 \fi
 \def\nameofplainTeX{plain}
