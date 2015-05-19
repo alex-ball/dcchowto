@@ -2914,9 +2914,10 @@ The following options are recognised:
   The logic is this way round for historical reasons.
 \end{docKey}
 
+\changes{v3.00}{2015/01/12}{Add \val{rev} value for \docAuxKey{mark}.}
 \begin{docKey}{mark}{=\meta{mark type}}{default \val{draft}}
-  This marks the PDF as not being ready for public release.
-  The two possible values for \meta{mark type} are
+  This marks the PDF with date information for version control.
+  The three possible values for \meta{mark type} are
   \docValue{draft} for a working draft,
   \docValue{rc} for a release candidate,
   and

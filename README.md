@@ -66,7 +66,8 @@ A makefile is provided which you can use with the Make utility:
         `dcchowto-fig-dual-licence.html`, `dcchowto-fig-dual-licence.tex`,
         and if you generated them, `dcchowto-example.html`,
         `dcchowto-example-preview.pdf`, `dcchowto-example.pdf`.
- 4. You may then have to update your installation's file name database before TeX and friends can see the files.
+ 4. You may then have to update your installation's file name database before
+    TeX and friends can see the files.
 
 ## Licence
 
