@@ -2765,13 +2765,13 @@ Copyright (C) 2015 by Alex Ball <a.ball@ukoln.ac.uk>
 \makeatletter
 \AtBeginDocument{%
   % Comments
-  \def\PY@tok@c{\def\PY@tc##1{\textcolor{gray}{##1}}}
+  \expandafter\def\csname PYGdefault@tok@c\endcsname{\let\PYGdefault@it=\textit\def\PYGdefault@tc##1{\textcolor{gray}{##1}}}
   % Command sequences
-  \def\PY@tok@k{\def\PY@tc##1{\textcolor{Command}{##1}}}
+  \expandafter\def\csname PYGdefault@tok@k\endcsname{\let\PYGdefault@bf=\textbf\def\PYGdefault@tc##1{\textcolor{Command}{##1}}}
   % Optional arguments
-  \def\PY@tok@na{\def\PY@tc##1{\textcolor{Option}{##1}}}
+  \expandafter\def\csname PYGdefault@tok@na\endcsname{\def\PYGdefault@tc##1{\textcolor{Option}{##1}}}
   % Braces
-  \def\PY@tok@nb{\def\PY@tc##1{\textcolor{Environment}{##1}}}
+  \expandafter\def\csname PYGdefault@tok@nb\endcsname{\def\PYGdefault@tc##1{\textcolor{Environment}{##1}}}
 }
 \makeatother
 \newcommand{\pkg}[1]{\href{http://www.ctan.org/pkg/#1}{\textsf{#1}}}
