@@ -5824,6 +5824,14 @@ environment).
 }
 %    \end{macrocode}
 %
+% \pkg{biblatex-apa} also changes the default list format, which it thinks will
+% only be used for locations. We, however, want institutions to be treated like
+% publishers so we change the alias accordingly.
+%
+%    \begin{macrocode}
+\DeclareListAlias{institution}{publisher}
+%    \end{macrocode}
+%
 % We move the ‘doi:’ portion of a DOI inside the hyperlink. Since it's all run
 % together, it just makes sense. 
 %
