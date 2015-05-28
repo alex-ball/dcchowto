@@ -4864,6 +4864,7 @@ environment).
       , leftmargin=0pt
       }%
     }
+  , before upper=\unskip\raggedyright
   , left=1ex
   , right=1ex
   , oversize
@@ -4897,7 +4898,7 @@ environment).
       , leftmargin=0pt
       }%
     }
-  , before upper=\raggedyright
+  , before upper=\unskip\raggedyright
   , left=1ex
   , right=1ex
   , top=1ex
@@ -5491,6 +5492,7 @@ environment).
   \let\margintable=\table
   \let\endmargintable=\endtable
   \newfloat{marginbox}{lom}{Box}
+  \makesavenoteenv{marginbox*}
 \else
   \newsavebox{\dcchowto@mflt}
   \newenvironment{marginbox}{%
@@ -5508,6 +5510,7 @@ environment).
     \marginpar{\usebox{\dcchowto@mflt}}%
   }
 \fi
+\makesavenoteenv{marginbox}
 %    \end{macrocode}
 % \end{environment}
 %
