@@ -3391,13 +3391,15 @@ environment).
 %
 % We will of course need to include graphics, hence we load \pkg{graphicx}.
 % By default graphics are scaled to fill the available space while keeping
-% their original aspect ratio.
+% their original aspect ratio. PDF inclusions are preferred over bitmaps.
 % We also load TikZ (\pkg{pgf}) for drawing logos and the datagrid
 % illustration, and \pkg{tcolorbox} for boxed material.
 %
 %    \begin{macrocode}
 \RequirePackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\usepackage{grfext}
+\PrependGraphicsExtensions*{.pdf,.PDF}
 \RequirePackage{tikz}
 \usetikzlibrary{fadings}
 \RequirePackage{tcolorbox}
