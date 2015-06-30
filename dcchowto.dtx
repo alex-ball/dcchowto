@@ -157,8 +157,6 @@ $endfor$
 \printbibliography[category=notcited]
 $endif$
 
-\textbf{Please cite as:} \DCCHowtoAuthorAPA\ (\the\year). ‘\thetitle’. \emph{DCC How-to Guides}. Edinburgh: Digital Curation Centre. Available online: \url{http://www.dcc.ac.uk/resources/how-guides}
-
 \vfill
 \noindent\bfseries\begingroup\color{dccblue}
 Follow the DCC on Twitter: \href{http://twitter.com/#!/digitalcuration}{@digitalcuration}, \href{https://twitter.com/hashtag/ukdcc}{\#ukdcc}
@@ -4548,8 +4546,17 @@ environment).
   \fi
   \par\vfill
   \begin{flushleft}
-    \large\bfseries
-    \color{dccblue}\includegraphics[width=74pt]{cc_by}\\[4pt]
+    \color{dccblue}\large
+    \parbox{\TitleTabWidth}{\raggedright
+      \textbf{Please cite as:}
+      \DCCHowtoAuthorAPA\ (\the\year). ‘\thetitle’.
+      \emph{DCC How-to Guides}. Edinburgh: Digital Curation Centre.
+      Available online: \url{http://www.dcc.ac.uk/resources/how-guides}
+    }
+  
+    \vspace{2\baselineskip}
+    \bfseries
+    \includegraphics[width=74pt]{cc_by}\\[4pt]
     Digital Curation Centre, \the\year.\\
     Licensed under Creative Commons Attribution 4.0 International:\\
     \url{http://creativecommons.org/licenses/by/4.0/}
