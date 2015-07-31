@@ -2643,7 +2643,7 @@ Copyright (C) 2015 by Alex Ball <a.ball@ukoln.ac.uk>
 %<class>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<class>\ProvidesClass{dcchowto}
 %<*class>
-    [2015/01/12 v3.00 A LaTeX class for DCC How-to Guides]
+    [2015/07/31 v3.1 A LaTeX class for DCC How-to Guides]
 %</class>
 %<*driver>
 \documentclass[12pt]{article}
@@ -2691,6 +2691,15 @@ Copyright (C) 2015 by Alex Ball <a.ball@ukoln.ac.uk>
 % Improving the look of the documentation
 \usepackage[bookmarks,raiselinks,pageanchor,hyperindex,colorlinks]{hyperref}
 \usepackage{tcolorbox,doc}
+\makeatletter
+\renewenvironment{theglossary}{%
+  \bgroup
+    \glossary@prologue
+    \GlossaryParms \let\item\@idxitem \ignorespaces
+}{%
+  \egroup
+}
+\makeatother
 \tcbuselibrary{documentation,breakable,minted}
 \colorlet{Option}{violet}
 \colorlet{Command}{red!75!black}
@@ -3389,16 +3398,18 @@ environment).
 \renewcommand{\RSsmallest}{5pt}
 %    \end{macrocode}
 %
+% \changes{v3.1}{2015/06/30}{PDF graphics preferred over bitmaps.}
 % We will of course need to include graphics, hence we load \pkg{graphicx}.
 % By default graphics are scaled to fill the available space while keeping
-% their original aspect ratio. PDF inclusions are preferred over bitmaps.
+% their original aspect ratio. PDF inclusions are preferred over bitmaps,
+% using the convenience of the \pkg{grfext} package.
 % We also load TikZ (\pkg{pgf}) for drawing logos and the datagrid
 % illustration, and \pkg{tcolorbox} for boxed material.
 %
 %    \begin{macrocode}
 \RequirePackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
-\usepackage{grfext}
+\RequirePackage{grfext}
 \PrependGraphicsExtensions*{.pdf,.PDF}
 \RequirePackage{tikz}
 \usetikzlibrary{fadings}
@@ -4523,9 +4534,10 @@ environment).
   \par\vspace{3.5\baselineskip}
 %    \end{macrocode}
 %
+% \changes{v3.1}{2015/06/30}{Sample citation moved to title page.}
 % Then we have the title, author information, and draft markings (if defined,
-% and including the date) coming down from the top, and the licence information
-% aligned at the bottom.
+% and including the date) coming down from the top, and the sample citation and
+% licence information aligned at the bottom.
 %
 %    \begin{macrocode}
   \begin{flushleft}
@@ -4847,6 +4859,8 @@ environment).
 \undef{\endsnugshade}
 %    \end{macrocode}
 %
+% \changes{v3.1}{2015/07/20}{Boxed material given more consistent format, and 
+% made easier to read with better-looking breaks.}
 % \begin{environment}{framed}
 % We use \pkg{tcolorbox} to create \env{framed} boxes, and \pkg{footnote} to
 % make them footnote friendly (unfortunately the footnote hyperlinks cannot be
@@ -5008,6 +5022,7 @@ environment).
 % \end{macro}
 %
 % \begin{macro}{quotefrom}
+% \changes{v3.1}{2015/05/29}{Spacing fixed in \cs{quotefrom}.}
 % For cases where we want to include a separate attribution line,
 % \cs{quotefrom} starts a new paragraph and sets it ragged-left and slightly
 % smaller.
@@ -5839,6 +5854,7 @@ environment).
 }
 %    \end{macrocode}
 %
+% \changes{v3.1}{2015/05/27}{Format of institution lists now matches publishers.}
 % \pkg{biblatex-apa} also changes the default list format, which it thinks will
 % only be used for locations. We, however, want institutions to be treated like
 % publishers so we change the alias accordingly.
