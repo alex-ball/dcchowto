@@ -25,7 +25,7 @@ tmp1 tmp2: $(NAME).pdf $(EG).md
 pdf: tmp1 $(EG).bib $(NAME)-apa.csl
 	# The next line is peculiar to the particular sample content
 	perl -0777 -p -i -e 's@\\footref\(fn:valimiki\)@\\footref{fn:valimiki}@ig' $(EG)-tmp.md
-	pandoc -s -S --latex-engine=lualatex --biblio $(EG).bib --csl $(NAME)-apa.csl -N -V fontsize=11pt -V papersize=a4paper -V lang=british -V geometry:hmargin=3cm -V geometry:vmargin=2.5cm -V mainfont=Charis\ SIL -V monofont=DejaVu\ Sans\ Mono -V documentclass=memoir -V classoption="article,oneside" -V header-includes="\usepackage[svgnames]{xcolor}\colorlet{dccblue}{Blue}\colorlet{dccmaroon}{Crimson}\colorlet{dccpeach}{AntiqueWhite}\colorlet{shadecolor}{AntiqueWhite}\usepackage{tikz}\usetikzlibrary{positioning}\let\marginfigure=\figure\let\endmarginfigure=\endfigure\newfloat{marginbox}{lom}{Box}\let\quotefrom=\relax\let\finalpage=\relax\let\fullwidth=\relax\let\endfullwidth=\relax\let\fullcite=\textbf\newcommand{\datagrid}[1][]{}\def\keepmarginfor#1{}" $(EG)-tmp.md -o $(EG)-preview.pdf
+	pandoc -s -S --latex-engine=lualatex --bibliography=$(EG).bib --csl=$(NAME)-apa.csl -N -V fontsize=11pt -V papersize=a4paper -V lang=british -V geometry:hmargin=3cm -V geometry:vmargin=2.5cm -V mainfont=Charis\ SIL -V monofont=DejaVu\ Sans\ Mono -V documentclass=memoir -V classoption="article,oneside" -V header-includes="\usepackage[svgnames]{xcolor}\colorlet{dccblue}{Blue}\colorlet{dccmaroon}{Crimson}\colorlet{dccpeach}{AntiqueWhite}\colorlet{shadecolor}{AntiqueWhite}\usepackage{tikz}\usetikzlibrary{positioning}\let\marginfigure=\figure\let\endmarginfigure=\endfigure\newfloat{marginbox}{lom}{Box}\let\quotefrom=\relax\let\finalpage=\relax\let\fullwidth=\relax\let\endfullwidth=\relax\let\fullcite=\textbf\newcommand{\datagrid}[1][]{}\def\keepmarginfor#1{}" $(EG)-tmp.md -o $(EG)-preview.pdf
 	rm -f $(EG)-tmp.md
 html: tmp2 $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@(?:\\begin\{(?:margin)?figure\*?\}|\\bgroup\\(?:margin)?figure|\\bgroup\\csname figure*\\endcsname)(?:\[[^\]]+\])?(.*?)\\caption(?:\[[^\]]+\])?\{([^}]+)\}\n\\label\{[^}]+\}\n\n(?:\\end\{(?:margin)?figure\*?\}|\\end(?:margin)?figure\\egroup|\\endcsname figure*\endcsname\\egroup)@<div class="div_highlight" style="border-radius:8px;" id="\3">\1<p style="text-align:center;"><strong>Figure N:</strong> \2</p>\n\n</div>@igms' $(EG)-tmp.md
@@ -38,7 +38,7 @@ html: tmp2 $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@\\footref\{fn:starr.gastl\}@<a href="#fn10" class="footnoteRef"><sup>[10]</sup></a>@ig' $(EG)-tmp.md
 	perl -0777 -p -i -e 's@\\footref\(fn:valimiki\)@<a href="#fn55" class="footnoteRef"><sup>[55]</sup></a>@ig' $(EG)-tmp.md
 	# General lines
-	pandoc -s -S --toc --toc-depth=1 --biblio $(EG).bib --csl $(NAME)-apa.csl --template=$(NAME)-template $(EG)-tmp.md -o $(EG).html
+	pandoc -s -S --toc --toc-depth=1 --bibliography=$(EG).bib --csl=$(NAME)-apa.csl --template=$(NAME)-template $(EG)-tmp.md -o $(EG).html
 	rm -f $(EG)-tmp.md
 	perl -0777 -p -i -e 's@<p></p>@@ig' $(EG).html
 	perl -0777 -p -i -e 's@<h5 id="([^"]+)">(?:<a href="[^"]+">)?([^<]+)(?:</a>)?</h5>@<h6 id="\1">\2</h6>@ig' $(EG).html
