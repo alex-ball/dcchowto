@@ -50,7 +50,7 @@ html: tmp2 $(EG).bib $(NAME)-apa.csl
 	perl -0777 -p -i -e 's@<h1><a href="#sec:refs">References</a></h1>@<h2 id="#sec:refs">References</h2>@ig' $(EG).html
 	perl -0777 -p -i -e 's@<sup>(\d+)</sup>@<sup>[\1]</sup>@ig' $(EG).html
 dtp: $(NAME).pdf $(EG).md $(EG).bib $(NAME)-template.latex
-	pandoc -s -S --biblatex -V biblio-files=$(EG).bib --template=$(NAME)-template -V header-includes="\usetikzlibrary{positioning}" $(EG).md -t latex -o $(EG).tex
+	pandoc -s -S --biblatex --bibliography=$(EG).bib --template=$(NAME)-template -V header-includes="\usetikzlibrary{positioning}" $(EG).md -t latex -o $(EG).tex
 	# The next 8 lines are peculiar to the particular sample content
 	perl -0777 -p -i -e 's@\\autocite\{altman\.king2007pss\}@\\footnote{\\fullcite{altman.king2007pss}\\label{fn:altman.king}}@i' $(EG).tex
 	perl -0777 -p -i -e 's@\\autocite\{lawrence\.etal2008dp\}@\\footnote{\\fullcite{lawrence.etal2008dp}\\label{fn:lawrence.etal}}@i' $(EG).tex
